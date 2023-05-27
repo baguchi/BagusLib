@@ -1,7 +1,6 @@
 package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.BagusLib;
-import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,9 +17,6 @@ public class CameraEvent {
     public static void cameraEvent(ViewportEvent.ComputeCameraAngles event) {
         for (int i = 0; i < cameraHolderList.size(); i++) {
             CameraHolder cameraHolder = cameraHolderList.get(i);
-            if(cameraHolder.getPos().dimension() != event.getCamera().getEntity().level.dimension()){
-                cameraHolderList.remove(cameraHolder);
-            }
             if (cameraHolder.getDuration() <= cameraHolder.time) {
                 cameraHolderList.remove(cameraHolder);
             }else {
