@@ -143,10 +143,10 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                         float f = (float) (i >> 16 & 255) / 255.0F;
                         float f1 = (float) (i >> 8 & 255) / 255.0F;
                         float f2 = (float) (i & 255) / 255.0F;
-                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
-                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, "overlay"), notAVanillaModel);
+                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, legItem, EquipmentSlot.LEGS, null), notAVanillaModel);
+                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.LEGS, "overlay"), notAVanillaModel);
                     } else {
-                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
+                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.LEGS, null), notAVanillaModel);
                     }
 
                 }
@@ -155,26 +155,26 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         }
         {
             matrixStackIn.pushPose();
-            ItemStack legItem = entity.getItemBySlot(EquipmentSlot.FEET);
-            if (legItem.getItem() instanceof ArmorItem) {
-                ArmorItem armoritem = (ArmorItem) legItem.getItem();
+            ItemStack feetItem = entity.getItemBySlot(EquipmentSlot.FEET);
+            if (feetItem.getItem() instanceof ArmorItem) {
+                ArmorItem armoritem = (ArmorItem) feetItem.getItem();
                 if (armoritem.getEquipmentSlot() == EquipmentSlot.FEET) {
                     HumanoidModel a = defaultBipedModel;
-                    a = getArmorModelHook(entity, legItem, EquipmentSlot.FEET, a);
+                    a = getArmorModelHook(entity, feetItem, EquipmentSlot.FEET, a);
                     boolean notAVanillaModel = a != defaultBipedModel;
                     this.setModelSlotVisible(a, EquipmentSlot.FEET);
 
-                    boolean flag1 = legItem.hasFoil();
+                    boolean flag1 = feetItem.hasFoil();
                     int clampedLight = packedLightIn;
                     if (armoritem instanceof net.minecraft.world.item.DyeableLeatherItem) { // Allow this for anything, not only cloth
-                        int i = ((net.minecraft.world.item.DyeableLeatherItem) armoritem).getColor(legItem);
+                        int i = ((net.minecraft.world.item.DyeableLeatherItem) armoritem).getColor(feetItem);
                         float f = (float) (i >> 16 & 255) / 255.0F;
                         float f1 = (float) (i >> 8 & 255) / 255.0F;
                         float f2 = (float) (i & 255) / 255.0F;
-                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
-                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, "overlay"), notAVanillaModel);
+                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, feetItem, EquipmentSlot.FEET, null), notAVanillaModel);
+                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, feetItem, EquipmentSlot.FEET, "overlay"), notAVanillaModel);
                     } else {
-                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
+                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, feetItem, EquipmentSlot.FEET, null), notAVanillaModel);
                     }
 
                 }
