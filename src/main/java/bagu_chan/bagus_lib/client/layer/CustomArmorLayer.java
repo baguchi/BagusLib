@@ -143,10 +143,38 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                         float f = (float) (i >> 16 & 255) / 255.0F;
                         float f1 = (float) (i >> 8 & 255) / 255.0F;
                         float f2 = (float) (i & 255) / 255.0F;
-                        renderChestplate(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
-                        renderChestplate(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, "overlay"), notAVanillaModel);
+                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
+                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, "overlay"), notAVanillaModel);
                     } else {
-                        renderChestplate(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
+                        renderLeg(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
+                    }
+
+                }
+            }
+            matrixStackIn.popPose();
+        }
+        {
+            matrixStackIn.pushPose();
+            ItemStack legItem = entity.getItemBySlot(EquipmentSlot.FEET);
+            if (legItem.getItem() instanceof ArmorItem) {
+                ArmorItem armoritem = (ArmorItem) legItem.getItem();
+                if (armoritem.getEquipmentSlot() == EquipmentSlot.FEET) {
+                    HumanoidModel a = defaultBipedModel;
+                    a = getArmorModelHook(entity, legItem, EquipmentSlot.FEET, a);
+                    boolean notAVanillaModel = a != defaultBipedModel;
+                    this.setModelSlotVisible(a, EquipmentSlot.FEET);
+
+                    boolean flag1 = legItem.hasFoil();
+                    int clampedLight = packedLightIn;
+                    if (armoritem instanceof net.minecraft.world.item.DyeableLeatherItem) { // Allow this for anything, not only cloth
+                        int i = ((net.minecraft.world.item.DyeableLeatherItem) armoritem).getColor(legItem);
+                        float f = (float) (i >> 16 & 255) / 255.0F;
+                        float f1 = (float) (i >> 8 & 255) / 255.0F;
+                        float f2 = (float) (i & 255) / 255.0F;
+                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, f, f1, f2, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
+                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, "overlay"), notAVanillaModel);
+                    } else {
+                        renderBoot(entity, matrixStackIn, bufferIn, clampedLight, flag1, a, 1.0F, 1.0F, 1.0F, getArmorResource(entity, legItem, EquipmentSlot.CHEST, null), notAVanillaModel);
                     }
 
                 }
