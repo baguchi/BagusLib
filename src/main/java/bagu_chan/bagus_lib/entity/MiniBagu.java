@@ -1,6 +1,7 @@
 package bagu_chan.bagus_lib.entity;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -29,12 +30,13 @@ public class MiniBagu extends PathfinderMob {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_, @Nullable CompoundTag p_21438_) {
         ItemStack stack = new ItemStack(Items.IRON_HELMET);
-        Optional<Holder.Reference<TrimMaterial>> optional1 = TrimMaterials.getFromIngredient(p_21434_.registryAccess(), new ItemStack(Items.LAPIS_LAZULI));
-        Optional<Holder.Reference<TrimPattern>> optional2 = TrimPatterns.getFromTemplate(p_21434_.registryAccess(), new ItemStack(Items.WILD_ARMOR_TRIM_SMITHING_TEMPLATE));
-        if (optional1.isPresent() && optional2.isPresent()) {
-            ArmorTrim.setTrim(p_21434_.registryAccess(), stack, new ArmorTrim(optional1.get(), optional2.get()));
-            this.setItemSlot(EquipmentSlot.HEAD, stack);
+        Optional<Holder.Reference<TrimMaterial>> trimMaterial = p_21434_.registryAccess().registry(Registries.TRIM_MATERIAL).get().getHolder(TrimMaterials.LAPIS);
+        Optional<Holder.Reference<TrimPattern>> trimPattern = p_21434_.registryAccess().registry(Registries.TRIM_PATTERN).get().getHolder(TrimPatterns.WILD);
+        if (trimMaterial.isPresent() && trimPattern.isPresent()) {
+            ArmorTrim.setTrim(p_21434_.registryAccess(), stack, new ArmorTrim(trimMaterial.get(), trimPattern.get()));
         }
+        this.setItemSlot(EquipmentSlot.HEAD, stack);
+
         return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_, p_21438_);
     }
 }
