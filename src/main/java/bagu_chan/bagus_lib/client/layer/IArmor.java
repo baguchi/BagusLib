@@ -14,11 +14,11 @@ public interface IArmor {
 
     void translateToChestPat(HumanoidArm arm, PoseStack poseStack);
 
-    ModelPart rightHand();
+    Iterable<ModelPart> rightHands();
 
-    ModelPart leftHand();
+    Iterable<ModelPart> leftHands();
 
-    ModelPart rightLeg();
+    Iterable<ModelPart> rightLegParts();
 
-    ModelPart leftLeg();
+    Iterable<ModelPart> leftLegParts();
 }

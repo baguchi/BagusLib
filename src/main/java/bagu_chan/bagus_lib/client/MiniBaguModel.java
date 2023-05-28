@@ -73,22 +73,22 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
     }
 
     @Override
-    public ModelPart rightHand() {
+    public Iterable<ModelPart> rightHands() {
         return null;
     }
 
     @Override
-    public ModelPart leftHand() {
+    public Iterable<ModelPart> leftHands() {
         return null;
     }
 
     @Override
-    public ModelPart rightLeg() {
+    public Iterable<ModelPart> rightLegParts() {
         return null;
     }
 
     @Override
-    public ModelPart leftLeg() {
+    public Iterable<ModelPart> leftLegParts() {
         return null;
     }
 }

@@ -61,7 +61,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
             domain = texture.substring(0, idx);
             texture = texture.substring(idx + 1);
         }
-        String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (1), type == null ? "" : String.format("_%s", type));
+        String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesInnerModel(slot) ? 2 : 1), type == null ? "" : String.format("_%s", type));
 
         s1 = net.minecraftforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
         ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
@@ -193,12 +193,12 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
 
     }
 
-    private boolean usesInnerModel(EquipmentSlot p_117129_) {
+    private static boolean usesInnerModel(EquipmentSlot p_117129_) {
         return p_117129_ == EquipmentSlot.LEGS;
     }
 
     private HumanoidModel getArmorModel(EquipmentSlot p_117079_) {
-        return (this.usesInnerModel(p_117079_) ? this.innerModel : this.defaultBipedModel);
+        return (usesInnerModel(p_117079_) ? this.innerModel : this.defaultBipedModel);
     }
 
     private void renderTrim(ArmorMaterial p_267946_, PoseStack p_268019_, MultiBufferSource p_268023_, int p_268190_, ArmorTrim p_267984_, boolean p_267965_, HumanoidModel p_267949_, boolean p_268259_, float p_268337_, float p_268095_, float p_268305_) {
@@ -239,22 +239,27 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = false;
         modelIn.rightLeg.visible = true;
         modelIn.leftLeg.visible = false;
-        matrixStackIn.pushPose();
-        renderer.getModel().translateToLeg(renderer.getModel().rightLeg(), matrixStackIn);
+        renderer.getModel().rightLegParts().forEach(part -> {
+                    matrixStackIn.pushPose();
+                    renderer.getModel().translateToLeg(part, matrixStackIn);
 
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+                    modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+                    renderTrim(legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
 
-        matrixStackIn.popPose();
+                    matrixStackIn.popPose();
+                }
+        );
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = true;
-        matrixStackIn.pushPose();
-        renderer.getModel().translateToLeg(renderer.getModel().leftLeg(), matrixStackIn);
+        renderer.getModel().leftLegParts().forEach(part -> {
+            matrixStackIn.pushPose();
+            renderer.getModel().translateToLeg(part, matrixStackIn);
 
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.body.visible = true;
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = false;
@@ -287,20 +292,24 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.rightLeg.z = 0F;
         modelIn.rightLeg.visible = true;
         modelIn.leftLeg.visible = false;
-        matrixStackIn.pushPose();
-        renderer.getModel().translateToLeg(renderer.getModel().rightLeg(), matrixStackIn);
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(feetItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.FEET, modelIn);
+        renderer.getModel().rightLegParts().forEach(part -> {
+            matrixStackIn.pushPose();
+            renderer.getModel().translateToLeg(part, matrixStackIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(feetItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.FEET, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = true;
-        matrixStackIn.pushPose();
-        renderer.getModel().translateToLeg(renderer.getModel().leftLeg(), matrixStackIn);
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(feetItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.FEET, modelIn);
+        renderer.getModel().leftLegParts().forEach(part -> {
+            matrixStackIn.pushPose();
+            renderer.getModel().translateToLeg(part, matrixStackIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(feetItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.FEET, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.rightLeg.visible = true;
         modelIn.leftLeg.visible = true;
 
