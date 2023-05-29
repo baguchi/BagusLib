@@ -4,6 +4,7 @@ package bagu_chan.bagus_lib.client;// Made with Blockbench 4.7.4
 
 
 import bagu_chan.bagus_lib.client.layer.IArmor;
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -11,7 +12,6 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
 
 public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implements IArmor {
     private final ModelPart root;
@@ -52,13 +52,13 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
     }
 
     @Override
-    public void translateToHead(PoseStack poseStack) {
+    public void translateToHead(ModelPart part, PoseStack poseStack) {
         this.root.translateAndRotate(poseStack);
-        this.head.translateAndRotate(poseStack);
+        part.translateAndRotate(poseStack);
     }
 
     @Override
-    public void translateToChest(PoseStack poseStack) {
+    public void translateToChest(ModelPart part, PoseStack poseStack) {
 
     }
 
@@ -68,7 +68,7 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
     }
 
     @Override
-    public void translateToChestPat(HumanoidArm arm, PoseStack poseStack) {
+    public void translateToChestPat(ModelPart part, PoseStack poseStack) {
 
     }
 
@@ -90,5 +90,15 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
     @Override
     public Iterable<ModelPart> leftLegParts() {
         return null;
+    }
+
+    @Override
+    public Iterable<ModelPart> bodyParts() {
+        return null;
+    }
+
+    @Override
+    public Iterable<ModelPart> headParts() {
+        return ImmutableList.of(this.head);
     }
 }
