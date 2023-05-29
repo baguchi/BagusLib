@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -99,11 +98,13 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                         }
                     }
                 } else {
-                    this.renderer.getModel().translateToHead(matrixStackIn);
+                renderer.getModel().headParts().forEach(part -> {
+                    this.renderer.getModel().translateToHead(part, matrixStackIn);
                     matrixStackIn.mulPose((new Quaternionf()).rotateX((float) Math.PI));
-                matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
-                Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level, 0);
-                }
+                    matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
+                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level, 0);
+                });
+            }
                 matrixStackIn.popPose();
             }
             {
@@ -263,13 +264,15 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = true;
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = false;
-        matrixStackIn.pushPose();
-        this.renderer.getModel().translateToChest(matrixStackIn);
+        renderer.getModel().bodyParts().forEach(part -> {
+            matrixStackIn.pushPose();
+            this.renderer.getModel().translateToChest(part, matrixStackIn);
 
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.rightLeg.visible = true;
         modelIn.leftLeg.visible = true;
 
@@ -344,30 +347,36 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = false;
         modelIn.rightArm.visible = true;
         modelIn.leftArm.visible = false;
-        matrixStackIn.pushPose();
-        renderer.getModel().translateToChestPat(HumanoidArm.RIGHT, matrixStackIn);
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
+        renderer.getModel().rightHands().forEach(part -> {
+            matrixStackIn.pushPose();
+            renderer.getModel().translateToChestPat(part, matrixStackIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.rightArm.visible = false;
         modelIn.leftArm.visible = true;
-        matrixStackIn.pushPose();
-        renderer.getModel().translateToChestPat(HumanoidArm.LEFT, matrixStackIn);
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
+        renderer.getModel().leftHands().forEach(part -> {
+            matrixStackIn.pushPose();
+            renderer.getModel().translateToChestPat(part, matrixStackIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.body.visible = true;
         modelIn.rightArm.visible = false;
         modelIn.leftArm.visible = false;
-        matrixStackIn.pushPose();
-        this.renderer.getModel().translateToChest(matrixStackIn);
+        renderer.getModel().bodyParts().forEach(part -> {
+            matrixStackIn.pushPose();
+            this.renderer.getModel().translateToChest(part, matrixStackIn);
 
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
 
-        matrixStackIn.popPose();
+            matrixStackIn.popPose();
+        });
         modelIn.rightArm.visible = true;
         modelIn.leftArm.visible = true;
 
@@ -388,11 +397,12 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.hat.x = 0F;
         modelIn.hat.y = 0F;
         modelIn.hat.z = 0F;
-        matrixStackIn.pushPose();
-        this.renderer.getModel().translateToHead(matrixStackIn);
-        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
-        renderTrim(headItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.HEAD, modelIn);
-
+        renderer.getModel().headParts().forEach(part -> {
+            matrixStackIn.pushPose();
+            this.renderer.getModel().translateToHead(part, matrixStackIn);
+            modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+            renderTrim(headItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.HEAD, modelIn);
+        });
         matrixStackIn.popPose();
     }
 
