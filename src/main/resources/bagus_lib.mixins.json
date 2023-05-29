@@ -7,7 +7,6 @@
   "mixins": [
   ],
   "client": [
-    "client.WitherModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
