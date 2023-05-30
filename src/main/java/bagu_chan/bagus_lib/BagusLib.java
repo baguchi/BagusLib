@@ -2,6 +2,7 @@ package bagu_chan.bagus_lib;
 
 import bagu_chan.bagus_lib.message.CameraMessage;
 import bagu_chan.bagus_lib.register.ModEntities;
+import bagu_chan.bagus_lib.register.ModSensors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,6 +31,7 @@ public class BagusLib {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
+        ModSensors.SENSOR_TYPES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
