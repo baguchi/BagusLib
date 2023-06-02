@@ -20,6 +20,7 @@ public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraH
             super.tick(event);
         } else {
             this.time = 1;
+            super.tick(event);
         }
 
     }
