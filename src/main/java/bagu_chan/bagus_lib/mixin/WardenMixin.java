@@ -34,7 +34,7 @@ public abstract class WardenMixin extends Monster {
                         CameraEvent.addCameraHolderList(this.level, new CameraHolder(24, 100, GlobalVec3.of(this.level.dimension(), this.position())));
                         break;
                     case ROARING:
-                        CameraEvent.addCameraHolderList(this.level, new CooldownCameraHolder(24, 100, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), 80));
+                        CameraEvent.addCameraHolderList(this.level, new CooldownCameraHolder(32, 100, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), 80));
                         break;
                 }
             }

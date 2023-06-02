@@ -38,7 +38,7 @@ public class CameraEvent {
     public static void addCameraHolderList(Level level, CameraHolder cameraHolder) {
         for (Player player : level.players()) {
             if (level.isClientSide()) {
-                if (player.level.dimension() == cameraHolder.getPos().dimension() && player.getEyePosition().distanceToSqr(cameraHolder.getPos().pos()) < cameraHolder.amount * cameraHolder.amount * 2.0F) {
+                if (player.level.dimension() == cameraHolder.getPos().dimension() && player.getEyePosition().distanceToSqr(cameraHolder.getPos().pos()) < cameraHolder.amount * cameraHolder.amount) {
                     cameraHolderList.add(cameraHolder);
                 }
             } else {
