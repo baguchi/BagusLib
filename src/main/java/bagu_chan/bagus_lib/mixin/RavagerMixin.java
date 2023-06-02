@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.mixin;
 
+import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.client.camera.CameraEvent;
 import bagu_chan.bagus_lib.client.camera.EntityConditionCameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Ravager.class)
 public abstract class RavagerMixin extends Raider {
@@ -23,8 +25,8 @@ public abstract class RavagerMixin extends Raider {
     }
 
     @Inject(method = "roar", at = @At("HEAD"))
-    private void roar() {
-        if (!this.level.isClientSide()) {
+    private void roar(CallbackInfo callbackInfo) {
+        if (!this.level.isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
             CameraEvent.addCameraHolderList(this.level, new EntityConditionCameraHolder<>(18, 20, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), this).setPredicate(predicate -> this.roarTick > 1));
         }
     }
