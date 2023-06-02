@@ -31,16 +31,16 @@ public class CameraHolder {
 
     private void preTick(ViewportEvent.ComputeCameraAngles event) {
 
-        float dist = (float) Mth.clamp((float) this.amount * this.amount / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 0.1F);
+        float dist = (float) Mth.clamp((float) this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) / this.amount * this.amount, 0F, 0.1F);
         float leftTick = ((float) this.getDuration() / (float) this.time);
 
-        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.amount * this.amount && event.getCamera().getEntity().level.dimension() == this.getPos().dimension()) {
+        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.amount * this.amount * 2.0F && event.getCamera().getEntity().level.dimension() == this.getPos().dimension()) {
             double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
-            float amount = this.amount * leftTick * dist;
+            float amount = leftTick * dist;
 
-            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)));
-            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * 2.5F)));
-            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * 2F)));
+            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)) * 10F);
+            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * 2.5F)) * 10.5F);
+            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * 2F)) * 9F);
         }
     }
 

@@ -28,10 +28,10 @@ public abstract class WardenMixin extends Monster {
             if (this.level.isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraEvent.addCameraHolderList(this.level, new CameraHolder(18, 100, GlobalVec3.of(this.level.dimension(), this.position())));
+                        CameraEvent.addCameraHolderList(this.level, new CameraHolder(24, 100, GlobalVec3.of(this.level.dimension(), this.position())));
                         break;
                     case DIGGING:
-                        CameraEvent.addCameraHolderList(this.level, new CameraHolder(18, 100, GlobalVec3.of(this.level.dimension(), this.position())));
+                        CameraEvent.addCameraHolderList(this.level, new CameraHolder(24, 100, GlobalVec3.of(this.level.dimension(), this.position())));
                         break;
                     case ROARING:
                         CameraEvent.addCameraHolderList(this.level, new CooldownCameraHolder(24, 100, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), 80));
