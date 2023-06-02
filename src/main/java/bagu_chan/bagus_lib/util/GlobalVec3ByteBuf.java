@@ -20,7 +20,7 @@ public class GlobalVec3ByteBuf {
 
 
     public static Vec3 readVec3(FriendlyByteBuf buf) {
-        return new Vec3(buf.readFloat(), buf.readFloat(), buf.readFloat());
+        return new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
     public static void writeVec3(FriendlyByteBuf buf, Vec3 p_270985_) {

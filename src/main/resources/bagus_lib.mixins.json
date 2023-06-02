@@ -5,7 +5,8 @@
   "minVersion": "0.8",
   "refmap": "bagus_lib.refmap.json",
   "mixins": [
-    "RavagerMixin"
+    "RavagerMixin",
+    "WardenMixin"
   ],
   "client": [
   ],

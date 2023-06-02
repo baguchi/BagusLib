@@ -38,9 +38,9 @@ public class CameraHolder {
             double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
             float amount = this.amount * leftTick * dist + 0.001F;
 
-            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.1F);
-            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.1F);
-            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.1F);
+            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.8F);
+            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.8F);
+            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.8F);
         }
     }
 

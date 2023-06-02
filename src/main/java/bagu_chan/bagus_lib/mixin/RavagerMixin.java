@@ -20,14 +20,17 @@ public abstract class RavagerMixin extends Raider {
     @Shadow
     private int roarTick;
 
-    protected RavagerMixin(EntityType<? extends Raider> p_37839_, Level p_37840_) {
+    protected RavagerMixin(EntityType<? extends Ravager> p_37839_, Level p_37840_) {
         super(p_37839_, p_37840_);
     }
 
     @Inject(method = "roar", at = @At("HEAD"))
     private void roar(CallbackInfo callbackInfo) {
+        Ravager ravager = (Ravager) ((Object) this);
         if (!this.level.isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
-            CameraEvent.addCameraHolderList(this.level, new EntityConditionCameraHolder<>(18, 20, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), this).setPredicate(predicate -> this.roarTick > 1));
+            EntityConditionCameraHolder<Ravager> entityConditionCameraHolder = new EntityConditionCameraHolder<>(24, 30, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), ravager);
+            entityConditionCameraHolder.setPredicate(predicate -> this.roarTick > 1);
+            CameraEvent.addCameraHolderList(this.level, entityConditionCameraHolder);
         }
     }
 }
