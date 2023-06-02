@@ -1,12 +1,15 @@
 package bagu_chan.bagus_lib.client.camera;
 
-import net.minecraft.core.GlobalPos;
+import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.client.event.ViewportEvent;
 
-public abstract class EntityConditionCameraHolder<T extends Entity> extends EntityCameraHolder<T> {
+import java.util.function.Predicate;
 
-    public EntityConditionCameraHolder(int amount, int duration, GlobalPos pos, T entity) {
+public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraHolder<T> {
+    public Predicate<T> predicate = Entity::isAlive;
+
+    public EntityConditionCameraHolder(int amount, int duration, GlobalVec3 pos, T entity) {
         super(amount, duration, pos, entity);
     }
 
@@ -21,5 +24,12 @@ public abstract class EntityConditionCameraHolder<T extends Entity> extends Enti
 
     }
 
-    protected abstract boolean hasCondition(Entity entity);
+    protected boolean hasCondition(T entity) {
+        return this.predicate.test(entity);
+    }
+
+    public EntityConditionCameraHolder<T> setPredicate(Predicate<T> predicate) {
+        this.predicate = predicate;
+        return this;
+    }
 }

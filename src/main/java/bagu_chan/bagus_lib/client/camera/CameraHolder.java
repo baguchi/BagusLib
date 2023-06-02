@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.client.camera;
 
-import net.minecraft.core.GlobalPos;
+import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.ViewportEvent;
 
@@ -9,9 +9,9 @@ public class CameraHolder {
     public int duration;
     public int time;
 
-    private final GlobalPos pos;
+    private final GlobalVec3 pos;
 
-    public CameraHolder(int amount, int duration, GlobalPos pos){
+    public CameraHolder(int amount, int duration, GlobalVec3 pos) {
         this.amount = amount;
         this.duration = duration;
         this.pos = pos;
@@ -21,7 +21,7 @@ public class CameraHolder {
         return amount;
     }
 
-    public GlobalPos getPos() {
+    public GlobalVec3 getPos() {
         return pos;
     }
 
@@ -31,16 +31,16 @@ public class CameraHolder {
 
     private void preTick(ViewportEvent.ComputeCameraAngles event) {
 
-        float dist = (float) Mth.clamp((float) this.amount / this.getPos().pos().distSqr(event.getCamera().getBlockPosition()), 0F, 0.1F);
+        float dist = (float) Mth.clamp((float) this.amount / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 0.1F);
         float leftTick = ((float) this.getDuration() / (float) this.time);
 
-        if (this.getPos().pos().distSqr(event.getCamera().getBlockPosition()) < this.amount * this.amount && event.getCamera().getEntity().level.dimension() == this.getPos().dimension()) {
+        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.amount * this.amount && event.getCamera().getEntity().level.dimension() == this.getPos().dimension()) {
             double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
             float amount = this.amount * leftTick * dist + 0.001F;
 
-            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * amount * 0.5F)));
-            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * amount * 0.5F)));
-            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * amount * 0.5F)));
+            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.1F);
+            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.1F);
+            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * amount * 0.5F)) * 0.1F);
         }
     }
 
