@@ -22,27 +22,27 @@ public interface IArmor {
      * if empty part. dosen't render
      */
 
-    default Iterable<ModelPart> rightHands() {
+    default Iterable<ModelPart> rightHandArmors() {
         return ImmutableList.of();
     }
 
-    default Iterable<ModelPart> leftHands() {
+    default Iterable<ModelPart> leftHandArmors() {
         return ImmutableList.of();
     }
 
-    default Iterable<ModelPart> rightLegParts() {
+    default Iterable<ModelPart> rightLegPartArmors() {
         return ImmutableList.of();
     }
 
-    default Iterable<ModelPart> leftLegParts() {
+    default Iterable<ModelPart> leftLegPartArmors() {
         return ImmutableList.of();
     }
 
-    default Iterable<ModelPart> bodyParts() {
+    default Iterable<ModelPart> bodyPartArmors() {
         return ImmutableList.of();
     }
 
-    default Iterable<ModelPart> headParts() {
+    default Iterable<ModelPart> headPartArmors() {
         return ImmutableList.of();
     }
 }

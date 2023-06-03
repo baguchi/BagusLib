@@ -1,10 +1,12 @@
 package bagu_chan.bagus_lib;
 
 import bagu_chan.bagus_lib.message.CameraMessage;
+import bagu_chan.bagus_lib.message.UpdateDataMessage;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModSensors;
 import bagu_chan.bagus_lib.util.WebHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -51,12 +53,17 @@ public class BagusLib {
         MinecraftForge.EVENT_BUS.register(this);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
 
     private void setupMessages() {
         CHANNEL.messageBuilder(CameraMessage.class, 0)
                 .encoder(CameraMessage::writeToPacket).decoder(CameraMessage::readFromPacket)
                 .consumerMainThread(CameraMessage::handle)
+                .add();
+        CHANNEL.messageBuilder(UpdateDataMessage.class, 1)
+                .encoder(UpdateDataMessage::writeToPacket).decoder(UpdateDataMessage::readFromPacket)
+                .consumerMainThread(UpdateDataMessage::handle)
                 .add();
     }
 
@@ -74,5 +81,9 @@ public class BagusLib {
                 LOGGER.warn("Failed to load perks");
             }
         } else LOGGER.warn("Failed to load perks");
+    }
+
+    public static boolean isFunker(Player player) {
+        return PATREONS.contains(player.getName().getString());
     }
 }

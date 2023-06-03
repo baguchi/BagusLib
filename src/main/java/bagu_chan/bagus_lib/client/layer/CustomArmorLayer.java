@@ -108,7 +108,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                         }
                     }
                 } else {
-                renderer.getModel().headParts().forEach(part -> {
+                renderer.getModel().headPartArmors().forEach(part -> {
                     this.renderer.getModel().translateToHead(part, matrixStackIn);
                     matrixStackIn.mulPose((new Quaternionf()).rotateX((float) Math.PI));
                     matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
@@ -250,7 +250,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = false;
         modelIn.rightLeg.visible = true;
         modelIn.leftLeg.visible = false;
-        renderer.getModel().rightLegParts().forEach(part -> {
+        renderer.getModel().rightLegPartArmors().forEach(part -> {
                     matrixStackIn.pushPose();
                     renderer.getModel().translateToLeg(part, matrixStackIn);
 
@@ -262,7 +262,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         );
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = true;
-        renderer.getModel().leftLegParts().forEach(part -> {
+        renderer.getModel().leftLegPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
             renderer.getModel().translateToLeg(part, matrixStackIn);
 
@@ -274,7 +274,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = true;
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = false;
-        renderer.getModel().bodyParts().forEach(part -> {
+        renderer.getModel().bodyPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
             this.renderer.getModel().translateToChest(part, matrixStackIn);
 
@@ -305,7 +305,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.rightLeg.z = 0F;
         modelIn.rightLeg.visible = true;
         modelIn.leftLeg.visible = false;
-        renderer.getModel().rightLegParts().forEach(part -> {
+        renderer.getModel().rightLegPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
             renderer.getModel().translateToLeg(part, matrixStackIn);
             modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
@@ -315,7 +315,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         });
         modelIn.rightLeg.visible = false;
         modelIn.leftLeg.visible = true;
-        renderer.getModel().leftLegParts().forEach(part -> {
+        renderer.getModel().leftLegPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
             renderer.getModel().translateToLeg(part, matrixStackIn);
             modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
@@ -357,7 +357,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = false;
         modelIn.rightArm.visible = true;
         modelIn.leftArm.visible = false;
-        renderer.getModel().rightHands().forEach(part -> {
+        renderer.getModel().rightHandArmors().forEach(part -> {
             matrixStackIn.pushPose();
             renderer.getModel().translateToChestPat(part, matrixStackIn);
             modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
@@ -367,7 +367,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         });
         modelIn.rightArm.visible = false;
         modelIn.leftArm.visible = true;
-        renderer.getModel().leftHands().forEach(part -> {
+        renderer.getModel().leftHandArmors().forEach(part -> {
             matrixStackIn.pushPose();
             renderer.getModel().translateToChestPat(part, matrixStackIn);
             modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
@@ -378,7 +378,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.body.visible = true;
         modelIn.rightArm.visible = false;
         modelIn.leftArm.visible = false;
-        renderer.getModel().bodyParts().forEach(part -> {
+        renderer.getModel().bodyPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
             this.renderer.getModel().translateToChest(part, matrixStackIn);
 
@@ -407,7 +407,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.hat.x = 0F;
         modelIn.hat.y = 0F;
         modelIn.hat.z = 0F;
-        renderer.getModel().headParts().forEach(part -> {
+        renderer.getModel().headPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
             this.renderer.getModel().translateToHead(part, matrixStackIn);
             modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);

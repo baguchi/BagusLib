@@ -6,9 +6,11 @@
   "refmap": "bagus_lib.refmap.json",
   "mixins": [
     "RavagerMixin",
-    "WardenMixin"
+    "WardenMixin",
+    "LivingEntityMixin"
   ],
   "client": [
+    "client.PlayerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

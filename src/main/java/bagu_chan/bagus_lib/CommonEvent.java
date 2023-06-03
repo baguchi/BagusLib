@@ -1,5 +1,9 @@
 package bagu_chan.bagus_lib;
 
+import bagu_chan.bagus_lib.util.MiscUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = BagusLib.MODID)
@@ -16,4 +20,13 @@ public class CommonEvent {
         Vec3 vec3 = event.getExplosion().getPosition();
         CameraEvent.addCameraHolderList(new CameraHolder(20, 20, GlobalPos.of(event.getLevel().dimension(), BlockPos.containing(vec3))));
     }*/
+
+    @SubscribeEvent
+    public static void onJoin(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide()) {
+            if (Minecraft.getInstance().player == event.getEntity()) {
+                MiscUtils.updateCosmetic();
+            }
+        }
+    }
 }
