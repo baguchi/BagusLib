@@ -4,7 +4,6 @@ import bagu_chan.bagus_lib.client.camera.CameraEvent;
 import bagu_chan.bagus_lib.client.camera.CameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.LogicalSide;
@@ -35,13 +34,14 @@ public class CameraMessage {
 
     public static void handle(CameraMessage message, Supplier<NetworkEvent.Context> ctx) {
         NetworkEvent.Context context = ctx.get();
-        if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT)
+        if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Level level = Minecraft.getInstance().level;
+                Level level = context.getSender().level;
                 if (level != null) {
                     CameraEvent.addCameraHolderList(level, new CameraHolder(message.amount, message.duration, message.globalPos));
                 }
             });
+        }
         ctx.get().setPacketHandled(true);
     }
 }
