@@ -36,7 +36,7 @@ public class CameraMessage {
         NetworkEvent.Context context = ctx.get();
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Level level = context.getSender().level;
+                Level level = context.getSender().level();
                 if (level != null) {
                     CameraEvent.addCameraHolderList(level, new CameraHolder(message.amount, message.duration, message.globalPos));
                 }

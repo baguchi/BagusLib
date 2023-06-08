@@ -34,7 +34,7 @@ public class CameraHolder {
         float dist = (float) Mth.clamp((float) this.amount / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 1F);
         float leftTick = ((float) this.getDuration() / (float) this.time);
 
-        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.amount * this.amount && event.getCamera().getEntity().level.dimension() == this.getPos().dimension()) {
+        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.amount * this.amount && event.getCamera().getEntity().level().dimension() == this.getPos().dimension()) {
             double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
             float amount = leftTick * dist;
 

@@ -112,7 +112,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                     this.renderer.getModel().translateToHead(part, matrixStackIn);
                     matrixStackIn.mulPose((new Quaternionf()).rotateX((float) Math.PI));
                     matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
-                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level, 0);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level(), 0);
                 });
             }
                 matrixStackIn.popPose();
@@ -220,7 +220,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
 
     private void renderTrim(ItemStack item, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, EquipmentSlot equipmentSlot, HumanoidModel modelIn) {
         if (item.getItem() instanceof ArmorItem armorItem) {
-            ArmorTrim.getTrim(entity.level.registryAccess(), item).ifPresent((p_267897_) -> {
+            ArmorTrim.getTrim(entity.level().registryAccess(), item).ifPresent((p_267897_) -> {
                 this.renderTrim(armorItem.getMaterial(), matrixStackIn, bufferIn, packedLightIn, p_267897_, glintIn, modelIn, this.usesInnerModel(equipmentSlot), 1.0F, 1.0F, 1.0F);
             });
         }

@@ -25,16 +25,16 @@ public abstract class WardenMixin extends Monster {
     @Inject(method = "onSyncedDataUpdated", at = @At("HEAD"))
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_219422_, CallbackInfo callbackInfo) {
         if (DATA_POSE.equals(p_219422_)) {
-            if (this.level.isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
+            if (this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraEvent.addCameraHolderList(this.level, new CameraHolder(18, 200, GlobalVec3.of(this.level.dimension(), this.position())));
+                        CameraEvent.addCameraHolderList(this.level(), new CameraHolder(18, 200, GlobalVec3.of(this.level().dimension(), this.position())));
                         break;
                     case DIGGING:
-                        CameraEvent.addCameraHolderList(this.level, new CameraHolder(18, 200, GlobalVec3.of(this.level.dimension(), this.position())));
+                        CameraEvent.addCameraHolderList(this.level(), new CameraHolder(18, 200, GlobalVec3.of(this.level().dimension(), this.position())));
                         break;
                     case ROARING:
-                        CameraEvent.addCameraHolderList(this.level, new CooldownCameraHolder(22, 100, GlobalVec3.of(this.level.dimension(), this.getEyePosition()), 80));
+                        CameraEvent.addCameraHolderList(this.level(), new CooldownCameraHolder(22, 100, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), 80));
                         break;
                 }
             }
