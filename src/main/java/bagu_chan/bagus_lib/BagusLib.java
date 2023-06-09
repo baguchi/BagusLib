@@ -4,9 +4,7 @@ import bagu_chan.bagus_lib.message.CameraMessage;
 import bagu_chan.bagus_lib.message.UpdateDataMessage;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModSensors;
-import bagu_chan.bagus_lib.util.WebHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -19,20 +17,12 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(BagusLib.MODID)
 public class BagusLib {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "bagus_lib";
     public static final String NETWORK_PROTOCOL = "2";
-
-    public static List<String> PATREONS = new ArrayList<>();
-
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(MODID, "net"))
@@ -70,20 +60,5 @@ public class BagusLib {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        BufferedReader urlContents = WebHelper.getURLContents("https://raw.githubusercontent.com/baguchan/BagusLib/master/src/main/resources/assets/bagus_lib/patreon.txt", "assets/bagus_lib/patreon.txt");
-        if (urlContents != null) {
-            try {
-                String line;
-                while ((line = urlContents.readLine()) != null) {
-                    PATREONS.add(line);
-                }
-            } catch (IOException e) {
-                LOGGER.warn("Failed to load perks");
-            }
-        } else LOGGER.warn("Failed to load perks");
-    }
-
-    public static boolean isFunker(Player player) {
-        return PATREONS.contains(player.getName().getString());
     }
 }
