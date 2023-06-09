@@ -44,7 +44,7 @@ public class BagusLib {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
-        this.setupMessages();
+
     }
 
     private void setupMessages() {
@@ -60,5 +60,6 @@ public class BagusLib {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        this.setupMessages();
     }
 }
