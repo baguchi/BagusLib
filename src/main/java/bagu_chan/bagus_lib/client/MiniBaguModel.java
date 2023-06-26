@@ -39,7 +39,7 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
+        this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
     }
 
     @Override
