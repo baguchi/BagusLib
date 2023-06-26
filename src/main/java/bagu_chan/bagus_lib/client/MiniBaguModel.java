@@ -11,6 +11,7 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implements IArmor {
@@ -38,7 +39,7 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+        this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
     }
 
     @Override
