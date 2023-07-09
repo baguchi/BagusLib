@@ -27,7 +27,7 @@ public abstract class RavagerMixin extends Raider {
     @Inject(method = "roar", at = @At("HEAD"))
     private void roar(CallbackInfo callbackInfo) {
         Ravager ravager = (Ravager) ((Object) this);
-        if (!this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
+        if (BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
             EntityConditionCameraHolder<Ravager> entityConditionCameraHolder = new EntityConditionCameraHolder<>(18, 40, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), ravager);
             entityConditionCameraHolder.setPredicate(predicate -> this.roarTick > 1);
             CameraEvent.addCameraHolderList(this.level(), entityConditionCameraHolder);

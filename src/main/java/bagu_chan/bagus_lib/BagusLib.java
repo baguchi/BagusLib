@@ -1,6 +1,5 @@
 package bagu_chan.bagus_lib;
 
-import bagu_chan.bagus_lib.message.CameraMessage;
 import bagu_chan.bagus_lib.message.UpdateDataMessage;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModSensors;
@@ -43,16 +42,11 @@ public class BagusLib {
         MinecraftForge.EVENT_BUS.register(this);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
 
     }
 
     private void setupMessages() {
-        CHANNEL.messageBuilder(CameraMessage.class, 0)
-                .encoder(CameraMessage::writeToPacket).decoder(CameraMessage::readFromPacket)
-                .consumerMainThread(CameraMessage::handle)
-                .add();
-        CHANNEL.messageBuilder(UpdateDataMessage.class, 1)
+        CHANNEL.messageBuilder(UpdateDataMessage.class, 0)
                 .encoder(UpdateDataMessage::writeToPacket).decoder(UpdateDataMessage::readFromPacket)
                 .consumerMainThread(UpdateDataMessage::handle)
                 .add();

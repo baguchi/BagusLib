@@ -2,11 +2,11 @@ package bagu_chan.bagus_lib.mixin;
 
 import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.client.camera.CameraEvent;
-import bagu_chan.bagus_lib.client.camera.CameraHolder;
-import bagu_chan.bagus_lib.client.camera.CooldownCameraHolder;
+import bagu_chan.bagus_lib.client.camera.EntityConditionCameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.level.Level;
@@ -28,13 +28,10 @@ public abstract class WardenMixin extends Monster {
             if (this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraEvent.addCameraHolderList(this.level(), new CameraHolder(18, 200, GlobalVec3.of(this.level().dimension(), this.position())));
+                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(18, 200, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.EMERGING));
                         break;
                     case DIGGING:
-                        CameraEvent.addCameraHolderList(this.level(), new CameraHolder(18, 200, GlobalVec3.of(this.level().dimension(), this.position())));
-                        break;
-                    case ROARING:
-                        CameraEvent.addCameraHolderList(this.level(), new CooldownCameraHolder(22, 100, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), 80));
+                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(18, 200, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.DIGGING));
                         break;
                 }
             }

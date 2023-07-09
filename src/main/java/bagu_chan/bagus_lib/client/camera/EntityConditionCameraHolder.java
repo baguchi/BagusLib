@@ -29,7 +29,8 @@ public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraH
         return this.predicate.test(entity);
     }
 
-    public void setPredicate(Predicate<T> predicate) {
+    public EntityConditionCameraHolder<T> setPredicate(Predicate<T> predicate) {
         this.predicate = predicate;
+        return this;
     }
 }
