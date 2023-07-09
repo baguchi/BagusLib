@@ -15,7 +15,7 @@ public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraH
 
     @Override
     public void tick(ViewportEvent.ComputeCameraAngles event) {
-        if (!this.hasCondition(this.getEntity())) {
+        if (!this.hasCondition(this.getEntity()) || this.getEntity() == null || !this.getEntity().isAlive()) {
             ++this.time;
             super.tick(event);
         } else {
