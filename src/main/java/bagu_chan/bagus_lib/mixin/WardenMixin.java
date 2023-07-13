@@ -28,10 +28,10 @@ public abstract class WardenMixin extends Monster {
             if (this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(18, 200, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.EMERGING));
+                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.EMERGING));
                         break;
                     case DIGGING:
-                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(18, 200, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.DIGGING));
+                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.DIGGING));
                         break;
                 }
             }
