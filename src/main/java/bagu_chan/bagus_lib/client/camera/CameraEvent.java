@@ -2,6 +2,9 @@ package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
+import bagu_chan.bagus_lib.message.CameraMessage;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ViewportEvent;
@@ -22,7 +25,7 @@ public class CameraEvent {
             CameraHolder cameraHolder = cameraHolderList.get(i);
             if (cameraHolder.getDuration() <= cameraHolder.time) {
                 cameraHolderList.remove(cameraHolder);
-            }else {
+            } else {
                 cameraHolder.tick(event);
             }
 
@@ -39,7 +42,11 @@ public class CameraEvent {
                 cameraHolderList.add(cameraHolder);
             }
         } else {
-            BagusPacketHandler.CHANNEL.send(PacketDistributor.DIMENSION.with(() -> level.dimension()), cameraHolder);
+            for (Player player : level.players()) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                }
+            }
         }
     }
 }

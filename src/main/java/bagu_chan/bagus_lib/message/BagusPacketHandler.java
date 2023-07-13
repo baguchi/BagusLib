@@ -15,7 +15,6 @@ public class BagusPacketHandler {
             PROTOCOL_VERSION::equals
     );
 
-    @SuppressWarnings("UnusedAssignment")
     public static void setupMessages() {
         CHANNEL.registerMessage(0, CameraMessage.class,
                 CameraMessage::writeToPacket, CameraMessage::readFromPacket, CameraMessage::handle);
