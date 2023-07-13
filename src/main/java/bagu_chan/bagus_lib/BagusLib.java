@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib;
 
+import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModSensors;
 import net.minecraft.resources.ResourceLocation;
@@ -43,5 +44,6 @@ public class BagusLib {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        BagusPacketHandler.setupMessages();
     }
 }

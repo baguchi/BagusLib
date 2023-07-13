@@ -13,6 +13,10 @@ public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraH
         super(amount, duration, pos, entity);
     }
 
+    public EntityConditionCameraHolder(int distance, int duration, float amount, GlobalVec3 pos, T entity) {
+        super(distance, duration, amount, pos, entity);
+    }
+
     @Override
     public void tick(ViewportEvent.ComputeCameraAngles event) {
         if (!this.hasCondition(this.getEntity()) || this.getEntity() == null || !this.getEntity().isAlive()) {

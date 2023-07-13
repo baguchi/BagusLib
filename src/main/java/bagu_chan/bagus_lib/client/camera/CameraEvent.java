@@ -1,11 +1,13 @@
 package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.BagusLib;
+import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -36,6 +38,8 @@ public class CameraEvent {
             if (level.dimension() == cameraHolder.getPos().dimension()) {
                 cameraHolderList.add(cameraHolder);
             }
+        } else {
+            BagusPacketHandler.CHANNEL.send(PacketDistributor.DIMENSION.with(() -> level.dimension()), cameraHolder);
         }
     }
 }

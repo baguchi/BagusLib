@@ -5,20 +5,29 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.ViewportEvent;
 
 public class CameraHolder {
-    public int amount;
+    public int distance;
     public int duration;
     public int time;
 
+    public float amount;
+
     private final GlobalVec3 pos;
 
-    public CameraHolder(int amount, int duration, GlobalVec3 pos) {
-        this.amount = amount;
+    public CameraHolder(int distance, int duration, float amount, GlobalVec3 pos) {
+        this.distance = distance;
         this.duration = duration;
+        this.amount = amount;
         this.pos = pos;
     }
 
-    public int getAmount() {
-        return amount;
+    public CameraHolder(int distance, int duration, GlobalVec3 pos) {
+        this(distance, duration, 0.05F, pos);
+        this.distance = distance;
+        this.duration = duration;
+    }
+
+    public int getDistance() {
+        return distance;
     }
 
     public GlobalVec3 getPos() {
@@ -31,16 +40,16 @@ public class CameraHolder {
 
     private void preTick(ViewportEvent.ComputeCameraAngles event) {
 
-        float dist = (float) Mth.clamp((float) this.amount / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 1F);
+        float dist = (float) Mth.clamp((float) this.distance / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 1F);
         float leftTick = ((float) this.getDuration() / (float) this.time);
 
-        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.amount * this.amount && event.getCamera().getEntity().level().dimension() == this.getPos().dimension()) {
+        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.distance * this.distance && event.getCamera().getEntity().level().dimension() == this.getPos().dimension()) {
             double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
             float amount = leftTick * dist;
 
-            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)) * this.amount * 0.1F);
-            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * 2.5F)) * this.amount * 0.1F);
-            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * 2F)) * this.amount * 0.1F);
+            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)) * this.distance * 0.1F * this.amount);
+            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * 2.5F)) * this.distance * 0.1F * this.amount);
+            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * 2F)) * this.distance * 0.1F * this.amount);
         }
     }
 
