@@ -16,7 +16,7 @@ public class MiscUtils {
     public static void updateCosmetic() {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player instanceof IData data) {
             CompoundTag compoundTag = new CompoundTag();
-            if (TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 2) {
+            if (TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 1) {
                 compoundTag.putBoolean(BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
                 data.setData(compoundTag);
                 BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag));
