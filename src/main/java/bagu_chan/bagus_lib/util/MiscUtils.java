@@ -19,7 +19,7 @@ public class MiscUtils {
             if (TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 1) {
                 compoundTag.putBoolean(BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
                 data.setData(compoundTag);
-                BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag));
+                BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
             }
         }
     }

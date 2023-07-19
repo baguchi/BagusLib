@@ -12,10 +12,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class TierHelper {
     private static final String SUPPORTER_URL = "https://raw.githubusercontent.com/baguchan/BagusLib/1.20/src/main/resources/assets/bagus_lib/patreon.txt";
@@ -46,7 +43,6 @@ public class TierHelper {
         return null;
     }
 
-    @Nullable
     public static void addSuporterContents() {
         BufferedReader urlContents = TierHelper.getSuporterContents();
         if (urlContents != null) {
@@ -63,6 +59,7 @@ public class TierHelper {
             lines.stream().filter(s -> !(s.isEmpty() || s.contains("#"))).forEach(s -> {
                 String[] values = s.split(",");
                 SUPPORTER.add(new User(User.getTier(values[0]), UUID.fromString(values[1])));
+
             });
 
         } else {
@@ -73,7 +70,7 @@ public class TierHelper {
     @Nullable
     public static User get(Player player) {
         Optional<User> optional = SUPPORTER.stream().filter(user -> {
-            return user.getUuid() == player.getUUID();
+            return user.getUuid().toString().contains(player.getUUID().toString().toLowerCase(Locale.ROOT));
         }).findFirst();
         return optional.orElse(null);
     }
