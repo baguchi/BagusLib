@@ -1,6 +1,5 @@
 package bagu_chan.bagus_lib.util;
 
-import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.api.IData;
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.UpdateDataMessage;
@@ -13,11 +12,11 @@ public class MiscUtils {
     public static final String BAGUS_COSMETIC_ID = "BaguCosmetic";
 
     @OnlyIn(Dist.CLIENT)
-    public static void updateCosmetic() {
+    public static void updateCosmetic(String cosmeticId, boolean enable) {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player instanceof IData data) {
-            CompoundTag compoundTag = new CompoundTag();
+            CompoundTag compoundTag = data.getData() != null ? data.getData() : null;
             if (TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 1) {
-                compoundTag.putBoolean(BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
+                compoundTag.putBoolean(cosmeticId, enable);
                 data.setData(compoundTag);
                 BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
             }

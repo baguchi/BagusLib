@@ -25,7 +25,7 @@ public class CommonEvent {
     public static void onJoin(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide()) {
             if (Minecraft.getInstance().player == event.getEntity()) {
-                MiscUtils.updateCosmetic();
+                MiscUtils.updateCosmetic(MiscUtils.BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
             }
         }
     }
