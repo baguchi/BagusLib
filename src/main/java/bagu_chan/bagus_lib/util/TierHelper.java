@@ -74,7 +74,7 @@ public class TierHelper {
     public static User get(Player player) {
         Optional<User> optional = SUPPORTER.stream().filter(user -> {
             return user.getUuid() == player.getUUID();
-        }).findFirst() l
+        }).findFirst();
         return optional.orElse(null);
     }
 
