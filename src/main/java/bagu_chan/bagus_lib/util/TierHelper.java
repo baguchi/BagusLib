@@ -1,8 +1,8 @@
 package bagu_chan.bagus_lib.util;
 
 import bagu_chan.bagus_lib.BagusLib;
+import com.google.common.collect.Lists;
 import net.minecraft.world.entity.player.Player;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
