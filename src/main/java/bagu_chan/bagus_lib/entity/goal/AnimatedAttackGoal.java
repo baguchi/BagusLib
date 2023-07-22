@@ -28,16 +28,19 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     @Override
     protected void checkAndPerformAttack(LivingEntity p_29589_, double p_29590_) {
         double d0 = this.getAttackReachSqr(p_29589_);
-        if (p_29590_ <= d0 && this.getTicksUntilNextAttack() == this.leftActionPoint) {
+        if (this.getTicksUntilNextAttack() == this.leftActionPoint) {
+            if (p_29590_ <= d0) {
+                this.mob.doHurtTarget(p_29589_);
+            }
 
-            this.mob.doHurtTarget(p_29589_);
-            this.attack = true;
+
             if (this.getTicksUntilNextAttack() == 0) {
                 this.resetAttackCooldown();
             }
         } else if (p_29590_ <= d0) {
             if (this.getTicksUntilNextAttack() == this.attackLengh) {
                 this.mob.level().broadcastEntityEvent(this.mob, (byte) 4);
+                this.attack = true;
             }
             if (this.getTicksUntilNextAttack() == 0) {
                 this.resetAttackCooldown();
