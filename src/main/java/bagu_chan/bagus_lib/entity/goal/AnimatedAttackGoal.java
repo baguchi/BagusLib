@@ -55,6 +55,7 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
 
     protected void resetAttackCooldown() {
         this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLengh + 1);
+        this.attack = false;
     }
 
     protected double getAttackReachSqr(LivingEntity p_25556_) {
