@@ -51,11 +51,11 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     }
 
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = this.adjustedTickDelay(11);
+        this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLengh + 1);
     }
 
-    protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return (double) (this.mob.getBbWidth() + this.mob.getBbWidth() + 3.0F + attackTarget.getBbWidth());
+    protected double getAttackReachSqr(LivingEntity p_25556_) {
+        return (double) (this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_25556_.getBbWidth());
     }
 
     @Override
