@@ -5,15 +5,13 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 public class AnimatedAttackGoal extends MeleeAttackGoal {
-    private final PathfinderMob mob;
-    private boolean attack;
+    protected boolean attack;
 
-    private final int leftActionPoint;
-    private final int attackLengh;
+    protected final int leftActionPoint;
+    protected final int attackLengh;
 
-    public AnimatedAttackGoal(PathfinderMob mob, double speed, int leftActionPoint, int attackLengh) {
-        super(mob, speed, true);
-        this.mob = mob;
+    public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLengh) {
+        super(attacker, speed, true);
         this.leftActionPoint = leftActionPoint;
         this.attackLengh = attackLengh;
     }
@@ -39,7 +37,7 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
             }
         } else if (p_29590_ <= d0) {
             if (this.getTicksUntilNextAttack() == this.attackLengh) {
-                this.mob.level().broadcastEntityEvent(this.mob, (byte) 4);
+                this.doTheAnimation();
                 this.attack = true;
             }
             if (this.getTicksUntilNextAttack() == 0) {
@@ -53,14 +51,15 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
 
     }
 
+    protected void doTheAnimation() {
+        this.mob.level().broadcastEntityEvent(this.mob, (byte) 4);
+    }
+
     protected void resetAttackCooldown() {
         this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLengh + 1);
         this.attack = false;
     }
 
-    protected double getAttackReachSqr(LivingEntity p_25556_) {
-        return (double) (this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_25556_.getBbWidth());
-    }
 
     @Override
     public boolean requiresUpdateEveryTick() {
