@@ -13,7 +13,11 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
     protected int currentAttackLengh;
 
     public ManyAnimatedAttackGoal(PathfinderMob attacker, double speed, int[] leftActionPoints, int attackLengh) {
-        super(attacker, speed, true);
+        this(attacker, speed, leftActionPoints, attackLengh, true);
+    }
+
+    public ManyAnimatedAttackGoal(PathfinderMob attacker, double speed, int[] leftActionPoints, int attackLengh, boolean longPath) {
+        super(attacker, speed, longPath);
         this.leftActionPoints = leftActionPoints;
         this.attackLengh = attackLengh;
         this.maxAttackLengh = leftActionPoints.length;

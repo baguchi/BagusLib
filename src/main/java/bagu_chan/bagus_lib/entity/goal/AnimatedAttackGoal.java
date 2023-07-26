@@ -11,7 +11,11 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     protected final int attackLengh;
 
     public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLengh) {
-        super(attacker, speed, true);
+        this(attacker, speed, leftActionPoint, attackLengh, true);
+    }
+
+    public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLengh, boolean longPath) {
+        super(attacker, speed, longPath);
         this.leftActionPoint = leftActionPoint;
         this.attackLengh = attackLengh;
     }
