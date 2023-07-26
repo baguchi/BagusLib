@@ -19,4 +19,13 @@ public class EntityCameraHolder<T extends Entity> extends CameraHolder {
     public T getEntity() {
         return entity;
     }
+
+    @Override
+    public GlobalVec3 getPos() {
+        GlobalVec3 vec3 = super.getPos();
+        if (entity != null) {
+            return GlobalVec3.of(vec3.dimension(), entity.position());
+        }
+        return vec3;
+    }
 }

@@ -3,6 +3,7 @@ package bagu_chan.bagus_lib.client.camera;
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.CameraMessage;
+import bagu_chan.bagus_lib.message.EntityCameraMessage;
 import com.google.common.collect.Lists;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +45,11 @@ public class CameraEvent {
         } else {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                    if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
+                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                    } else {
+                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                    }
                 }
             }
         }
