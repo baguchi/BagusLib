@@ -2,6 +2,7 @@ package bagu_chan.bagus_lib;
 
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.register.ModEntities;
+import bagu_chan.bagus_lib.register.ModLootModifiers;
 import bagu_chan.bagus_lib.register.ModSensors;
 import bagu_chan.bagus_lib.util.TierHelper;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +31,7 @@ public class BagusLib {
         // Register the commonSetup method for modloading
 
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
+        ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
