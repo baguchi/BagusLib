@@ -25,13 +25,13 @@ public abstract class WardenMixin extends Monster {
     @Inject(method = "onSyncedDataUpdated", at = @At("HEAD"))
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_219422_, CallbackInfo callbackInfo) {
         if (DATA_POSE.equals(p_219422_)) {
-            if (this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
+            if (this.level.isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.EMERGING));
+                        CameraEvent.addCameraHolderList(this.level, new EntityConditionCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level.dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.EMERGING));
                         break;
                     case DIGGING:
-                        CameraEvent.addCameraHolderList(this.level(), new EntityConditionCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.DIGGING));
+                        CameraEvent.addCameraHolderList(this.level, new EntityConditionCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level.dimension(), this.position()), this).setPredicate(wardenMixin -> wardenMixin.getPose() == Pose.DIGGING));
                         break;
                 }
             }

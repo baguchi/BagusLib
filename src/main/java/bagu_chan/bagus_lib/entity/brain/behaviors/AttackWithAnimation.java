@@ -56,12 +56,12 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
         return true;
     }
 
-    protected void checkAndPerformAttack(E entity, LivingEntity p_29589_, ServerLevel serverLevel) {
-        double d0 = entity.getMeleeAttackRangeSqr(p_29589_);
-        double d1 = entity.getPerceivedTargetDistanceSquareForMeleeAttack(p_29589_);
+    protected void checkAndPerformAttack(E entity, LivingEntity livingEntity, ServerLevel serverLevel) {
+        double d0 = entity.getMeleeAttackRangeSqr(livingEntity);
+        double d1 = entity.distanceToSqr(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
         if (this.cooldownTick == this.leftActionPoint) {
             if (d1 <= d0) {
-                entity.doHurtTarget(p_29589_);
+                entity.doHurtTarget(livingEntity);
             }
 
 

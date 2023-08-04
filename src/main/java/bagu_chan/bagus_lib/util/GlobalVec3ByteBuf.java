@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.util;
 
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class GlobalVec3ByteBuf {
     public static GlobalVec3 readGlobalPos(FriendlyByteBuf buf) {
-        ResourceKey<Level> resourcekey = buf.readResourceKey(Registries.DIMENSION);
+        ResourceKey<Level> resourcekey = buf.readResourceKey(Registry.DIMENSION_REGISTRY);
         Vec3 blockpos = readVec3(buf);
         return GlobalVec3.of(resourcekey, blockpos);
     }

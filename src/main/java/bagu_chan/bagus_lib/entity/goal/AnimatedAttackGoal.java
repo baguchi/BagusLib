@@ -56,7 +56,7 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     }
 
     protected void doTheAnimation() {
-        this.mob.level().broadcastEntityEvent(this.mob, (byte) 4);
+        this.mob.level.broadcastEntityEvent(this.mob, (byte) 4);
     }
 
     protected void resetAttackCooldown() {

@@ -42,7 +42,7 @@ public class EntityCameraMessage {
     public static void handle(EntityCameraMessage message, Supplier<NetworkEvent.Context> ctx) {
         NetworkEvent.Context context = ctx.get();
         context.enqueueWork(() -> {
-            Level level = Minecraft.getInstance().player.level();
+            Level level = Minecraft.getInstance().player.level;
             if (level == null) {
                 return;
             }
