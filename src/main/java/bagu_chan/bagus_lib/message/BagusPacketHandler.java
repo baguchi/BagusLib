@@ -20,5 +20,7 @@ public class BagusPacketHandler {
                 CameraMessage::writeToPacket, CameraMessage::readFromPacket, CameraMessage::handle);
         CHANNEL.registerMessage(1, UpdateDataMessage.class,
                 UpdateDataMessage::writeToPacket, UpdateDataMessage::readFromPacket, UpdateDataMessage::handle);
+        CHANNEL.registerMessage(2, EntityCameraMessage.class,
+                EntityCameraMessage::writeToPacket, EntityCameraMessage::readFromPacket, EntityCameraMessage::handle);
     }
 }
