@@ -48,6 +48,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
             p_22552_.lookAt(EntityAnchorArgument.Anchor.EYES, livingentity.position());
             p_22552_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(livingentity.position(), 1.0F, 0));
             checkAndPerformAttack(p_22552_, livingentity, p_22551_);
+            this.cooldownTick = Math.max(this.cooldownTick - 1, 0);
         }
     }
 
