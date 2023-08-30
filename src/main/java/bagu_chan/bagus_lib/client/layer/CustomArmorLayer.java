@@ -113,7 +113,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                     this.renderer.getModel().translateToHead(part, matrixStackIn);
                     matrixStackIn.mulPose((new Quaternionf()).rotateX((float) Math.PI));
                     matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
-                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level(), 0);
+                    matrixStackIn.scale(0.625F, 0.625F, 0.625F);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.HEAD, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level(), 0);
                 });
             }
                 matrixStackIn.popPose();
