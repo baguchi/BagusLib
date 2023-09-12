@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.mixin;
 
-import bagu_chan.bagus_lib.api.IData;
+import bagu_chan.bagus_lib.api.IBaguData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements IData {
+public abstract class LivingEntityMixin extends Entity implements IBaguData {
     private static final EntityDataAccessor<CompoundTag> DATA = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.COMPOUND_TAG);
 
     public LivingEntityMixin(EntityType<?> p_19870_, Level p_19871_) {
