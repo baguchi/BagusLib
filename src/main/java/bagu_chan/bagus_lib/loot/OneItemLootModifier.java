@@ -1,28 +1,20 @@
 package bagu_chan.bagus_lib.loot;
 
-import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class OneItemLootModifier extends LootModifier {
-
-    public static final Supplier<Codec<OneItemLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(inst -> codecStart(inst)
-                    .and(ResourceLocation.CODEC.fieldOf("loot_table").forGetter((m) -> m.lootTable))
-                    .apply(inst, OneItemLootModifier::new)));
-
     public final ResourceLocation lootTable;
 
     public OneItemLootModifier(LootItemCondition[] conditionsIn, ResourceLocation lootTable) {
@@ -30,9 +22,9 @@ public class OneItemLootModifier extends LootModifier {
         this.lootTable = lootTable;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         LootTable extraTable = context.getLootTable(this.lootTable);
 
         ObjectArrayList<ItemStack> stacks = new ObjectArrayList<>();
@@ -47,8 +39,16 @@ public class OneItemLootModifier extends LootModifier {
         }
     }
 
-    @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
-        return CODEC.get();
+    public static class Serializer extends GlobalLootModifierSerializer<OneItemLootModifier> {
+        @Override
+        public OneItemLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
+            ResourceLocation addedItem = new ResourceLocation((GsonHelper.getAsString(object, "loot_table")));
+            return new OneItemLootModifier(ailootcondition, addedItem);
+        }
+
+        @Override
+        public JsonObject write(OneItemLootModifier instance) {
+            return new JsonObject();
+        }
     }
 }

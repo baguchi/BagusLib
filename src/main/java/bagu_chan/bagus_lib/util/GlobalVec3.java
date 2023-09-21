@@ -9,8 +9,11 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Objects;
 
 public class GlobalVec3 {
+    public static final Codec<Vec3> CODEC_VEC3 = RecordCodecBuilder.create((p_122642_) -> {
+        return p_122642_.group(Codec.DOUBLE.fieldOf("x").forGetter(Vec3::x), Codec.DOUBLE.fieldOf("y").forGetter(Vec3::y), Codec.DOUBLE.fieldOf("z").forGetter(Vec3::z)).apply(p_122642_, Vec3::new);
+    });
     public static final Codec<GlobalVec3> CODEC = RecordCodecBuilder.create((p_122642_) -> {
-        return p_122642_.group(Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(GlobalVec3::dimension), Vec3.CODEC.fieldOf("vec3").forGetter(GlobalVec3::pos)).apply(p_122642_, GlobalVec3::of);
+        return p_122642_.group(Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(GlobalVec3::dimension), CODEC_VEC3.fieldOf("vec3").forGetter(GlobalVec3::pos)).apply(p_122642_, GlobalVec3::of);
     });
     private final ResourceKey<Level> dimension;
     private final Vec3 vec3;

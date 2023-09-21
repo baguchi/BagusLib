@@ -38,7 +38,7 @@ public class CameraMessage {
     public static void handle(CameraMessage message, Supplier<NetworkEvent.Context> ctx) {
         NetworkEvent.Context context = ctx.get();
         context.enqueueWork(() -> {
-            Level level = Minecraft.getInstance().player.level;
+            Level level = Minecraft.getInstance().player.getLevel();
             if (level == null) {
                 return;
             }

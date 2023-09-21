@@ -2,7 +2,7 @@ package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 
 import java.util.function.Predicate;
 
@@ -18,7 +18,7 @@ public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraH
     }
 
     @Override
-    public void tick(ViewportEvent.ComputeCameraAngles event) {
+    public void tick(EntityViewRenderEvent.CameraSetup event) {
         if (!this.hasCondition(this.getEntity()) || this.getEntity() == null || !this.getEntity().isAlive()) {
             ++this.time;
             super.tick(event);

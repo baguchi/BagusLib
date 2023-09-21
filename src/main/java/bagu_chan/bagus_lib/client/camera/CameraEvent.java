@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
@@ -21,7 +21,7 @@ public class CameraEvent {
     public static List<CameraHolder> cameraHolderList = Lists.newArrayList();
 
     @SubscribeEvent
-    public static void cameraEvent(ViewportEvent.ComputeCameraAngles event) {
+    public static void cameraEvent(EntityViewRenderEvent.CameraSetup event) {
         for (int i = 0; i < cameraHolderList.size(); i++) {
             CameraHolder cameraHolder = cameraHolderList.get(i);
             if (cameraHolder.getDuration() <= cameraHolder.time) {

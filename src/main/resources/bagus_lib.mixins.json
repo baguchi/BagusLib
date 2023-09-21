@@ -2,17 +2,17 @@
   "required": true,
   "package": "bagu_chan.bagus_lib.mixin",
   "compatibilityLevel": "JAVA_17",
-  "minVersion": "0.8",
+
   "refmap": "bagus_lib.refmap.json",
   "mixins": [
-    "RavagerMixin",
-    "WardenMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "RavagerMixin"
   ],
   "client": [
     "client.PlayerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "minVersion": "0.8"
 }

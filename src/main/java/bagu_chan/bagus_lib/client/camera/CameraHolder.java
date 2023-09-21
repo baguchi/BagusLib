@@ -2,7 +2,7 @@ package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.util.Mth;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 
 public class CameraHolder {
     public int distance;
@@ -38,13 +38,13 @@ public class CameraHolder {
         return duration;
     }
 
-    private void preTick(ViewportEvent.ComputeCameraAngles event) {
+    private void preTick(EntityViewRenderEvent.CameraSetup event) {
 
         float dist = (float) Mth.clamp((float) this.distance / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 1F);
         float leftTick = ((float) this.getDuration() / (float) this.time);
 
         if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.distance * this.distance && event.getCamera().getEntity().level.dimension() == this.getPos().dimension()) {
-            double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
+            double ticks = event.getCamera().getEntity().tickCount + event.getPartialTicks();
             float amount = leftTick * dist;
 
             event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)) * this.distance * 0.1F * this.amount);
@@ -53,7 +53,7 @@ public class CameraHolder {
         }
     }
 
-    public void tick(ViewportEvent.ComputeCameraAngles event) {
+    public void tick(EntityViewRenderEvent.CameraSetup event) {
         ++this.time;
         preTick(event);
     }
