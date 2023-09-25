@@ -46,9 +46,9 @@ public class CameraEvent {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
-                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        BagusPacketHandler.CHANNEL.send(new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()), PacketDistributor.PLAYER.with(serverPlayer));
                     } else {
-                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        BagusPacketHandler.CHANNEL.send(new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()), PacketDistributor.PLAYER.with(serverPlayer));
                     }
                 }
             }

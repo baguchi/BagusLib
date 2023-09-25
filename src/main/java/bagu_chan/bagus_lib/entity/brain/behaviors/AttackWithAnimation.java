@@ -58,10 +58,8 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     }
 
     protected void checkAndPerformAttack(E entity, LivingEntity p_29589_, ServerLevel serverLevel) {
-        double d0 = entity.getMeleeAttackRangeSqr(p_29589_);
-        double d1 = entity.getPerceivedTargetDistanceSquareForMeleeAttack(p_29589_);
         if (this.cooldownTick == this.leftActionPoint) {
-            if (d1 <= d0) {
+            if (this.canPerformAttack(entity, p_29589_)) {
                 entity.doHurtTarget(p_29589_);
             }
 
@@ -69,7 +67,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
             if (this.cooldownTick == 0) {
                 this.resetAttackCooldown();
             }
-        } else if (d1 <= d0) {
+        } else if (this.canPerformAttack(entity, p_29589_)) {
             if (this.cooldownTick == this.attackLengh) {
                 this.doTheAnimation(entity, serverLevel);
                 this.attack = true;
@@ -83,6 +81,10 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
             }
         }
 
+    }
+
+    protected boolean canPerformAttack(E entity, LivingEntity p_301160_) {
+        return entity.isWithinMeleeAttackRange(p_301160_) && entity.getSensing().hasLineOfSight(p_301160_);
     }
 
     public void doTheAnimation(E entity, ServerLevel serverLevel) {

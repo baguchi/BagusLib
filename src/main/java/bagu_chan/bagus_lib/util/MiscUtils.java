@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.PacketDistributor;
 
 public class MiscUtils {
     public static final String BAGUS_COSMETIC_ID = "BaguCosmetic";
@@ -18,7 +19,7 @@ public class MiscUtils {
             if (TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 1) {
                 compoundTag.putBoolean(cosmeticId, enable);
                 data.setData(compoundTag);
-                BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
+                BagusPacketHandler.CHANNEL.send(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()), PacketDistributor.SERVER.noArg());
             }
         }
     }

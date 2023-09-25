@@ -8,9 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class EntityCameraMessage {
     private final int entityId;
@@ -39,16 +37,15 @@ public class EntityCameraMessage {
         return new EntityCameraMessage(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
-    public static void handle(EntityCameraMessage message, Supplier<NetworkEvent.Context> ctx) {
-        NetworkEvent.Context context = ctx.get();
+    public void handle(CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
                 return;
             }
-            Entity entity = level.getEntity(message.entityId);
-            CameraEvent.addCameraHolderList(level, new EntityCameraHolder(message.distance, message.duration, message.amount, message.globalPos, entity));
+            Entity entity = level.getEntity(entityId);
+            CameraEvent.addCameraHolderList(level, new EntityCameraHolder(distance, duration, amount, globalPos, entity));
         });
-        ctx.get().setPacketHandled(true);
+        context.setPacketHandled(true);
     }
 }

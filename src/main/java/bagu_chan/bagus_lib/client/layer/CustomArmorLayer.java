@@ -216,13 +216,13 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
 
     private void renderTrim(ModelPart part, ArmorMaterial p_267946_, PoseStack p_268019_, MultiBufferSource p_268023_, int p_268190_, ArmorTrim p_267984_, boolean p_267965_, HumanoidModel p_267949_, boolean p_268259_, float p_268337_, float p_268095_, float p_268305_) {
         TextureAtlasSprite textureatlassprite = this.armorTrimAtlas.getSprite(p_268259_ ? p_267984_.innerTexture(p_267946_) : p_267984_.outerTexture(p_267946_));
-        VertexConsumer vertexconsumer = textureatlassprite.wrap(ItemRenderer.getFoilBufferDirect(p_268023_, Sheets.armorTrimsSheet(), true, p_267965_));
+        VertexConsumer vertexconsumer = textureatlassprite.wrap(ItemRenderer.getFoilBufferDirect(p_268023_, Sheets.armorTrimsSheet(p_267984_.pattern().value().decal()), true, p_267965_));
         part.render(p_268019_, vertexconsumer, p_268190_, OverlayTexture.NO_OVERLAY, p_268337_, p_268095_, p_268305_, 1.0F);
     }
 
     private void renderTrim(ModelPart part, ItemStack item, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, EquipmentSlot equipmentSlot, HumanoidModel modelIn) {
         if (item.getItem() instanceof ArmorItem armorItem) {
-            ArmorTrim.getTrim(entity.level().registryAccess(), item).ifPresent((p_267897_) -> {
+            ArmorTrim.getTrim(entity.level().registryAccess(), item, true).ifPresent((p_267897_) -> {
                 this.renderTrim(part, armorItem.getMaterial(), matrixStackIn, bufferIn, packedLightIn, p_267897_, glintIn, modelIn, this.usesInnerModel(equipmentSlot), 1.0F, 1.0F, 1.0F);
             });
         }

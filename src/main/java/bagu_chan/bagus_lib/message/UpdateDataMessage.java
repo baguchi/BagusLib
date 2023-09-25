@@ -5,10 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class UpdateDataMessage {
     private final CompoundTag tag;
@@ -33,15 +31,14 @@ public class UpdateDataMessage {
         return new UpdateDataMessage(buf.readNbt(), buf.readInt());
     }
 
-    public static void handle(UpdateDataMessage message, Supplier<NetworkEvent.Context> ctx) {
-        NetworkEvent.Context context = ctx.get();
+    public void handle(CustomPayloadEvent.Context context) {
         if (context.getDirection().getReceptionSide() == LogicalSide.SERVER)
             context.enqueueWork(() -> {
-                Player player = ctx.get().getSender();
+                Player player = context.getSender();
                 if (player != null && player instanceof IBaguData data) {
-                    data.setData(message.tag);
+                    data.setData(tag);
                 }
             });
-        ctx.get().setPacketHandled(true);
+        context.setPacketHandled(true);
     }
 }

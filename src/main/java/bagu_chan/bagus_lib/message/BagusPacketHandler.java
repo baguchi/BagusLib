@@ -1,26 +1,20 @@
 package bagu_chan.bagus_lib.message;
 
 import bagu_chan.bagus_lib.BagusLib;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
 
 public class BagusPacketHandler {
 
 
     public static final String PROTOCOL_VERSION = "2";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            BagusLib.prefix("channel"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+    public static final SimpleChannel CHANNEL = ChannelBuilder.named(
+            BagusLib.prefix("channel")
+    ).networkProtocolVersion(2).simpleChannel();
 
     public static void setupMessages() {
-        CHANNEL.registerMessage(0, CameraMessage.class,
-                CameraMessage::writeToPacket, CameraMessage::readFromPacket, CameraMessage::handle);
-        CHANNEL.registerMessage(1, UpdateDataMessage.class,
-                UpdateDataMessage::writeToPacket, UpdateDataMessage::readFromPacket, UpdateDataMessage::handle);
-        CHANNEL.registerMessage(2, EntityCameraMessage.class,
-                EntityCameraMessage::writeToPacket, EntityCameraMessage::readFromPacket, EntityCameraMessage::handle);
+        CHANNEL.messageBuilder(CameraMessage.class, 0).decoder(CameraMessage::readFromPacket).encoder(CameraMessage::writeToPacket).consumerMainThread(CameraMessage::handle);
+        CHANNEL.messageBuilder(UpdateDataMessage.class, 1).decoder(UpdateDataMessage::readFromPacket).encoder(UpdateDataMessage::writeToPacket).consumerMainThread(UpdateDataMessage::handle);
+        CHANNEL.messageBuilder(EntityCameraMessage.class, 2).decoder(EntityCameraMessage::readFromPacket).encoder(EntityCameraMessage::writeToPacket).consumerMainThread(EntityCameraMessage::handle);
     }
 }
