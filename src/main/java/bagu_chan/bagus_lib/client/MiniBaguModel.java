@@ -3,7 +3,9 @@ package bagu_chan.bagus_lib.client;// Made with Blockbench 4.7.4
 // Paste this class into your mod and generate all required imports
 
 
+import bagu_chan.bagus_lib.client.animation.TestAnimations;
 import bagu_chan.bagus_lib.client.layer.IArmor;
+import bagu_chan.bagus_lib.entity.MiniBagu;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -12,9 +14,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 
-public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implements IArmor {
+public class MiniBaguModel<T extends MiniBagu> extends HierarchicalModel<T> implements IArmor {
     private final ModelPart root;
     private final ModelPart head;
 
@@ -39,7 +40,9 @@ public class MiniBaguModel<T extends Entity> extends HierarchicalModel<T> implem
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
         this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
+        this.animate(entity.attackAnimationState, TestAnimations.ATTACK, ageInTicks);
     }
 
     @Override

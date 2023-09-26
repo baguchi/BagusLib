@@ -2,7 +2,7 @@ package bagu_chan.bagus_lib;
 
 import bagu_chan.bagus_lib.util.MiscUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -22,8 +22,8 @@ public class CommonEvent {
     }*/
 
     @SubscribeEvent
-    public static void onJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide()) {
+    public static void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity().level().isClientSide()) {
             if (Minecraft.getInstance().player == event.getEntity()) {
                 MiscUtils.updateCosmetic(MiscUtils.BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
             }

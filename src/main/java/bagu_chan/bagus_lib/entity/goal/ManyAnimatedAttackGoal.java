@@ -39,7 +39,7 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
     @Override
     protected void checkAndPerformAttack(LivingEntity p_29589_) {
         if (this.getTicksUntilNextAttack() == this.leftActionPoints[this.currentAttackLengh]) {
-            if (this.canPerformAttackWithoutTimer(p_29589_)) {
+            if (this.canPerformAttack(p_29589_)) {
                 this.mob.doHurtTarget(p_29589_);
             }
 
@@ -49,7 +49,7 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
             if (this.getTicksUntilNextAttack() == 0) {
                 this.resetAttackCooldown();
             }
-        } else if (this.canPerformAttack(p_29589_)) {
+        } else if (this.canPerformAttack(p_29589_) && this.getTicksUntilNextAttack() >= this.attackLengh) {
             if (this.getTicksUntilNextAttack() == this.attackLengh) {
                 this.doTheAnimation();
                 this.attack = true;
@@ -65,7 +65,7 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
 
     }
 
-    protected boolean canPerformAttackWithoutTimer(LivingEntity p_301160_) {
+    protected boolean canPerformAttack(LivingEntity p_301160_) {
         return this.mob.isWithinMeleeAttackRange(p_301160_) && this.mob.getSensing().hasLineOfSight(p_301160_);
     }
 

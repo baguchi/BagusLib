@@ -72,7 +72,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
                 this.doTheAnimation(entity, serverLevel);
                 this.attack = true;
             }
-            if (this.cooldownTick == 0) {
+            if (this.cooldownTick == 0 && this.cooldownTick >= this.attackLengh) {
                 this.resetAttackCooldown();
             }
         } else {

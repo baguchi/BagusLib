@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.entity;
 
+import bagu_chan.bagus_lib.entity.goal.AnimatedAttackGoal;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -7,7 +8,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +26,12 @@ import java.util.Optional;
 
 //example Entity
 public class MiniBagu extends PathfinderMob {
+
+    public final AnimationState attackAnimationState = new AnimationState();
+
+    public int attackAnimationTick;
+    private final int attackAnimationLength = (int) (20);
+
     public MiniBagu(EntityType<? extends PathfinderMob> p_21683_, Level p_21684_) {
         super(p_21683_, p_21684_);
     }
@@ -33,10 +44,36 @@ public class MiniBagu extends PathfinderMob {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(1, new AnimatedAttackGoal(this, 1.1D, 10, 20));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        if (this.level().isClientSide) {
+            if (this.attackAnimationTick < this.attackAnimationLength) {
+                this.attackAnimationTick++;
+            }
+
+            if (this.attackAnimationTick >= this.attackAnimationLength) {
+                this.attackAnimationState.stop();
+            }
+        }
+    }
+
+    @Override
+    public void handleEntityEvent(byte p_21375_) {
+        if (p_21375_ == 4) {
+            this.attackAnimationState.start(this.tickCount);
+
+            this.attackAnimationTick = 0;
+        } else {
+            super.handleEntityEvent(p_21375_);
+        }
     }
 
     @Nullable
