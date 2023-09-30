@@ -42,7 +42,7 @@ public class CameraEvent {
             if (level.dimension() == cameraHolder.getPos().dimension()) {
                 cameraHolderList.add(cameraHolder);
             }
-        } else {
+        } else if (!level.isClientSide()) {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {

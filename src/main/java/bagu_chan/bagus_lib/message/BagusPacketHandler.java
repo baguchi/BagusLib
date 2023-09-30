@@ -14,8 +14,8 @@ public class BagusPacketHandler {
     ).networkProtocolVersion(2).clientAcceptedVersions(Channel.VersionTest.exact(2)).serverAcceptedVersions(Channel.VersionTest.exact(2)).simpleChannel();
 
     public static void setupMessages() {
-        CHANNEL.messageBuilder(CameraMessage.class, 0).decoder(CameraMessage::readFromPacket).encoder(CameraMessage::writeToPacket).consumerMainThread(CameraMessage::handle);
-        CHANNEL.messageBuilder(UpdateDataMessage.class, 1).decoder(UpdateDataMessage::readFromPacket).encoder(UpdateDataMessage::writeToPacket).consumerNetworkThread(UpdateDataMessage::handle);
-        CHANNEL.messageBuilder(EntityCameraMessage.class, 2).decoder(EntityCameraMessage::readFromPacket).encoder(EntityCameraMessage::writeToPacket).consumerMainThread(EntityCameraMessage::handle);
+        CHANNEL.messageBuilder(CameraMessage.class, 0).decoder(CameraMessage::readFromPacket).encoder(CameraMessage::writeToPacket).consumerMainThread(CameraMessage::handle).add();
+        CHANNEL.messageBuilder(UpdateDataMessage.class, 1).decoder(UpdateDataMessage::readFromPacket).encoder(UpdateDataMessage::writeToPacket).consumerNetworkThread(UpdateDataMessage::handle).add();
+        CHANNEL.messageBuilder(EntityCameraMessage.class, 2).decoder(EntityCameraMessage::readFromPacket).encoder(EntityCameraMessage::writeToPacket).consumerMainThread(EntityCameraMessage::handle).add();
     }
 }
