@@ -32,11 +32,11 @@ public class EntityCameraMessage {
         buf.writeInt(packet.duration);
         buf.writeInt(packet.distance);
         buf.writeFloat(packet.amount);
-        GlobalVec3ByteBuf.writeGlobalPos(buf, packet.globalPos);
+        GlobalVec3ByteBuf.writeGlobalVec(buf, packet.globalPos);
     }
 
     public static EntityCameraMessage readFromPacket(FriendlyByteBuf buf) {
-        return new EntityCameraMessage(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
+        return new EntityCameraMessage(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalVec(buf));
     }
 
     public static void handle(EntityCameraMessage message, Supplier<NetworkEvent.Context> ctx) {

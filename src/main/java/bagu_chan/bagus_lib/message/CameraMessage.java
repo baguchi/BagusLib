@@ -28,11 +28,11 @@ public class CameraMessage {
         buf.writeInt(packet.duration);
         buf.writeInt(packet.distance);
         buf.writeFloat(packet.amount);
-        GlobalVec3ByteBuf.writeGlobalPos(buf, packet.globalPos);
+        GlobalVec3ByteBuf.writeGlobalVec(buf, packet.globalPos);
     }
 
     public static CameraMessage readFromPacket(FriendlyByteBuf buf) {
-        return new CameraMessage(buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
+        return new CameraMessage(buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalVec(buf));
     }
 
     public static void handle(CameraMessage message, Supplier<NetworkEvent.Context> ctx) {
