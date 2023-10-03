@@ -14,13 +14,11 @@ public class AnimationScale {
     private float animationScale0;
     private final float amount;
 
-
-    public AnimationScale(boolean flag) {
-        this(flag, 0.1F);
+    public AnimationScale() {
+        this(0.1F);
     }
 
-    public AnimationScale(boolean flag, float amount) {
-        this.flag = flag;
+    public AnimationScale(float amount) {
         this.amount = amount;
     }
 
@@ -32,6 +30,10 @@ public class AnimationScale {
         } else {
             this.animationScale = Mth.clamp(this.animationScale - amount, 0.0F, 1.0F);
         }
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
     public float getAnimationScale(float p_29570_) {
