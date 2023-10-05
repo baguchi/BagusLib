@@ -35,7 +35,7 @@ public class BagusConfigs {
         public Client(ForgeConfigSpec.Builder builder) {
             enableMiniBagu = builder
                     .comment("Enable the Mini Bagu cosmetic. [true / false]")
-                    .define("Enable Mini Bagu cosmetic(Only The Patreon CrystalFox Tier)", true);
+                    .define("Enable Mini Bagu cosmetic", false);
         }
     }
 }
