@@ -8,23 +8,39 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     protected boolean attack;
 
     protected final int leftActionPoint;
-    protected final int attackLengh;
+    protected final int attackLength;
+    private int ticksUntilNextAttack;
 
-    public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLengh) {
-        this(attacker, speed, leftActionPoint, attackLengh, true);
+    public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLength) {
+        this(attacker, speed, leftActionPoint, attackLength, true);
     }
 
-    public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLengh, boolean longPath) {
+    public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLength, boolean longPath) {
         super(attacker, speed, longPath);
         this.leftActionPoint = leftActionPoint;
-        this.attackLengh = attackLengh;
+        this.attackLength = attackLength;
     }
+
+    @Override
+    public void start() {
+        super.start();
+        this.ticksUntilNextAttack = 0;
+    }
+
 
     @Override
     public void stop() {
         super.stop();
         this.attack = false;
         this.mob.setAggressive(false);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.mob.getTarget() != null) {
+            this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
+        }
     }
 
     @Override
@@ -38,8 +54,8 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
             if (this.getTicksUntilNextAttack() == 0) {
                 this.resetAttackCooldown();
             }
-        } else if (this.canPerformAttack(p_29589_) && this.getTicksUntilNextAttack() >= this.attackLengh) {
-            if (this.getTicksUntilNextAttack() == this.attackLengh) {
+        } else if (this.canPerformAttack(p_29589_) && this.getTicksUntilNextAttack() >= this.attackLength) {
+            if (this.getTicksUntilNextAttack() == this.attackLength) {
                 this.doTheAnimation();
                 this.attack = true;
             }
@@ -63,10 +79,18 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     }
 
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLengh + 1);
+        this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLength + 1);
         this.attack = false;
     }
 
+    protected boolean isTimeToAttack() {
+        return this.ticksUntilNextAttack <= 0;
+    }
+
+
+    protected int getTicksUntilNextAttack() {
+        return this.ticksUntilNextAttack;
+    }
 
     @Override
     public boolean requiresUpdateEveryTick() {

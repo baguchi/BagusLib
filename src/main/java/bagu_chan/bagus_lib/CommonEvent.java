@@ -2,9 +2,9 @@ package bagu_chan.bagus_lib;
 
 import bagu_chan.bagus_lib.util.MiscUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @Mod.EventBusSubscriber(modid = BagusLib.MODID)
 public class CommonEvent {

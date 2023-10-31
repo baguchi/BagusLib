@@ -1,27 +1,27 @@
 package bagu_chan.bagus_lib;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BagusConfigs {
     public static final Common COMMON;
-    public static final ForgeConfigSpec COMMON_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
     public static final Client CLIENT;
-    public static final ForgeConfigSpec CLIENT_SPEC;
+    public static final ModConfigSpec CLIENT_SPEC;
 
     static {
-        Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
         COMMON_SPEC = specPair.getRight();
         COMMON = specPair.getLeft();
-        Pair<Client, ForgeConfigSpec> specPair2 = new ForgeConfigSpec.Builder().configure(Client::new);
+        Pair<Client, ModConfigSpec> specPair2 = new ModConfigSpec.Builder().configure(Client::new);
         CLIENT_SPEC = specPair2.getRight();
         CLIENT = specPair2.getLeft();
     }
 
     public static class Common {
-        public final ForgeConfigSpec.BooleanValue enableCameraShakeForVanillaMobs;
+        public final ModConfigSpec.BooleanValue enableCameraShakeForVanillaMobs;
 
-        public Common(ForgeConfigSpec.Builder builder) {
+        public Common(ModConfigSpec.Builder builder) {
             enableCameraShakeForVanillaMobs = builder
                     .comment("Enable the camera shake for vanilla mobs. [true / false]")
                     .translation(BagusLib.MODID + ".config.shakeCameraForVanilla")
@@ -30,9 +30,9 @@ public class BagusConfigs {
     }
 
     public static class Client {
-        public final ForgeConfigSpec.BooleanValue enableMiniBagu;
+        public final ModConfigSpec.BooleanValue enableMiniBagu;
 
-        public Client(ForgeConfigSpec.Builder builder) {
+        public Client(ModConfigSpec.Builder builder) {
             enableMiniBagu = builder
                     .comment("Enable the Mini Bagu cosmetic. [true / false]")
                     .define("Enable Mini Bagu cosmetic(Only The Patreon CrystalFox Tier)", false);

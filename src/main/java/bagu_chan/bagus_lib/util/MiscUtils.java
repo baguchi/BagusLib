@@ -5,8 +5,8 @@ import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.UpdateDataMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class MiscUtils {
     public static final String BAGUS_COSMETIC_ID = "BaguCosmetic";
@@ -19,7 +19,7 @@ public class MiscUtils {
                 compoundTag.putBoolean(cosmeticId, enable);
                 data.setData(compoundTag);
                 if (Minecraft.getInstance().getConnection() != null) {
-                    BagusPacketHandler.CHANNEL.send(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()), Minecraft.getInstance().getConnection().getConnection());
+                    BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
                 }
             }
         }

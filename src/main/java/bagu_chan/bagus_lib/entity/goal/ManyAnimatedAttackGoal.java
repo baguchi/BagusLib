@@ -8,25 +8,27 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
     protected boolean attack;
 
     protected final int[] leftActionPoints;
-    protected final int attackLengh;
-    protected int maxAttackLengh;
-    protected int currentAttackLengh;
+    protected final int attackLength;
+    protected int maxAttackLength;
+    protected int currentAttackLength;
+    private int ticksUntilNextAttack;
 
-    public ManyAnimatedAttackGoal(PathfinderMob attacker, double speed, int[] leftActionPoints, int attackLengh) {
-        this(attacker, speed, leftActionPoints, attackLengh, true);
+    public ManyAnimatedAttackGoal(PathfinderMob attacker, double speed, int[] leftActionPoints, int attackLength) {
+        this(attacker, speed, leftActionPoints, attackLength, true);
     }
 
-    public ManyAnimatedAttackGoal(PathfinderMob attacker, double speed, int[] leftActionPoints, int attackLengh, boolean longPath) {
+    public ManyAnimatedAttackGoal(PathfinderMob attacker, double speed, int[] leftActionPoints, int attackLength, boolean longPath) {
         super(attacker, speed, longPath);
         this.leftActionPoints = leftActionPoints;
-        this.attackLengh = attackLengh;
-        this.maxAttackLengh = leftActionPoints.length;
+        this.attackLength = attackLength;
+        this.maxAttackLength = leftActionPoints.length;
     }
 
     @Override
     public void start() {
         super.start();
-        this.currentAttackLengh = 0;
+        this.currentAttackLength = 0;
+        this.ticksUntilNextAttack = 0;
     }
 
     @Override
@@ -37,20 +39,28 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (this.mob.getTarget() != null) {
+            this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
+        }
+    }
+
+    @Override
     protected void checkAndPerformAttack(LivingEntity p_29589_) {
-        if (this.getTicksUntilNextAttack() == this.leftActionPoints[this.currentAttackLengh]) {
+        if (this.getTicksUntilNextAttack() == this.leftActionPoints[this.currentAttackLength]) {
             if (this.canPerformAttack(p_29589_)) {
                 this.mob.doHurtTarget(p_29589_);
             }
 
-            if (this.currentAttackLengh < this.maxAttackLengh - 1) {
-                this.maxAttackLengh += 1;
+            if (this.currentAttackLength < this.maxAttackLength - 1) {
+                this.maxAttackLength += 1;
             }
             if (this.getTicksUntilNextAttack() == 0) {
                 this.resetAttackCooldown();
             }
-        } else if (this.canPerformAttack(p_29589_) && this.getTicksUntilNextAttack() >= this.attackLengh) {
-            if (this.getTicksUntilNextAttack() == this.attackLengh) {
+        } else if (this.canPerformAttack(p_29589_) && this.getTicksUntilNextAttack() >= this.attackLength) {
+            if (this.getTicksUntilNextAttack() == this.attackLength) {
                 this.doTheAnimation();
                 this.attack = true;
             }
@@ -74,9 +84,19 @@ public class ManyAnimatedAttackGoal extends MeleeAttackGoal {
     }
 
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLengh + 1);
+        this.ticksUntilNextAttack = this.adjustedTickDelay(this.attackLength + 1);
         this.attack = false;
     }
+
+    protected boolean isTimeToAttack() {
+        return this.ticksUntilNextAttack <= 0;
+    }
+
+
+    protected int getTicksUntilNextAttack() {
+        return this.ticksUntilNextAttack;
+    }
+
 
 
     @Override

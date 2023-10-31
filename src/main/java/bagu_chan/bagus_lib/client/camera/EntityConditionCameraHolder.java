@@ -2,7 +2,7 @@ package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
 
 import java.util.function.Predicate;
 

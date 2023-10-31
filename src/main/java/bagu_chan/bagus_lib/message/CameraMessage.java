@@ -7,7 +7,7 @@ import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class CameraMessage {
     private final int duration;
@@ -33,7 +33,7 @@ public class CameraMessage {
         return new CameraMessage(buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
-    public void handle(CustomPayloadEvent.Context context) {
+    public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {

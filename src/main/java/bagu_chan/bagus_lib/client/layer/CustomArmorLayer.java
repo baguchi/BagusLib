@@ -29,6 +29,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.neoforged.neoforge.client.ClientHooks;
 import org.joml.Quaternionf;
 
 import java.util.Map;
@@ -73,7 +74,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         }
         String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesInnerModel(slot) ? 2 : 1), type == null ? "" : String.format("_%s", type));
 
-        s1 = net.minecraftforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
+        s1 = ClientHooks.getArmorTexture(entity, stack, s1, slot, type);
         ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
 
         if (resourcelocation == null) {
@@ -422,7 +423,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
 
 
     protected HumanoidModel<?> getArmorModelHook(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, HumanoidModel model) {
-        Model basicModel = net.minecraftforge.client.ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
+        Model basicModel = ClientHooks.getArmorModel(entity, itemStack, slot, model);
         return basicModel instanceof HumanoidModel ? (HumanoidModel<?>) basicModel : model;
     }
 }

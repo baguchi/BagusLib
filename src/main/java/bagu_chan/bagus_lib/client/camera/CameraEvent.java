@@ -8,11 +8,11 @@ import com.google.common.collect.Lists;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -46,9 +46,9 @@ public class CameraEvent {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
-                        BagusPacketHandler.CHANNEL.send(new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()), PacketDistributor.PLAYER.with(serverPlayer));
+                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     } else {
-                        BagusPacketHandler.CHANNEL.send(new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()), PacketDistributor.PLAYER.with(serverPlayer));
+                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     }
                 }
             }

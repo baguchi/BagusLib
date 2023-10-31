@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class EntityCameraMessage {
     private final int entityId;
@@ -37,7 +37,7 @@ public class EntityCameraMessage {
         return new EntityCameraMessage(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
-    public void handle(CustomPayloadEvent.Context context) {
+    public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
