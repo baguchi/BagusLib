@@ -9,7 +9,6 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
 
     protected final int leftActionPoint;
     protected final int attackLength;
-    private int ticksUntilNextAttack;
 
     public AnimatedAttackGoal(PathfinderMob attacker, double speed, int leftActionPoint, int attackLength) {
         this(attacker, speed, leftActionPoint, attackLength, true);
@@ -22,25 +21,10 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
     }
 
     @Override
-    public void start() {
-        super.start();
-        this.ticksUntilNextAttack = 0;
-    }
-
-
-    @Override
     public void stop() {
         super.stop();
         this.attack = false;
         this.mob.setAggressive(false);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.mob.getTarget() != null) {
-            this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
-        }
     }
 
     @Override
@@ -87,10 +71,6 @@ public class AnimatedAttackGoal extends MeleeAttackGoal {
         return this.ticksUntilNextAttack <= 0;
     }
 
-
-    protected int getTicksUntilNextAttack() {
-        return this.ticksUntilNextAttack;
-    }
 
     @Override
     public boolean requiresUpdateEveryTick() {
