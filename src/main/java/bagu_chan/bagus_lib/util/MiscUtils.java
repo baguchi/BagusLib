@@ -15,13 +15,15 @@ public class MiscUtils {
     public static void updateCosmetic(String cosmeticId, boolean enable) {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player instanceof IBaguData data && Minecraft.getInstance().level != null) {
             CompoundTag compoundTag = data.getData() != null ? data.getData() : new CompoundTag();
-            if (TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 1) {
-                compoundTag.putBoolean(cosmeticId, enable);
-                data.setData(compoundTag);
-                if (Minecraft.getInstance().getConnection() != null) {
-                    BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
-                }
+
+            enable = TierHelper.getTier(Minecraft.getInstance().player).getLevel() >= 1 && enable;
+
+            compoundTag.putBoolean(cosmeticId, enable);
+            data.setData(compoundTag);
+            if (Minecraft.getInstance().getConnection() != null) {
+                BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
             }
+
         }
     }
 }
