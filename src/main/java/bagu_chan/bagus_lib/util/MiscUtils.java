@@ -5,8 +5,8 @@ import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.UpdateDataMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MiscUtils {
     public static final String BAGUS_COSMETIC_ID = "BaguCosmetic";
