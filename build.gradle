@@ -28,7 +28,7 @@ mixin {
     add sourceSets.main, "bagus_lib.refmap.json"
 }
 
-version = '1.19.2-3.4.2'
+version = '1.19.2-3.5.0'
 group = 'bagus_lib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Baguslib'
 
