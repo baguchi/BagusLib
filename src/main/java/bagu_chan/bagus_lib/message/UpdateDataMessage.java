@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.message;
 
-import bagu_chan.bagus_lib.api.IData;
+import bagu_chan.bagus_lib.api.IBaguData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -38,7 +38,7 @@ public class UpdateDataMessage {
         if (context.getDirection().getReceptionSide() == LogicalSide.SERVER)
             context.enqueueWork(() -> {
                 Player player = ctx.get().getSender();
-                if (player != null && player instanceof IData data) {
+                if (player != null && player instanceof IBaguData data) {
                     data.setData(message.tag);
                 }
             });

@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.client.layer;
 
-import bagu_chan.bagus_lib.api.IData;
+import bagu_chan.bagus_lib.api.IBaguData;
 import bagu_chan.bagus_lib.client.MiniBaguModel;
 import bagu_chan.bagus_lib.client.MiniBaguRenderer;
 import bagu_chan.bagus_lib.client.ModModelLayers;
@@ -44,7 +44,7 @@ public class BagusLayer<T extends LivingEntity, M extends EntityModel<T> & IArmo
 
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         {
-            if (entity instanceof IData data) {
+            if (entity instanceof IBaguData data) {
                 CompoundTag tag = data.getData();
                 if (tag.contains(MiscUtils.BAGUS_COSMETIC_ID) && tag.getBoolean(MiscUtils.BAGUS_COSMETIC_ID)) {
                     matrixStackIn.pushPose();
