@@ -14,17 +14,17 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     protected boolean attack;
 
     protected final int leftActionPoint;
-    protected final int attackLengh;
+    protected final int attackLength;
 
     private final int cooldownBetweenAttacks;
 
     private int cooldownTick;
     private final double speed;
 
-    public AttackWithAnimation(int leftActionPoint, int attackLengh, int cooldownBetweenAttacks, double speed) {
+    public AttackWithAnimation(int leftActionPoint, int attackLength, int cooldownBetweenAttacks, double speed) {
         super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
         this.leftActionPoint = leftActionPoint;
-        this.attackLengh = attackLengh;
+        this.attackLength = attackLength;
         this.cooldownBetweenAttacks = cooldownBetweenAttacks;
         this.speed = speed;
     }
@@ -68,11 +68,11 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
                 this.resetAttackCooldown();
             }
         } else if (this.canPerformAttack(entity, p_29589_)) {
-            if (this.cooldownTick == this.attackLengh) {
+            if (this.cooldownTick == this.attackLength) {
                 this.doTheAnimation(entity, serverLevel);
                 this.attack = true;
             }
-            if (this.cooldownTick == 0 && this.cooldownTick >= this.attackLengh) {
+            if (this.cooldownTick == 0 && this.cooldownTick >= this.attackLength) {
                 this.resetAttackCooldown();
             }
         } else {
@@ -92,7 +92,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     }
 
     private void resetAttackCooldown() {
-        cooldownTick = attackLengh + 1;
+        cooldownTick = attackLength + 1;
     }
 
     @Override
