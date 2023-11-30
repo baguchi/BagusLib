@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = LivingEntity.class, remap = false)
+@Mixin(value = LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements IBaguData {
     @Unique
     private CompoundTag data = new CompoundTag();
