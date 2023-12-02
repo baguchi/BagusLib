@@ -9,10 +9,6 @@ import java.util.function.Predicate;
 public class EntityConditionCameraHolder<T extends Entity> extends EntityCameraHolder<T> {
     public Predicate<T> predicate = Entity::isAlive;
 
-    public EntityConditionCameraHolder(int amount, int duration, GlobalVec3 pos, T entity) {
-        super(amount, duration, pos, entity);
-    }
-
     public EntityConditionCameraHolder(int distance, int duration, float amount, GlobalVec3 pos, T entity) {
         super(distance, duration, amount, pos, entity);
     }

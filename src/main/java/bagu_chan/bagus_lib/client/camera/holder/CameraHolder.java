@@ -22,8 +22,6 @@ public class CameraHolder {
 
     public CameraHolder(int distance, int duration, GlobalVec3 pos) {
         this(distance, duration, 0.05F, pos);
-        this.distance = distance;
-        this.duration = duration;
     }
 
     public int getDistance() {

@@ -12,23 +12,25 @@ import net.neoforged.neoforge.network.NetworkEvent;
 
 public class EntityCameraMessage {
     private final int entityId;
-    private final int duration;
+
     private final int distance;
+    private final int duration;
     private final float amount;
     private final GlobalVec3 globalPos;
 
-    public EntityCameraMessage(int entityId, int duration, int distance, float amount, GlobalVec3 globalPos) {
+    public EntityCameraMessage(int entityId, int distance, int duration, float amount, GlobalVec3 globalPos) {
         this.entityId = entityId;
-        this.duration = duration;
         this.distance = distance;
+        this.duration = duration;
+
         this.amount = amount;
         this.globalPos = globalPos;
     }
 
     public static void writeToPacket(EntityCameraMessage packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.entityId);
-        buf.writeInt(packet.duration);
         buf.writeInt(packet.distance);
+        buf.writeInt(packet.duration);
         buf.writeFloat(packet.amount);
         GlobalVec3ByteBuf.writeGlobalPos(buf, packet.globalPos);
     }
