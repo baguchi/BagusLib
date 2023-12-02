@@ -2,7 +2,7 @@ package bagu_chan.bagus_lib.util;
 
 import bagu_chan.bagus_lib.api.IBaguData;
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
-import bagu_chan.bagus_lib.message.UpdateDataMessage;
+import bagu_chan.bagus_lib.message.PlayerDataSyncMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.api.distmarker.Dist;
@@ -21,7 +21,7 @@ public class MiscUtils {
             compoundTag.putBoolean(cosmeticId, enable);
             data.setData(compoundTag);
             if (Minecraft.getInstance().getConnection() != null) {
-                BagusPacketHandler.CHANNEL.sendToServer(new UpdateDataMessage(compoundTag, (Minecraft.getInstance().player).getId()));
+                BagusPacketHandler.CHANNEL.sendToServer(new PlayerDataSyncMessage(compoundTag, (Minecraft.getInstance().player).getId()));
             }
 
         }
