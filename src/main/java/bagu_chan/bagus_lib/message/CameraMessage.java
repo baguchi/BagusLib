@@ -17,16 +17,17 @@ public class CameraMessage {
     private final float amount;
     private final GlobalVec3 globalPos;
 
-    public CameraMessage(int duration, int distance, float amount, GlobalVec3 globalPos) {
-        this.duration = duration;
+    public CameraMessage(int distance, int duration, float amount, GlobalVec3 globalPos) {
         this.distance = distance;
+        this.duration = duration;
         this.amount = amount;
         this.globalPos = globalPos;
     }
 
     public static void writeToPacket(CameraMessage packet, FriendlyByteBuf buf) {
-        buf.writeInt(packet.duration);
         buf.writeInt(packet.distance);
+        buf.writeInt(packet.duration);
+
         buf.writeFloat(packet.amount);
         GlobalVec3ByteBuf.writeGlobalPos(buf, packet.globalPos);
     }
