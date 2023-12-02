@@ -1,8 +1,8 @@
 package bagu_chan.bagus_lib.mixin;
 
 import bagu_chan.bagus_lib.BagusConfigs;
-import bagu_chan.bagus_lib.client.camera.CameraEvent;
-import bagu_chan.bagus_lib.client.camera.EntityCameraHolder;
+import bagu_chan.bagus_lib.client.camera.CameraCore;
+import bagu_chan.bagus_lib.client.camera.holder.EntityCameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.EntityType;
@@ -27,10 +27,10 @@ public abstract class WardenMixin extends Monster {
             if (this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraEvent.addCameraHolderList(this.level(), new EntityCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this));
+                        CameraCore.addCameraHolderList(this.level(), new EntityCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this));
                         break;
                     case DIGGING:
-                        CameraEvent.addCameraHolderList(this.level(), new EntityCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this));
+                        CameraCore.addCameraHolderList(this.level(), new EntityCameraHolder<>(20, 200, 0.01F, GlobalVec3.of(this.level().dimension(), this.position()), this));
                         break;
                 }
             }

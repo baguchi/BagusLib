@@ -1,6 +1,8 @@
 package bagu_chan.bagus_lib.client.camera;
 
 import bagu_chan.bagus_lib.BagusLib;
+import bagu_chan.bagus_lib.client.camera.holder.CameraHolder;
+import bagu_chan.bagus_lib.client.camera.holder.EntityCameraHolder;
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.CameraMessage;
 import bagu_chan.bagus_lib.message.EntityCameraMessage;
@@ -17,7 +19,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CameraEvent {
+public class CameraCore {
     public static List<CameraHolder> cameraHolderList = Lists.newArrayList();
 
     @SubscribeEvent

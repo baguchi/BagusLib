@@ -1,4 +1,4 @@
-package bagu_chan.bagus_lib.client.camera;
+package bagu_chan.bagus_lib.client.camera.holder;
 
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.util.Mth;

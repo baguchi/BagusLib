@@ -1,7 +1,7 @@
 package bagu_chan.bagus_lib.message;
 
-import bagu_chan.bagus_lib.client.camera.CameraEvent;
-import bagu_chan.bagus_lib.client.camera.CameraHolder;
+import bagu_chan.bagus_lib.client.camera.CameraCore;
+import bagu_chan.bagus_lib.client.camera.holder.CameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -39,7 +39,7 @@ public class CameraMessage {
             if (level == null) {
                 return;
             }
-            CameraEvent.addCameraHolderList(level, new CameraHolder(distance, duration, amount, globalPos));
+            CameraCore.addCameraHolderList(level, new CameraHolder(distance, duration, amount, globalPos));
         });
         context.setPacketHandled(true);
     }
