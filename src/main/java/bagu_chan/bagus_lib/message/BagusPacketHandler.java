@@ -16,7 +16,7 @@ public class BagusPacketHandler {
         CHANNEL.messageBuilder(CameraMessage.class, 0).decoder(CameraMessage::readFromPacket).encoder(CameraMessage::writeToPacket).consumerMainThread(CameraMessage::handle).add();
         CHANNEL.messageBuilder(PlayerDataSyncMessage.class, 1).decoder(PlayerDataSyncMessage::readFromPacket).encoder(PlayerDataSyncMessage::writeToPacket).consumerNetworkThread(PlayerDataSyncMessage::handle).add();
         CHANNEL.messageBuilder(EntityCameraMessage.class, 2).decoder(EntityCameraMessage::readFromPacket).encoder(EntityCameraMessage::writeToPacket).consumerMainThread(EntityCameraMessage::handle).add();
-        CHANNEL.messageBuilder(LivingDataSyncMessage.class, 3).decoder(LivingDataSyncMessage::readFromPacket).encoder(LivingDataSyncMessage::writeToPacket).consumerNetworkThread(LivingDataSyncMessage::handle).add();
+        CHANNEL.messageBuilder(SyncEntityPacketToServer.class, 3).decoder(SyncEntityPacketToServer::readFromPacket).encoder(SyncEntityPacketToServer::writeToPacket).consumerNetworkThread(SyncEntityPacketToServer::handle).add();
 
     }
 }

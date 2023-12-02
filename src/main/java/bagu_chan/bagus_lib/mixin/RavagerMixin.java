@@ -1,9 +1,12 @@
 package bagu_chan.bagus_lib.mixin;
 
 import bagu_chan.bagus_lib.BagusConfigs;
+import bagu_chan.bagus_lib.api.IBaguPacket;
 import bagu_chan.bagus_lib.client.camera.CameraCore;
 import bagu_chan.bagus_lib.client.camera.holder.EntityConditionCameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.raid.Raider;
@@ -15,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = Ravager.class, remap = false)
-public abstract class RavagerMixin extends Raider {
+public abstract class RavagerMixin extends Raider implements IBaguPacket {
 
     @Shadow
     private int roarTick;
@@ -28,9 +31,14 @@ public abstract class RavagerMixin extends Raider {
     private void roar(CallbackInfo callbackInfo) {
         Ravager ravager = (Ravager) ((Object) this);
         if (BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
-            EntityConditionCameraHolder<Ravager> entityConditionCameraHolder = new EntityConditionCameraHolder<>(18, 40, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), ravager);
+            EntityConditionCameraHolder<Ravager> entityConditionCameraHolder = new EntityConditionCameraHolder<>(18, 40, 0.2F, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), ravager);
             entityConditionCameraHolder.setPredicate(predicate -> this.roarTick > 1);
             CameraCore.addCameraHolderList(this.level(), entityConditionCameraHolder);
         }
+    }
+
+    @Override
+    public void resync(Entity entity, int id) {
+        entity.playSound(SoundEvents.RAVAGER_ROAR);
     }
 }

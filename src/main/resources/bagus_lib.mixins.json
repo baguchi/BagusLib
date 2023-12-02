@@ -5,11 +5,12 @@
   "minVersion": "0.8",
   "refmap": "bagus_lib.refmap.json",
   "mixins": [
+    "LivingEntityMixin",
     "RavagerMixin",
-    "WardenMixin",
-    "LivingEntityMixin"
+    "WardenMixin"
   ],
   "client": [
+    "client.ClientPacketListenerMixin",
     "client.PlayerModelMixin"
   ],
   "injectors": {
