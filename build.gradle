@@ -44,7 +44,6 @@ runs {
         systemProperty 'forge.logging.console.level', 'debug'
 
         systemProperty 'mixin.env.disableRefMap', 'true'
-        programArgument "-mixin.config=${mod_id}.mixins.json"
         modSource project.sourceSets.main
     }
 

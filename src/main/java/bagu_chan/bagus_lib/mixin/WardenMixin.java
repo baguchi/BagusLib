@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = Warden.class, remap = false)
+@Mixin(value = Warden.class)
 public abstract class WardenMixin extends Monster {
 
     protected WardenMixin(EntityType<? extends Warden> p_37839_, Level p_37840_) {
