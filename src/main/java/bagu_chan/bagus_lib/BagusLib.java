@@ -11,7 +11,6 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,9 +23,7 @@ public class BagusLib {
     public static final String MODID = "bagus_lib";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public BagusLib() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    public BagusLib(IEventBus modEventBus) {
         // Register the commonSetup method for modloading
 
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
