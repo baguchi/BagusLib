@@ -13,15 +13,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(value = ClientPacketListener.class)
+@Mixin(value = ClientPacketListener.class, priority = 1200)
 public abstract class ClientPacketListenerMixin {
 
     @Inject(method = "handleAddEntity(Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;putNonPlayerEntity(ILnet/minecraft/world/entity/Entity;)V"),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;getId()I"),
             locals = LocalCapture.CAPTURE_FAILSOFT,
             require = 0
     )
-    private void syncEntity(ClientboundAddEntityPacket p_104958_, CallbackInfo ci, EntityType entitytype, Entity entity, int i) {
+    private void syncEntity(ClientboundAddEntityPacket clientboundAddEntityPacket,
+                            CallbackInfo ci,
+                            EntityType<?> entitytype,
+                            Entity entity) {
         if (entity instanceof IBaguPacket && entity.level().isClientSide()) {
             BagusPacketHandler.CHANNEL.sendToServer(new SyncEntityPacketToServer(entity.getUUID()));
         }
