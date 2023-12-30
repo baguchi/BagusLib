@@ -63,22 +63,20 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
                 entity.doHurtTarget(p_29589_);
             }
 
-
             if (this.cooldownTick == 0) {
                 this.resetAttackCooldown();
             }
-        } else if (this.canPerformAttack(entity, p_29589_)) {
+        } else if (this.canPerformAttack(entity, p_29589_) && this.cooldownTick >= this.attackLength) {
             if (this.cooldownTick == this.attackLength) {
                 this.doTheAnimation(entity, serverLevel);
                 this.attack = true;
             }
+
             if (this.cooldownTick == 0 && this.cooldownTick >= this.attackLength) {
                 this.resetAttackCooldown();
             }
-        } else {
-            if (this.cooldownTick == 0 || !this.attack) {
-                this.resetAttackCooldown();
-            }
+        } else if (this.cooldownTick == 0 || !this.attack) {
+            this.resetAttackCooldown();
         }
 
     }
