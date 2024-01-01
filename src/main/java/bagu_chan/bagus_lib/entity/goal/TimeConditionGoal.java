@@ -1,11 +1,11 @@
 package bagu_chan.bagus_lib.entity.goal;
 
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class TimeConditionGoal extends Goal {
-    protected final PathfinderMob mob;
+    protected final Mob mob;
     protected int tick;
     private int cooldown;
     private int maxCooldown;
@@ -13,11 +13,11 @@ public class TimeConditionGoal extends Goal {
     private final UniformInt timeBetweenCooldown;
     private final UniformInt timeBetween;
 
-    public TimeConditionGoal(PathfinderMob mob, UniformInt cooldown) {
+    public TimeConditionGoal(Mob mob, UniformInt cooldown) {
         this(mob, cooldown, cooldown);
     }
 
-    public TimeConditionGoal(PathfinderMob mob, UniformInt cooldown, UniformInt time) {
+    public TimeConditionGoal(Mob mob, UniformInt cooldown, UniformInt time) {
         this.mob = mob;
         this.timeBetweenCooldown = cooldown;
         this.timeBetween = time;
