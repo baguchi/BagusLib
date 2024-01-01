@@ -20,12 +20,17 @@ public class BagusConfigs {
 
     public static class Common {
         public final ModConfigSpec.BooleanValue enableCameraShakeForVanillaMobs;
+        public final ModConfigSpec.BooleanValue aprilFool;
 
         public Common(ModConfigSpec.Builder builder) {
             enableCameraShakeForVanillaMobs = builder
                     .comment("Enable the camera shake for vanilla mobs. [true / false]")
                     .translation(BagusLib.MODID + ".config.shakeCameraForVanilla")
                     .define("Enable Shake Camera for Vanilla", true);
+            aprilFool = builder
+                    .comment("Enable April Feature. [true / false]")
+                    .translation(BagusLib.MODID + ".config.aprilFeature")
+                    .define("Enable AprilFool Joke", true);
         }
     }
 

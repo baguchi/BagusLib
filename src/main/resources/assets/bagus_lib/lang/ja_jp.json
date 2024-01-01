@@ -1,3 +1,5 @@
 {
-  "baguslib.config.shakeCameraForVanilla": "カメラの揺れをバニラでも有効にする"
+  "baguslib.config.shakeCameraForVanilla": "カメラの揺れをバニラでも有効にする",
+  "baguslib.config.aprilFeature": "エイプリルフールジョークを有効にする",
+  "bagus_lib.watermelon": "スイカゲーム"
 }

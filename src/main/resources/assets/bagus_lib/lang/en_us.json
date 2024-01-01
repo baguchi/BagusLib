@@ -1,3 +1,5 @@
 {
-  "baguslib.config.shakeCameraForVanilla": "Enable Shake Camera For Vanilla"
+  "baguslib.config.shakeCameraForVanilla": "Enable Shake Camera For Vanilla",
+  "baguslib.config.aprilFeature": "Enable April Feature",
+  "bagus_lib.watermelon": "Water Melon"
 }
