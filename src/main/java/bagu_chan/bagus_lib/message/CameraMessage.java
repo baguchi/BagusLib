@@ -1,15 +1,21 @@
 package bagu_chan.bagus_lib.message;
 
+import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.camera.CameraCore;
 import bagu_chan.bagus_lib.client.camera.holder.CameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class CameraMessage {
+public class CameraMessage implements CustomPacketPayload {
+
+    public static final ResourceLocation ID = BagusLib.prefix("camera");
+
     private final int duration;
     private final int distance;
     private final float amount;
@@ -23,26 +29,30 @@ public class CameraMessage {
         this.globalPos = globalPos;
     }
 
-    public static void writeToPacket(CameraMessage packet, FriendlyByteBuf buf) {
-        buf.writeInt(packet.distance);
-        buf.writeInt(packet.duration);
-
-        buf.writeFloat(packet.amount);
-        GlobalVec3ByteBuf.writeGlobalPos(buf, packet.globalPos);
+    public CameraMessage(FriendlyByteBuf buf) {
+        this(buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
-    public static CameraMessage readFromPacket(FriendlyByteBuf buf) {
-        return new CameraMessage(buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.distance);
+        buf.writeInt(this.duration);
+
+        buf.writeFloat(this.amount);
+        GlobalVec3ByteBuf.writeGlobalPos(buf, this.globalPos);
     }
 
-    public void handle(NetworkEvent.Context context) {
-        context.enqueueWork(() -> {
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    public static void handle(CameraMessage message, PlayPayloadContext context) {
+        context.workHandler().execute(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
                 return;
             }
-            CameraCore.addCameraHolderList(level, new CameraHolder(distance, duration, amount, globalPos));
+            CameraCore.addCameraHolderList(level, new CameraHolder(message.distance, message.duration, message.amount, message.globalPos));
         });
-        context.setPacketHandled(true);
     }
 }

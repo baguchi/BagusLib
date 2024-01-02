@@ -1,11 +1,11 @@
 package bagu_chan.bagus_lib.mixin.client;
 
 import bagu_chan.bagus_lib.api.IBaguPacket;
-import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.SyncEntityPacketToServer;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,7 @@ public abstract class ClientPacketListenerMixin {
     private void syncEntity(
             ClientboundAddEntityPacket p_104958_, CallbackInfo ci, Entity entity) {
         if (entity instanceof IBaguPacket && entity.level().isClientSide()) {
-            BagusPacketHandler.CHANNEL.sendToServer(new SyncEntityPacketToServer(entity.getUUID()));
+            PacketDistributor.SERVER.noArg().send(new SyncEntityPacketToServer(entity.getUUID()));
         }
     }
 }

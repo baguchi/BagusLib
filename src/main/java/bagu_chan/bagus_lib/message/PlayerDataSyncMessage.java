@@ -1,20 +1,24 @@
 package bagu_chan.bagus_lib.message;
 
+import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.api.IBaguData;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.Optional;
 
 /**
  * This is use update data for player.
- * If you want update non player entity data see {@link LivingDataSyncMessage}
  * *
  */
-public class PlayerDataSyncMessage {
+public class PlayerDataSyncMessage implements CustomPacketPayload {
+    public static final ResourceLocation ID = BagusLib.prefix("player_data");
+
     private final CompoundTag tag;
     private int entityId;
 
@@ -28,31 +32,26 @@ public class PlayerDataSyncMessage {
         this.entityId = entityId;
     }
 
-    public static void writeToPacket(PlayerDataSyncMessage packet, FriendlyByteBuf buf) {
-        buf.writeNbt(packet.tag);
-        buf.writeInt(packet.entityId);
+    public PlayerDataSyncMessage(FriendlyByteBuf buf) {
+        this(buf.readNbt(), buf.readInt());
     }
 
-    public static PlayerDataSyncMessage readFromPacket(FriendlyByteBuf buf) {
-        return new PlayerDataSyncMessage(buf.readNbt(), buf.readInt());
+    public void write(FriendlyByteBuf buf) {
+        buf.writeNbt(this.tag);
+        buf.writeInt(this.entityId);
     }
 
-    public void handle(NetworkEvent.Context context) {
-        if (context.getDirection().getReceptionSide() == LogicalSide.SERVER) {
-            context.enqueueWork(() -> {
-                Player player = context.getSender();
-                if (player != null && player instanceof IBaguData data) {
-                    data.setData(tag);
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    public static void handle(PlayerDataSyncMessage message, PlayPayloadContext context) {
+        context.workHandler().execute(() -> {
+            Optional<Player> player = context.player();
+            if (player.isPresent() && player.get() instanceof IBaguData data) {
+                data.setData(message.tag);
                 }
             });
-        } else if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-            context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
-                if (entity instanceof Player && entity instanceof IBaguData data) {
-                    data.setData(tag);
-                }
-            });
-        }
-        context.setPacketHandled(true);
     }
 }

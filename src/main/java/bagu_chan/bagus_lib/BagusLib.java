@@ -1,6 +1,9 @@
 package bagu_chan.bagus_lib;
 
-import bagu_chan.bagus_lib.message.BagusPacketHandler;
+import bagu_chan.bagus_lib.message.CameraMessage;
+import bagu_chan.bagus_lib.message.EntityCameraMessage;
+import bagu_chan.bagus_lib.message.PlayerDataSyncMessage;
+import bagu_chan.bagus_lib.message.SyncEntityPacketToServer;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModLootModifiers;
 import bagu_chan.bagus_lib.register.ModSensors;
@@ -11,6 +14,8 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +35,7 @@ public class BagusLib {
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::setupPackets);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
@@ -39,7 +45,14 @@ public class BagusLib {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        BagusPacketHandler.setupMessages();
         TierHelper.addSuporterContents();
+    }
+
+    public void setupPackets(RegisterPayloadHandlerEvent event) {
+        IPayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
+        registrar.play(CameraMessage.ID, CameraMessage::new, payload -> payload.client(CameraMessage::handle));
+        registrar.play(EntityCameraMessage.ID, EntityCameraMessage::new, payload -> payload.client(EntityCameraMessage::handle));
+        registrar.play(PlayerDataSyncMessage.ID, PlayerDataSyncMessage::new, payload -> payload.client(PlayerDataSyncMessage::handle));
+        registrar.play(SyncEntityPacketToServer.ID, SyncEntityPacketToServer::new, payload -> payload.client(SyncEntityPacketToServer::handle));
     }
 }

@@ -3,7 +3,6 @@ package bagu_chan.bagus_lib.client.camera;
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.camera.holder.CameraHolder;
 import bagu_chan.bagus_lib.client.camera.holder.EntityCameraHolder;
-import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.message.CameraMessage;
 import bagu_chan.bagus_lib.message.EntityCameraMessage;
 import com.google.common.collect.Lists;
@@ -48,9 +47,9 @@ public class CameraCore {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
-                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        PacketDistributor.PLAYER.with(serverPlayer).send(new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     } else {
-                        BagusPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        PacketDistributor.PLAYER.with(serverPlayer).send(new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     }
                 }
             }

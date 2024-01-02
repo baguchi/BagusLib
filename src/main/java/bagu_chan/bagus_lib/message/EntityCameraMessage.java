@@ -1,16 +1,21 @@
 package bagu_chan.bagus_lib.message;
 
+import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.camera.CameraCore;
 import bagu_chan.bagus_lib.client.camera.holder.EntityCameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class EntityCameraMessage {
+public class EntityCameraMessage implements CustomPacketPayload {
+    public static final ResourceLocation ID = BagusLib.prefix("entity_camera");
+
     private final int entityId;
 
     private final int distance;
@@ -27,27 +32,31 @@ public class EntityCameraMessage {
         this.globalPos = globalPos;
     }
 
-    public static void writeToPacket(EntityCameraMessage packet, FriendlyByteBuf buf) {
-        buf.writeInt(packet.entityId);
-        buf.writeInt(packet.distance);
-        buf.writeInt(packet.duration);
-        buf.writeFloat(packet.amount);
-        GlobalVec3ByteBuf.writeGlobalPos(buf, packet.globalPos);
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.entityId);
+        buf.writeInt(this.distance);
+        buf.writeInt(this.duration);
+        buf.writeFloat(this.amount);
+        GlobalVec3ByteBuf.writeGlobalPos(buf, this.globalPos);
     }
 
-    public static EntityCameraMessage readFromPacket(FriendlyByteBuf buf) {
-        return new EntityCameraMessage(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
+    public EntityCameraMessage(FriendlyByteBuf buf) {
+        this(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
-    public void handle(NetworkEvent.Context context) {
-        context.enqueueWork(() -> {
+    public static void handle(EntityCameraMessage message, PlayPayloadContext context) {
+        context.workHandler().execute(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
                 return;
             }
-            Entity entity = level.getEntity(entityId);
-            CameraCore.addCameraHolderList(level, new EntityCameraHolder(distance, duration, amount, globalPos, entity));
+            Entity entity = level.getEntity(message.entityId);
+            CameraCore.addCameraHolderList(level, new EntityCameraHolder(message.distance, message.duration, message.amount, message.globalPos, entity));
         });
-        context.setPacketHandled(true);
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 }
