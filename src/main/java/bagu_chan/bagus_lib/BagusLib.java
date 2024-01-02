@@ -52,7 +52,7 @@ public class BagusLib {
         IPayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
         registrar.play(CameraMessage.ID, CameraMessage::new, payload -> payload.client(CameraMessage::handle));
         registrar.play(EntityCameraMessage.ID, EntityCameraMessage::new, payload -> payload.client(EntityCameraMessage::handle));
-        registrar.play(PlayerDataSyncMessage.ID, PlayerDataSyncMessage::new, payload -> payload.client(PlayerDataSyncMessage::handle));
-        registrar.play(SyncEntityPacketToServer.ID, SyncEntityPacketToServer::new, payload -> payload.client(SyncEntityPacketToServer::handle));
+        registrar.play(PlayerDataSyncMessage.ID, PlayerDataSyncMessage::new, payload -> payload.server(PlayerDataSyncMessage::handle));
+        registrar.play(SyncEntityPacketToServer.ID, SyncEntityPacketToServer::new, payload -> payload.server(SyncEntityPacketToServer::handle));
     }
 }
