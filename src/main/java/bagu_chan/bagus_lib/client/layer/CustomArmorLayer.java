@@ -418,7 +418,6 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
 
     protected void setModelVisible(HumanoidModel model) {
         model.setAllVisible(false);
-
     }
 
 

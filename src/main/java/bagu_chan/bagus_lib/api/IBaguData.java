@@ -3,7 +3,7 @@ package bagu_chan.bagus_lib.api;
 import net.minecraft.nbt.CompoundTag;
 
 public interface IBaguData {
-    void setData(CompoundTag compoundTag);
+    void setBagusData(CompoundTag compoundTag);
 
-    CompoundTag getData();
+    CompoundTag getBagusData();
 }

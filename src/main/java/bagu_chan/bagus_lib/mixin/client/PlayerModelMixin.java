@@ -14,7 +14,6 @@ public abstract class PlayerModelMixin<T extends LivingEntity> extends HumanoidM
 
     public PlayerModelMixin(ModelPart p_170679_) {
         super(p_170679_);
-
     }
 
     @Override

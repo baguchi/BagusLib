@@ -1,4 +1,4 @@
-package bagu_chan.bagus_lib.util;
+package bagu_chan.bagus_lib.util.reward;
 
 import bagu_chan.bagus_lib.BagusLib;
 import com.google.common.collect.Lists;

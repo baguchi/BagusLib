@@ -45,7 +45,7 @@ public class BagusLayer<T extends LivingEntity, M extends EntityModel<T> & IArmo
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         {
             if (entity instanceof IBaguData data) {
-                CompoundTag tag = data.getData();
+                CompoundTag tag = data.getBagusData();
                 if (tag.contains(MiscUtils.BAGUS_COSMETIC_ID) && tag.getBoolean(MiscUtils.BAGUS_COSMETIC_ID)) {
                     matrixStackIn.pushPose();
 

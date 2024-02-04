@@ -50,7 +50,7 @@ public class PlayerDataSyncMessage implements CustomPacketPayload {
         context.workHandler().execute(() -> {
             Optional<Player> player = context.player();
             if (player.isPresent() && player.get() instanceof IBaguData data) {
-                data.setData(message.tag);
+                data.setBagusData(message.tag);
                 }
             });
     }

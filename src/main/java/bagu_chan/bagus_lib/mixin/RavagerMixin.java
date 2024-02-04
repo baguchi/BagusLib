@@ -2,7 +2,7 @@ package bagu_chan.bagus_lib.mixin;
 
 import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.client.camera.CameraCore;
-import bagu_chan.bagus_lib.client.camera.holder.EntityConditionCameraHolder;
+import bagu_chan.bagus_lib.client.camera.holder.EntityCameraHolder;
 import bagu_chan.bagus_lib.util.GlobalVec3;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Ravager;
@@ -28,8 +28,7 @@ public abstract class RavagerMixin extends Raider {
     private void roar(CallbackInfo callbackInfo) {
         Ravager ravager = (Ravager) ((Object) this);
         if (BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
-            EntityConditionCameraHolder<Ravager> entityConditionCameraHolder = new EntityConditionCameraHolder<>(18, 40, 0.2F, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), ravager);
-            entityConditionCameraHolder.setPredicate(predicate -> this.roarTick > 1);
+            EntityCameraHolder<Ravager> entityConditionCameraHolder = new EntityCameraHolder<>(18, 40, 0.2F, GlobalVec3.of(this.level().dimension(), this.getEyePosition()), ravager);
             CameraCore.addCameraHolderList(this.level(), entityConditionCameraHolder);
         }
     }

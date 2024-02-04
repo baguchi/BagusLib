@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements IBaguData {
     @Unique
-    private CompoundTag data = new CompoundTag();
+    private CompoundTag bagusData = new CompoundTag();
 
     public LivingEntityMixin(EntityType<?> p_19870_, Level p_19871_) {
         super(p_19870_, p_19871_);
@@ -23,7 +23,7 @@ public abstract class LivingEntityMixin extends Entity implements IBaguData {
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
     protected void addAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-        CompoundTag data = this.getData();
+        CompoundTag data = this.getBagusData();
         if (data != null) {
             compoundTag.put("BaguData", data);
         }
@@ -32,17 +32,17 @@ public abstract class LivingEntityMixin extends Entity implements IBaguData {
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
     protected void readAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
         if (compoundTag.contains("BaguData")) {
-            this.setData(compoundTag.getCompound("BaguData"));
+            this.setBagusData(compoundTag.getCompound("BaguData"));
         }
     }
 
     @Override
-    public void setData(CompoundTag compoundTag) {
-        this.data = compoundTag;
+    public void setBagusData(CompoundTag compoundTag) {
+        this.bagusData = compoundTag;
     }
 
     @Override
-    public CompoundTag getData() {
-        return data;
+    public CompoundTag getBagusData() {
+        return bagusData;
     }
 }

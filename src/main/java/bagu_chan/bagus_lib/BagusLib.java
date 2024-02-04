@@ -7,7 +7,7 @@ import bagu_chan.bagus_lib.message.SyncEntityPacketToServer;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModLootModifiers;
 import bagu_chan.bagus_lib.register.ModSensors;
-import bagu_chan.bagus_lib.util.TierHelper;
+import bagu_chan.bagus_lib.util.reward.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;

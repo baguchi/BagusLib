@@ -47,7 +47,7 @@ public class SyncEntityPacketToServer implements CustomPacketPayload {
             if (player.isPresent()) {
                 Entity entity = ((ServerLevel) player.get().level()).getEntity(message.uuid);
                 if (entity instanceof IBaguPacket baguPacket) {
-                    baguPacket.resync(entity, entity.getId());
+                    baguPacket.resync(entity);
                 }
             }
         });
