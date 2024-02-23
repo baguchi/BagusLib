@@ -7,6 +7,7 @@ import bagu_chan.bagus_lib.message.SyncEntityPacketToServer;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModLootModifiers;
 import bagu_chan.bagus_lib.register.ModSensors;
+import bagu_chan.bagus_lib.register.ModStructureProcessorTypes;
 import bagu_chan.bagus_lib.util.reward.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -32,6 +33,7 @@ public class BagusLib {
         // Register the commonSetup method for modloading
 
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
+        ModStructureProcessorTypes.PROCESSOR_TYPE.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
