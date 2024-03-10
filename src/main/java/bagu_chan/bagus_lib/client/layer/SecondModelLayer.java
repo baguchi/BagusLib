@@ -2,7 +2,6 @@ package bagu_chan.bagus_lib.client.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -14,7 +13,7 @@ public class SecondModelLayer<T extends Mob, M extends EntityModel<T>>
     private final ResourceLocation location;
     private final M layerModel;
 
-    public SecondModelLayer(RenderLayerParent<T, M> renderLayerParent, ResourceLocation location, M model, EntityModelSet entityModelSet) {
+    public SecondModelLayer(RenderLayerParent<T, M> renderLayerParent, ResourceLocation location, M model) {
         super(renderLayerParent);
         this.location = location;
         this.layerModel = model;
