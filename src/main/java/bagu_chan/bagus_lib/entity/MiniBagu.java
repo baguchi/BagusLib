@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.entity;
 
-import bagu_chan.bagus_lib.entity.goal.AnimatedAttackGoal;
+import bagu_chan.bagus_lib.entity.goal.ManyAnimateAttackGoal;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -44,7 +44,7 @@ public class MiniBagu extends PathfinderMob {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new AnimatedAttackGoal(this, 1.1D, 10, 20));
+        this.goalSelector.addGoal(1, new ManyAnimateAttackGoal(this, 1.1D, new int[]{10, 18}, 20));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
