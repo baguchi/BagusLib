@@ -5,6 +5,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 
 public class ModModelLayers {
-    public static ModelLayerLocation MINI_BAGU = new ModelLayerLocation(new ResourceLocation(BagusLib.MODID, "mini_bagu"), "mini_bagu");
+    public static ModelLayerLocation MINI_BAGU = new ModelLayerLocation(new ResourceLocation(BagusLib.MODID, "mini_bagu"), "main");
 
 }
