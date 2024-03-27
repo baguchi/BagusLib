@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.bus.api.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 public class BagusModelEvent extends Event {
     private LivingEntity entityIn;
