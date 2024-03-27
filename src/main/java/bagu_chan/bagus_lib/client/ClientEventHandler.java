@@ -1,6 +1,7 @@
 package bagu_chan.bagus_lib.client;
 
 import bagu_chan.bagus_lib.BagusConfigs;
+import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.game.WaterMelonScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -14,7 +15,7 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 import java.util.Calendar;
 import java.util.Date;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = BagusLib.MODID)
 public class ClientEventHandler {
     private static boolean initDate = false;
 
