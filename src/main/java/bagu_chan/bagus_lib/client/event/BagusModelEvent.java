@@ -2,6 +2,7 @@ package bagu_chan.bagus_lib.client.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Event;
@@ -69,6 +70,20 @@ public class BagusModelEvent extends Event {
 
         public float getAgeInTick() {
             return (float) getPartialTick() + getEntityIn().tickCount;
+        }
+    }
+
+    public static class Render extends BagusModelEvent {
+
+        private RenderType renderType;
+
+        public Render(LivingEntity entityIn, EntityModel model, float partialTick, RenderType renderType) {
+            super(entityIn, model, partialTick);
+            this.renderType = renderType;
+        }
+
+        public RenderType getRenderType() {
+            return renderType;
         }
     }
 }
