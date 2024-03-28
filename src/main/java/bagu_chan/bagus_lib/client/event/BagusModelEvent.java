@@ -76,14 +76,20 @@ public class BagusModelEvent extends Event {
     public static class Render extends BagusModelEvent {
 
         private MultiBufferSource multiBufferSource;
+        private PoseStack poseStack;
 
-        public Render(LivingEntity entityIn, EntityModel model, float partialTick, MultiBufferSource multiBufferSource) {
+        public Render(LivingEntity entityIn, EntityModel model, float partialTick, MultiBufferSource multiBufferSource, PoseStack poseStack) {
             super(entityIn, model, partialTick);
             this.multiBufferSource = multiBufferSource;
+            this.poseStack = poseStack;
         }
 
         public MultiBufferSource getMultiBufferSource() {
             return multiBufferSource;
+        }
+
+        public PoseStack getPoseStack() {
+            return this.poseStack;
         }
     }
 }
