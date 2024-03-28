@@ -3,6 +3,7 @@ package bagu_chan.bagus_lib.client.event;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.Event;
@@ -19,7 +20,7 @@ public class BagusModelEvent extends Event {
         this.partialTick = partialTick;
     }
 
-    public Entity getEntityIn() {
+    public Entity getEntity() {
         return entityIn;
     }
 
@@ -58,7 +59,7 @@ public class BagusModelEvent extends Event {
         }
 
         public float getAgeInTick() {
-            return (float) getPartialTick() + getEntityIn().tickCount;
+            return (float) getPartialTick() + getEntity().tickCount;
         }
     }
 
@@ -69,7 +70,7 @@ public class BagusModelEvent extends Event {
         }
 
         public float getAgeInTick() {
-            return (float) getPartialTick() + getEntityIn().tickCount;
+            return (float) getPartialTick() + getEntity().tickCount;
         }
     }
 
@@ -77,11 +78,13 @@ public class BagusModelEvent extends Event {
 
         private MultiBufferSource multiBufferSource;
         private PoseStack poseStack;
+        private final LivingEntityRenderer livingEntityRenderer;
 
-        public Render(LivingEntity entityIn, EntityModel model, float partialTick, MultiBufferSource multiBufferSource, PoseStack poseStack) {
+        public Render(LivingEntity entityIn, EntityModel model, float partialTick, MultiBufferSource multiBufferSource, PoseStack poseStack, LivingEntityRenderer livingEntityRenderer) {
             super(entityIn, model, partialTick);
             this.multiBufferSource = multiBufferSource;
             this.poseStack = poseStack;
+            this.livingEntityRenderer = livingEntityRenderer;
         }
 
         public MultiBufferSource getMultiBufferSource() {
@@ -90,6 +93,10 @@ public class BagusModelEvent extends Event {
 
         public PoseStack getPoseStack() {
             return this.poseStack;
+        }
+
+        public LivingEntityRenderer getLivingEntityRenderer() {
+            return livingEntityRenderer;
         }
     }
 }
