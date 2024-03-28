@@ -2,7 +2,6 @@ package bagu_chan.bagus_lib.mixin.client;
 
 import bagu_chan.bagus_lib.client.event.BagusModelEvent;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -62,11 +61,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V", shift = At.Shift.AFTER), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
     protected void setupRender(T p_115308_, float p_115309_, float p_115310_, PoseStack p_115311_, MultiBufferSource p_115312_, int p_115313_, CallbackInfo ci) {
-        Minecraft minecraft = Minecraft.getInstance();
-        boolean flag = this.isBodyVisible(p_115308_);
-        boolean flag1 = !flag && !p_115308_.isInvisibleTo(minecraft.player);
-        boolean flag2 = minecraft.shouldEntityAppearGlowing(p_115308_);
-        BagusModelEvent.Render event = new BagusModelEvent.Render(p_115308_, this.model, p_115310_, this.getRenderType(p_115308_, flag, flag1, flag2));
+        BagusModelEvent.Render event = new BagusModelEvent.Render(p_115308_, this.model, p_115310_, p_115312_);
         NeoForge.EVENT_BUS.post(event);
     }
 }
