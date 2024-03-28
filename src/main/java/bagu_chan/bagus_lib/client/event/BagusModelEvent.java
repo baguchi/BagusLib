@@ -59,7 +59,7 @@ public class BagusModelEvent extends Event {
         }
 
         public float getAgeInTick() {
-            return (float) getPartialTick() + getEntityIn().tickCount;
+            return (float) getPartialTick() + getEntity().tickCount;
         }
     }
 
@@ -70,7 +70,7 @@ public class BagusModelEvent extends Event {
         }
 
         public float getAgeInTick() {
-            return (float) getPartialTick() + getEntityIn().tickCount;
+            return (float) getPartialTick() + getEntity().tickCount;
         }
     }
 
