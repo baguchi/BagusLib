@@ -61,7 +61,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V", shift = At.Shift.AFTER), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
     protected void setupRender(T p_115308_, float p_115309_, float p_115310_, PoseStack p_115311_, MultiBufferSource p_115312_, int p_115313_, CallbackInfo ci) {
-        BagusModelEvent.Render event = new BagusModelEvent.Render(p_115308_, this.model, p_115310_, p_115312_, p_115311_);
+        BagusModelEvent.Render event = new BagusModelEvent.Render(p_115308_, this.model, p_115310_, p_115312_, p_115311_, (LivingEntityRenderer) (Object) this);
         NeoForge.EVENT_BUS.post(event);
     }
 }
