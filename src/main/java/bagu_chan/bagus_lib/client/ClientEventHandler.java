@@ -3,6 +3,7 @@ package bagu_chan.bagus_lib.client;
 import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.game.WaterMelonScreen;
+import bagu_chan.bagus_lib.util.DialogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -11,6 +12,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,4 +42,28 @@ public class ClientEventHandler {
         }
         return aprilFools && BagusConfigs.COMMON.aprilFool.get();
     }
+
+    @SubscribeEvent
+    public static void clientLoggOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        DialogHandler.INSTANCE.setDialogue(null);
+    }
+
+    /*@SubscribeEvent
+    public static void clientTick(TickEvent.PlayerTickEvent event) {
+        if (Minecraft.getInstance().player != null) {
+            if (Minecraft.getInstance().player.tickCount == 20) {
+                DialogHandler.INSTANCE.setDialogue(Component.literal("Literal test"));
+            }
+
+            if (Minecraft.getInstance().player.tickCount == 100) {
+                DialogHandler.INSTANCE.setDialogue(Component.literal("..Also I'm potato"));
+            }
+
+            if (Minecraft.getInstance().player.tickCount == 200) {
+                DialogHandler.INSTANCE.setDialogue(Component.literal("I'm Sans"), Holder.direct(SoundEvents.SKELETON_AMBIENT), SANS, 215, 211);
+                DialogHandler.INSTANCE.setScale(0.25F,0.25F);
+                DialogHandler.INSTANCE.setPos(30,30);
+            }
+        }
+    }*/
 }

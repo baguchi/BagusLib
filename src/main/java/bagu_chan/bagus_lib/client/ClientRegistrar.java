@@ -11,6 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -36,4 +37,8 @@ public class ClientRegistrar {
         });
     }
 
+    @SubscribeEvent
+    public static void overlayRegister(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll(ModGuiOverlays.DIALOG.id(), ModGuiOverlays.DIALOG.overlay());
+    }
 }
