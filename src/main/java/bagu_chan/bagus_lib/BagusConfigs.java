@@ -21,7 +21,6 @@ public class BagusConfigs {
     public static class Common {
         public final ModConfigSpec.BooleanValue enableCameraShakeForVanillaMobs;
         public final ModConfigSpec.BooleanValue aprilFool;
-
         public Common(ModConfigSpec.Builder builder) {
             enableCameraShakeForVanillaMobs = builder
                     .comment("Enable the camera shake for vanilla mobs. [true / false]")
@@ -31,16 +30,22 @@ public class BagusConfigs {
                     .comment("Enable April Feature. [true / false]")
                     .translation(BagusLib.MODID + ".config.aprilFeature")
                     .define("Enable AprilFool Joke", true);
+
         }
     }
 
     public static class Client {
         public final ModConfigSpec.BooleanValue enableMiniBagu;
+        public final ModConfigSpec.BooleanValue coolerEndPoem;
 
         public Client(ModConfigSpec.Builder builder) {
             enableMiniBagu = builder
                     .comment("Enable the Mini Bagu cosmetic. [true / false]")
                     .define("Enable Mini Bagu cosmetic(Only The Patreon CrystalFox Tier)", false);
+            coolerEndPoem = builder
+                    .comment("Enable Cooler EndPoem Feature...(Take a look the After beat the End) [true / false]")
+                    .translation(BagusLib.MODID + ".config.betterEndPoem")
+                    .define("Enable Cooler EndPoem", true);
         }
     }
 }

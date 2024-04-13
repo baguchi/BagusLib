@@ -45,7 +45,12 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void clientLoggOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        DialogHandler.INSTANCE.setDialogue(null);
+        DialogHandler.INSTANCE.removeAllDialogType();
+    }
+
+    @SubscribeEvent
+    public static void clientRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        DialogHandler.INSTANCE.removeAllDialogType();
     }
 
     /*@SubscribeEvent

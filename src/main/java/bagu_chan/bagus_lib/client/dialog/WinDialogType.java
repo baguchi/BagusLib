@@ -16,23 +16,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DialogType {
-    @Nullable
-    protected DialogHandler.DrawString dialogue;
-    @Nullable
-    protected MutableComponent dialogueBase;
-    @Nullable
-    protected Holder<SoundEvent> soundEvent;
-
-    protected float scaleX = 1;
-    protected float scaleY = 1;
-    protected int posX = 1;
-    protected int posY = 1;
-    protected int renderDialogY = 16;
-
-    public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
-
-    }
+public class WinDialogType extends DialogType {
 
     public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
 
@@ -40,7 +24,7 @@ public class DialogType {
         float g = (float) tickCount + f;
         if (this.dialogue == null && this.dialogueBase != null) {
             MutableComponent component = dialogueBase;
-            this.dialogue = beginString(guiGraphics, g, 2.0, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
+            this.dialogue = beginString(guiGraphics, g, 1.5, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72, false);
         }
 
 
@@ -49,6 +33,19 @@ public class DialogType {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(soundEvent.value(), 1.0F, 0.75F));
             }
         }
+    }
+
+    public DialogHandler.DrawString beginString(GuiGraphics guiGraphics, double d, double e, Font font, String string2, int i, int j2, boolean ignoreWhiteSpace) {
+        List<FormattedText> list = font.getSplitter().splitLines(string2, j2, Style.EMPTY);
+        String string22 = list.stream().map(FormattedText::getString).collect(Collectors.joining("\n"));
+        return new DialogHandler.DrawString(d, e, string22, (string, j, k) -> {
+            String[] strings = string.split("\\r?\\n");
+            int l = k;
+            for (String string3 : strings) {
+                guiGraphics.drawString(font, string3, j, l, i);
+                l += font.lineHeight + 4;
+            }
+        }, ignoreWhiteSpace);
     }
 
     public DialogHandler.DrawString beginString(GuiGraphics guiGraphics, double d, double e, Font font, String string2, int i, int j2) {

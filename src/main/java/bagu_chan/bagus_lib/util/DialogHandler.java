@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
@@ -19,19 +18,16 @@ import java.util.stream.Collectors;
 
 //direct port from Minecraft 24w14potato
 public class DialogHandler {
-    private static final Vector3f TRANSLATION = new Vector3f();
-
     public static final DialogHandler INSTANCE = new DialogHandler();
 
 
-    public static final Map<String, DialogType> dialogTypes = Maps.newHashMap();
+    public final Map<String, DialogType> dialogTypes = Maps.newHashMap();
 
 
     public void renderDialogue(GuiGraphics guiGraphics, float f, float tickCount) {
         Minecraft minecraft = Minecraft.getInstance();
         float g = (float) tickCount + f;
         PoseStack poseStack = guiGraphics.pose();
-        Font font = minecraft.font;
         for (DialogType dialogue : dialogTypes.values()) {
             poseStack.pushPose();
             dialogue.render(guiGraphics, poseStack, f, tickCount);
@@ -39,27 +35,12 @@ public class DialogHandler {
             poseStack.pushPose();
             dialogue.renderText(guiGraphics, poseStack, f, tickCount);
             poseStack.popPose();
-        /*if(this.entityPreview == null && this.entityType != null || this.entityType != this.oldEntityType){
-            this.entityPreview = this.entityType.create(Minecraft.getInstance().level);
-            this.oldEntityType = this.entityType;
-            this.entityPreview.setYRot(0F);
-            this.entityPreview.setYBodyRot(0F);
-            this.entityPreview.setYHeadRot(0F);
-        }*/
-
-        /*if(entityPreview instanceof LivingEntity livingEntity){
-            poseStack.pushPose();
-            poseStack.scale(this.scaleX, this.scaleY, 1.0f);
-            InventoryScreen.renderEntityInInventory(guiGraphics, this.posX, this.posY, 25, TRANSLATION, new Quaternionf().rotationXYZ((float) Math.PI, (float) Math.PI, 0F), null, livingEntity);
-            poseStack.popPose();
-        }else
-        */
-
         }
     }
 
 
     public void addOrReplaceDialogType(String name, DialogType dialogType) {
+        dialogTypes.remove(name);
         dialogTypes.put(name, dialogType);
     }
 
@@ -80,12 +61,22 @@ public class DialogHandler {
         private final DrawFunction drawFunction;
         private double lastTick;
         private String subString = "";
+        private final boolean ignoreWhiteSpace;
+
+        public DrawString(double d, double e, String string, DrawFunction drawFunction, boolean ignoreWhiteSpace) {
+            this.lastTick = d;
+            this.charsPerTick = e;
+            this.targetString = string;
+            this.drawFunction = drawFunction;
+            this.ignoreWhiteSpace = ignoreWhiteSpace;
+        }
 
         public DrawString(double d, double e, String string, DrawFunction drawFunction) {
             this.lastTick = d;
             this.charsPerTick = e;
             this.targetString = string;
             this.drawFunction = drawFunction;
+            this.ignoreWhiteSpace = true;
         }
 
         public boolean draw(double d, int i, int j) {
@@ -99,10 +90,16 @@ public class DialogHandler {
                 this.drawFunction.apply(this.subString, i, j);
                 return false;
             }
-            for (l = Math.min(this.subString.length() + k, this.targetString.length()); l < this.targetString.length() && Character.isWhitespace(this.targetString.charAt(l - 1)); ++l) {
+            if (this.ignoreWhiteSpace) {
+                for (l = Math.min(this.subString.length() + k, this.targetString.length()); l < this.targetString.length() && Character.isWhitespace(this.targetString.charAt(l - 1)); ++l) {
+                }
+            } else {
+                l = Math.min(this.subString.length() + k, this.targetString.length());
             }
-            this.subString = this.targetString.substring(0, l);
-            this.drawFunction.apply(this.subString, i, j);
+            if (l >= 0) {
+                this.subString = this.targetString.substring(0, l);
+                this.drawFunction.apply(this.subString, i, j);
+            }
             this.lastTick = d;
             return true;
         }
