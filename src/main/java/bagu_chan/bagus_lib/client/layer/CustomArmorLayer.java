@@ -112,6 +112,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
                 } else {
                 renderer.getModel().headPartArmors().forEach(part -> {
                     this.renderer.getModel().translateToHead(part, matrixStackIn);
+                    matrixStackIn.translate(0, -0.25, 0.0F);
                     matrixStackIn.mulPose((new Quaternionf()).rotateX((float) Math.PI));
                     matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
                     matrixStackIn.scale(0.625F, 0.625F, 0.625F);
