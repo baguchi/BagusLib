@@ -24,6 +24,14 @@ public class BagusPacketHandler {
                 EntityCameraMessage::writeToPacket, EntityCameraMessage::readFromPacket, EntityCameraMessage::handle);
         CHANNEL.registerMessage(3, SyncEntityPacketToServer.class,
                 SyncEntityPacketToServer::writeToPacket, SyncEntityPacketToServer::readFromPacket, SyncEntityPacketToServer::handle);
+        CHANNEL.registerMessage(3, DialogMessage.class,
+                DialogMessage::writeToPacket, DialogMessage::readFromPacket, DialogMessage::handle);
+        CHANNEL.registerMessage(3, ImageDialogMessage.class,
+                ImageDialogMessage::writeToPacket, ImageDialogMessage::readFromPacket, ImageDialogMessage::handle);
+        CHANNEL.registerMessage(3, ItemStackDialogMessage.class,
+                ItemStackDialogMessage::writeToPacket, ItemStackDialogMessage::readFromPacket, ItemStackDialogMessage::handle);
+        CHANNEL.registerMessage(3, RemoveAllDialogMessage.class,
+                RemoveAllDialogMessage::writeToPacket, RemoveAllDialogMessage::readFromPacket, RemoveAllDialogMessage::handle);
 
     }
 }

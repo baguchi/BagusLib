@@ -31,11 +31,15 @@ public class BagusConfigs {
 
     public static class Client {
         public final ForgeConfigSpec.BooleanValue enableMiniBagu;
+        public final ForgeConfigSpec.BooleanValue coolerEndPoem;
 
         public Client(ForgeConfigSpec.Builder builder) {
             enableMiniBagu = builder
                     .comment("Enable the Mini Bagu cosmetic. [true / false]")
                     .define("Enable Mini Bagu cosmetic", false);
+            coolerEndPoem = builder
+                    .comment("Enable Cooler EndPoem Feature...(Take a look the After beat the End) [true / false]")
+                    .define("Enable Cooler EndPoem", true);
         }
     }
 }

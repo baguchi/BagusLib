@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -34,6 +35,11 @@ public class ClientRegistrar {
                 }
             }
         });
+    }
+
+    @SubscribeEvent
+    public static void overlayRegister(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll(ModGuiOverlays.DIALOG.id().toString(), ModGuiOverlays.DIALOG.overlay());
     }
 
 }

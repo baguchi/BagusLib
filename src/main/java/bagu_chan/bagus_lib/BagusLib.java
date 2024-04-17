@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib;
 
+import bagu_chan.bagus_lib.command.DialogCommand;
 import bagu_chan.bagus_lib.message.BagusPacketHandler;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModLootModifiers;
@@ -8,6 +9,7 @@ import bagu_chan.bagus_lib.register.ModStructureProcessorTypes;
 import bagu_chan.bagus_lib.util.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -36,9 +38,8 @@ public class BagusLib {
         ModSensors.SENSOR_TYPES.register(modEventBus);
         ModStructureProcessorTypes.PROCESSOR_TYPE.register(modEventBus);
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::commonSetup);
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
@@ -50,5 +51,9 @@ public class BagusLib {
     private void commonSetup(final FMLCommonSetupEvent event) {
         BagusPacketHandler.setupMessages();
         TierHelper.addSuporterContents();
+    }
+
+    private void registerCommands(RegisterCommandsEvent evt) {
+        DialogCommand.register(evt.getDispatcher(), evt.getBuildContext());
     }
 }
