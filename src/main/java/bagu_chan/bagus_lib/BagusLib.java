@@ -1,9 +1,7 @@
 package bagu_chan.bagus_lib;
 
-import bagu_chan.bagus_lib.message.CameraMessage;
-import bagu_chan.bagus_lib.message.EntityCameraMessage;
-import bagu_chan.bagus_lib.message.PlayerDataSyncMessage;
-import bagu_chan.bagus_lib.message.SyncEntityPacketToServer;
+import bagu_chan.bagus_lib.command.DialogCommand;
+import bagu_chan.bagus_lib.message.*;
 import bagu_chan.bagus_lib.register.ModEntities;
 import bagu_chan.bagus_lib.register.ModLootModifiers;
 import bagu_chan.bagus_lib.register.ModSensors;
@@ -15,6 +13,8 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import org.apache.logging.log4j.LogManager;
@@ -38,6 +38,7 @@ public class BagusLib {
         ModSensors.SENSOR_TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupPackets);
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
@@ -56,5 +57,13 @@ public class BagusLib {
         registrar.play(EntityCameraMessage.ID, EntityCameraMessage::new, payload -> payload.client(EntityCameraMessage::handle));
         registrar.play(PlayerDataSyncMessage.ID, PlayerDataSyncMessage::new, payload -> payload.server(PlayerDataSyncMessage::handle));
         registrar.play(SyncEntityPacketToServer.ID, SyncEntityPacketToServer::new, payload -> payload.server(SyncEntityPacketToServer::handle));
+        registrar.play(DialogMessage.ID, DialogMessage::new, payload -> payload.client(DialogMessage::handle));
+        registrar.play(ImageDialogMessage.ID, ImageDialogMessage::new, payload -> payload.client(ImageDialogMessage::handle));
+        registrar.play(ItemStackDialogMessage.ID, ItemStackDialogMessage::new, payload -> payload.client(ItemStackDialogMessage::handle));
+        registrar.play(RemoveAllDialogMessage.ID, RemoveAllDialogMessage::new, payload -> payload.client(RemoveAllDialogMessage::handle));
+    }
+
+    private void registerCommands(RegisterCommandsEvent evt) {
+        DialogCommand.register(evt.getDispatcher(), evt.getBuildContext());
     }
 }

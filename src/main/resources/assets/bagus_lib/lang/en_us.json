@@ -1,6 +1,10 @@
 {
-  "baguslib.config.shakeCameraForVanilla": "Enable Shake Camera For Vanilla",
-  "baguslib.config.aprilFeature": "Enable April Feature",
-  "baguslib.config.betterEndPoem": "Better End Poem",
-  "bagus_lib.watermelon": "Water Melon"
+  "bagus_lib.config.shakeCameraForVanilla": "Enable Shake Camera For Vanilla",
+  "bagus_lib.config.aprilFeature": "Enable April Feature",
+  "bagus_lib.config.betterEndPoem": "Better End Poem",
+  "bagus_lib.watermelon": "Water Melon",
+  "command.bagus_lib.remove_all_dialog": "Successfully Removed All Dialog",
+  "command.bagus_lib.item_dialog": "Successfully add Item Dialog",
+  "command.bagus_lib.dialog": "Successfully add Dialog",
+  "command.bagus_lib.image_dialog": "Successfully add Image Dialog"
 }
