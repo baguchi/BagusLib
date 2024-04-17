@@ -6,6 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
+
+/*
+ * If using this dialog. Image Path should be textures/gui/sprites/[filename]
+ */
 public class ImageDialogType extends DialogType {
     @Nullable
     protected ResourceLocation resourceLocation;
