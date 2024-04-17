@@ -57,17 +57,12 @@ public class ClientEventHandler {
     public static void clientTick(TickEvent.PlayerTickEvent event) {
         if (Minecraft.getInstance().player != null) {
             if (Minecraft.getInstance().player.tickCount == 20) {
-                DialogHandler.INSTANCE.setDialogue(Component.literal("Literal test"));
-            }
-
-            if (Minecraft.getInstance().player.tickCount == 100) {
-                DialogHandler.INSTANCE.setDialogue(Component.literal("..Also I'm potato"));
-            }
-
-            if (Minecraft.getInstance().player.tickCount == 200) {
-                DialogHandler.INSTANCE.setDialogue(Component.literal("I'm Sans"), Holder.direct(SoundEvents.SKELETON_AMBIENT), SANS, 215, 211);
-                DialogHandler.INSTANCE.setScale(0.25F,0.25F);
-                DialogHandler.INSTANCE.setPos(30,30);
+                ImageDialogType dialogType = new ImageDialogType();
+                dialogType.setDialogueBase(Component.literal("Hmm... something different"));
+                dialogType.setSize(280, 336);
+                dialogType.setScale(0.25F, 0.25F);
+                dialogType.setResourceLocation(new ResourceLocation(BagusLib.MODID, "foresight"));
+                DialogHandler.INSTANCE.addOrReplaceDialogType("Host", dialogType);
             }
         }
     }*/
