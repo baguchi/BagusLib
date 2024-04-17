@@ -15,7 +15,8 @@
     "client.HumanoidModelMixin",
     "client.LivingEntityRendererMixin",
     "client.PlayerModelMixin",
-    "client.QuadrupedModelMixin"
+    "client.QuadrupedModelMixin",
+    "client.WinScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
