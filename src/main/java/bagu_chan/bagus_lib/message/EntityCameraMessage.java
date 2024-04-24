@@ -7,14 +7,19 @@ import bagu_chan.bagus_lib.util.GlobalVec3;
 import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class EntityCameraMessage implements CustomPacketPayload {
-    public static final ResourceLocation ID = BagusLib.prefix("entity_camera");
+public class EntityCameraMessage implements CustomPacketPayload, IPayloadHandler<EntityCameraMessage> {
+
+    public static final StreamCodec<FriendlyByteBuf, EntityCameraMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            EntityCameraMessage::write, EntityCameraMessage::new
+    );
+    public static final CustomPacketPayload.Type<EntityCameraMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("entity_camera").toString());
 
     private final int entityId;
 
@@ -44,8 +49,8 @@ public class EntityCameraMessage implements CustomPacketPayload {
         this(buf.readInt(), buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
-    public static void handle(EntityCameraMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    public void handle(EntityCameraMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
                 return;
@@ -56,7 +61,7 @@ public class EntityCameraMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

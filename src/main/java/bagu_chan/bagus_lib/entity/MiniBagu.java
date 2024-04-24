@@ -1,7 +1,6 @@
 package bagu_chan.bagus_lib.entity;
 
 import bagu_chan.bagus_lib.entity.goal.ManyAnimateAttackGoal;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -72,10 +71,9 @@ public class MiniBagu extends PathfinderMob {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_, @Nullable CompoundTag p_21438_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_) {
         ItemStack stack = new ItemStack(Items.CARVED_PUMPKIN);
         this.setItemSlot(EquipmentSlot.HEAD, stack);
-
-        return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_, p_21438_);
+        return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_);
     }
 }

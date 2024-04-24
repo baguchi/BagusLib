@@ -11,13 +11,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class CameraCore {
     public static List<CameraHolder> cameraHolderList = Lists.newArrayList();
 
@@ -47,9 +47,9 @@ public class CameraCore {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
-                        PacketDistributor.PLAYER.with(serverPlayer).send(new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        PacketDistributor.sendToPlayer(serverPlayer, new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     } else {
-                        PacketDistributor.PLAYER.with(serverPlayer).send(new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        PacketDistributor.sendToPlayer(serverPlayer, new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     }
                 }
             }

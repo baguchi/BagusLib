@@ -1,9 +1,13 @@
 package bagu_chan.bagus_lib.loot;
 
+import bagu_chan.bagus_lib.register.ModLootModifiers;
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -14,12 +18,13 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class OneItemLootModifier extends LootModifier {
 
-    public static final Supplier<Codec<OneItemLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(inst -> codecStart(inst)
+    public static final Supplier<MapCodec<OneItemLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
                     .and(ResourceLocation.CODEC.fieldOf("loot_table").forGetter((m) -> m.lootTable))
                     .apply(inst, OneItemLootModifier::new)));
 
@@ -33,10 +38,11 @@ public class OneItemLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        LootTable extraTable = context.getResolver().getLootTable(this.lootTable);
-
         ObjectArrayList<ItemStack> stacks = new ObjectArrayList<>();
-        extraTable.getRandomItemsRaw(context, stacks::add);
+        Optional<Holder.Reference<LootTable>> extraTable = context.getResolver().get(Registries.LOOT_TABLE, ResourceKey.create(Registries.LOOT_TABLE, this.lootTable));
+        if (extraTable.isPresent()) {
+            extraTable.get().value().getRandomItemsRaw(context, generatedLoot::add);
+        }
         List<ItemStack> itemStacks = stacks.stream().filter(itemStack -> {
             return !itemStack.isEmpty();
         }).toList();
@@ -48,7 +54,7 @@ public class OneItemLootModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
-        return CODEC.get();
+    public MapCodec<? extends IGlobalLootModifier> codec() {
+        return ModLootModifiers.ONE_IN_LOOT.get();
     }
 }

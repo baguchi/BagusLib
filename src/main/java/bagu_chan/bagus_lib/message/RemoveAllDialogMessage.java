@@ -3,13 +3,19 @@ package bagu_chan.bagus_lib.message;
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.util.DialogHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class RemoveAllDialogMessage implements CustomPacketPayload {
+public class RemoveAllDialogMessage implements CustomPacketPayload, IPayloadHandler<RemoveAllDialogMessage> {
 
-    public static final ResourceLocation ID = BagusLib.prefix("remove_all_dialog");
+    public static final StreamCodec<FriendlyByteBuf, RemoveAllDialogMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            RemoveAllDialogMessage::write, RemoveAllDialogMessage::new
+    );
+    public static final CustomPacketPayload.Type<RemoveAllDialogMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("remove_all_dialog").toString());
+
+
 
     public RemoveAllDialogMessage() {
     }
@@ -22,12 +28,12 @@ public class RemoveAllDialogMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(RemoveAllDialogMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    public void handle(RemoveAllDialogMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             DialogHandler.INSTANCE.removeAllDialogType();
         });
     }

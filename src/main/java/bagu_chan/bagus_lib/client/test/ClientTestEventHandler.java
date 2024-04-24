@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.client.test;
 
-//@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = BagusLib.MODID)
+//@EventBusSubscriber(value = Dist.CLIENT, modid = BagusLib.MODID)
 public class ClientTestEventHandler {
 /*
     @SubscribeEvent

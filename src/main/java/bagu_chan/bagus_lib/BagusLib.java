@@ -15,14 +15,14 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 
-// The value here should match an entry in the META-INF/mods.toml file
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(BagusLib.MODID)
 public class BagusLib {
     // Define mod id in a common place for everything to reference
@@ -51,16 +51,15 @@ public class BagusLib {
         TierHelper.addSuporterContents();
     }
 
-    public void setupPackets(RegisterPayloadHandlerEvent event) {
-        IPayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
-        registrar.play(CameraMessage.ID, CameraMessage::new, payload -> payload.client(CameraMessage::handle));
-        registrar.play(EntityCameraMessage.ID, EntityCameraMessage::new, payload -> payload.client(EntityCameraMessage::handle));
-        registrar.play(PlayerDataSyncMessage.ID, PlayerDataSyncMessage::new, payload -> payload.server(PlayerDataSyncMessage::handle));
-        registrar.play(SyncEntityPacketToServer.ID, SyncEntityPacketToServer::new, payload -> payload.server(SyncEntityPacketToServer::handle));
-        registrar.play(DialogMessage.ID, DialogMessage::new, payload -> payload.client(DialogMessage::handle));
-        registrar.play(ImageDialogMessage.ID, ImageDialogMessage::new, payload -> payload.client(ImageDialogMessage::handle));
-        registrar.play(ItemStackDialogMessage.ID, ItemStackDialogMessage::new, payload -> payload.client(ItemStackDialogMessage::handle));
-        registrar.play(RemoveAllDialogMessage.ID, RemoveAllDialogMessage::new, payload -> payload.client(RemoveAllDialogMessage::handle));
+    public void setupPackets(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
+        registrar.playBidirectional(CameraMessage.TYPE, CameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(EntityCameraMessage.TYPE, EntityCameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(PlayerDataSyncMessage.TYPE, PlayerDataSyncMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(ImageDialogMessage.TYPE, ImageDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
     }
 
     private void registerCommands(RegisterCommandsEvent evt) {

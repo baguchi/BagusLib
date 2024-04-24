@@ -1,7 +1,7 @@
 package bagu_chan.bagus_lib.world.processor;
 
 import bagu_chan.bagus_lib.register.ModStructureProcessorTypes;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  * https://github.com/YUNG-GANG/YUNGs-Better-Ocean-Monuments/blob/1.20/Common/src/main/java/com/yungnickyoung/minecraft/betteroceanmonuments/world/processor/LegProcessor.java
  */
 public class BaseProcessor extends StructureProcessor {
-    public static final Codec<BaseProcessor> CODEC = RecordCodecBuilder.create((p_74116_) -> {
+    public static final MapCodec<BaseProcessor> CODEC = RecordCodecBuilder.mapCodec((p_74116_) -> {
         return p_74116_.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter((p_163729_) -> {
             return p_163729_.baseBlock;
         }), BuiltInRegistries.BLOCK.byNameCodec().fieldOf("replace_block").forGetter((p_163727_) -> {

@@ -7,14 +7,17 @@ import bagu_chan.bagus_lib.util.GlobalVec3;
 import bagu_chan.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class CameraMessage implements CustomPacketPayload {
-
-    public static final ResourceLocation ID = BagusLib.prefix("camera");
+public class CameraMessage implements CustomPacketPayload, IPayloadHandler<CameraMessage> {
+    public static final StreamCodec<FriendlyByteBuf, CameraMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            CameraMessage::write, CameraMessage::new
+    );
+    public static final CustomPacketPayload.Type<CameraMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("camera").toString());
 
     private final int duration;
     private final int distance;
@@ -42,12 +45,13 @@ public class CameraMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(CameraMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    @Override
+    public void handle(CameraMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
                 return;

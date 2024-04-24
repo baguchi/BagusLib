@@ -22,7 +22,7 @@ public class MiscUtils {
             compoundTag.putBoolean(cosmeticId, enable);
             data.setBagusData(compoundTag);
             if (Minecraft.getInstance().getConnection() != null) {
-                PacketDistributor.SERVER.noArg().send(new PlayerDataSyncMessage(compoundTag, (Minecraft.getInstance().player).getId()));
+                PacketDistributor.sendToServer(new PlayerDataSyncMessage(compoundTag, (Minecraft.getInstance().player).getId()));
             }
 
         }

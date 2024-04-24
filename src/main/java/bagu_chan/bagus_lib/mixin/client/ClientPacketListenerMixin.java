@@ -23,7 +23,7 @@ public abstract class ClientPacketListenerMixin {
     private void syncEntity(
             ClientboundAddEntityPacket p_104958_, CallbackInfo ci, Entity entity) {
         if (entity instanceof IBaguPacket && entity.level().isClientSide()) {
-            PacketDistributor.SERVER.noArg().send(new SyncEntityPacketToServer(entity.getUUID()));
+            PacketDistributor.sendToServer(new SyncEntityPacketToServer(entity.getUUID()));
         }
     }
 }

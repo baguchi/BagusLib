@@ -3,14 +3,14 @@ package bagu_chan.bagus_lib.message;
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.api.IBaguPacket;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -19,9 +19,14 @@ import java.util.UUID;
  * So I created this to make that process easier
  *
  */
-public class SyncEntityPacketToServer implements CustomPacketPayload {
+public class SyncEntityPacketToServer implements CustomPacketPayload, IPayloadHandler<SyncEntityPacketToServer> {
 
-    public static final ResourceLocation ID = BagusLib.prefix("sync_packet");
+    public static final StreamCodec<FriendlyByteBuf, SyncEntityPacketToServer> STREAM_CODEC = CustomPacketPayload.codec(
+            SyncEntityPacketToServer::write, SyncEntityPacketToServer::new
+    );
+    public static final CustomPacketPayload.Type<SyncEntityPacketToServer> TYPE = CustomPacketPayload.createType(BagusLib.prefix("sync_entity").toString());
+
+
     private final UUID uuid;
 
     public SyncEntityPacketToServer(UUID uuid) {
@@ -37,19 +42,18 @@ public class SyncEntityPacketToServer implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(SyncEntityPacketToServer message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
-            Optional<Player> player = context.player();
-            if (player.isPresent()) {
-                Entity entity = ((ServerLevel) player.get().level()).getEntity(message.uuid);
+    public void handle(SyncEntityPacketToServer message, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            Entity entity = ((ServerLevel) player.level()).getEntity(message.uuid);
                 if (entity instanceof IBaguPacket baguPacket) {
                     baguPacket.resync(entity);
                 }
-            }
+
         });
     }
 }

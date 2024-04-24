@@ -5,13 +5,17 @@ import bagu_chan.bagus_lib.client.dialog.DialogType;
 import bagu_chan.bagus_lib.util.DialogHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class DialogMessage implements CustomPacketPayload {
+public class DialogMessage implements CustomPacketPayload, IPayloadHandler<DialogMessage> {
 
-    public static final ResourceLocation ID = BagusLib.prefix("dialog");
+    public static final StreamCodec<FriendlyByteBuf, DialogMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            DialogMessage::write, DialogMessage::new
+    );
+    public static final CustomPacketPayload.Type<DialogMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("dialog").toString());
 
     private final String string;
 
@@ -28,12 +32,12 @@ public class DialogMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(DialogMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    public void handle(DialogMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             DialogType dialogType = new DialogType();
             dialogType.setDialogueBase(Component.literal(message.string));
             DialogHandler.INSTANCE.addOrReplaceDialogType("Command", dialogType);

@@ -4,20 +4,25 @@ import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.api.IBaguData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-import java.util.Optional;
 
 /**
  * This is use update data for player.
  * *
  */
-public class PlayerDataSyncMessage implements CustomPacketPayload {
-    public static final ResourceLocation ID = BagusLib.prefix("player_data");
+public class PlayerDataSyncMessage implements CustomPacketPayload, IPayloadHandler<PlayerDataSyncMessage> {
+
+    public static final StreamCodec<FriendlyByteBuf, PlayerDataSyncMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            PlayerDataSyncMessage::write, PlayerDataSyncMessage::new
+    );
+    public static final CustomPacketPayload.Type<PlayerDataSyncMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("player_data").toString());
+
 
     private final CompoundTag tag;
     private int entityId;
@@ -42,14 +47,14 @@ public class PlayerDataSyncMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(PlayerDataSyncMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
-            Optional<Player> player = context.player();
-            if (player.isPresent() && player.get() instanceof IBaguData data) {
+    public void handle(PlayerDataSyncMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player != null && player instanceof IBaguData data) {
                 data.setBagusData(message.tag);
                 }
             });

@@ -5,13 +5,18 @@ import bagu_chan.bagus_lib.client.dialog.ImageDialogType;
 import bagu_chan.bagus_lib.util.DialogHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class ImageDialogMessage implements CustomPacketPayload {
+public class ImageDialogMessage implements CustomPacketPayload, IPayloadHandler<ImageDialogMessage> {
 
-    public static final ResourceLocation ID = BagusLib.prefix("image_dialog");
+    public static final StreamCodec<FriendlyByteBuf, ImageDialogMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            ImageDialogMessage::write, ImageDialogMessage::new
+    );
+    public static final CustomPacketPayload.Type<ImageDialogMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("image_dialog").toString());
 
     private final String string;
     private final ResourceLocation imagePath;
@@ -41,12 +46,12 @@ public class ImageDialogMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(ImageDialogMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    public void handle(ImageDialogMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             ImageDialogType dialogType = new ImageDialogType();
             dialogType.setSize(message.sizeX, message.sizeY);
             dialogType.setScale(message.scale, message.scale);

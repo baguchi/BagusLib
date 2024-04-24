@@ -3,18 +3,20 @@ package bagu_chan.bagus_lib.client;
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.layer.BagusLayer;
 import bagu_chan.bagus_lib.client.layer.IArmor;
+import bagu_chan.bagus_lib.client.overlay.DialogOverlay;
 import bagu_chan.bagus_lib.register.ModEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientRegistrar {
     @SubscribeEvent
     public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
@@ -38,7 +40,7 @@ public class ClientRegistrar {
     }
 
     @SubscribeEvent
-    public static void overlayRegister(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll(ModGuiOverlays.DIALOG.id(), ModGuiOverlays.DIALOG.overlay());
+    public static void overlayRegister(RegisterGuiLayersEvent event) {
+        event.registerAboveAll(new ResourceLocation(BagusLib.MODID, "dialog"), new DialogOverlay());
     }
 }
