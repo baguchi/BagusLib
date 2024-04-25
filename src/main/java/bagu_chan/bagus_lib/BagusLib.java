@@ -9,7 +9,7 @@ import bagu_chan.bagus_lib.register.ModStructureProcessorTypes;
 import bagu_chan.bagus_lib.util.reward.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -29,7 +29,7 @@ public class BagusLib {
     public static final String MODID = "bagus_lib";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public BagusLib(IEventBus modEventBus) {
+    public BagusLib(ModContainer modContainer, IEventBus modEventBus) {
         // Register the commonSetup method for modloading
 
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
@@ -39,8 +39,8 @@ public class BagusLib {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupPackets);
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
 
     public static ResourceLocation prefix(String name) {
