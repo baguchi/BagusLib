@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 public class ImageDialogType extends DialogType {
     @Nullable
     protected ResourceLocation resourceLocation;
-    protected int sizeX = 16;
-    protected int sizeY = 16;
+    protected int sizeX = 32;
+    protected int sizeY = 32;
 
     @Override
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
@@ -43,8 +43,12 @@ public class ImageDialogType extends DialogType {
         if (tag.contains("ImagePath")) {
             this.resourceLocation = ResourceLocation.tryParse(tag.getString("ImagePath"));
         }
-        this.sizeX = tag.getInt("sizeX");
-        this.sizeY = tag.getInt("sizeY");
+        if (tag.contains("sizeX")) {
+            this.sizeX = tag.getInt("sizeX");
+        }
+        if (tag.contains("sizeY")) {
+            this.sizeY = tag.getInt("sizeY");
+        }
     }
 
     public void setSize(int sizeX, int sizeY) {
