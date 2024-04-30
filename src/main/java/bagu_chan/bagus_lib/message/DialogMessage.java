@@ -2,9 +2,10 @@ package bagu_chan.bagus_lib.message;
 
 import bagu_chan.bagus_lib.BagusLib;
 import bagu_chan.bagus_lib.client.dialog.DialogType;
+import bagu_chan.bagus_lib.register.ModDialogs;
 import bagu_chan.bagus_lib.util.DialogHandler;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -17,18 +18,21 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
     );
     public static final CustomPacketPayload.Type<DialogMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("dialog").toString());
 
-    private final String string;
+    private final DialogType type;
+    private final CompoundTag tag;
 
-    public DialogMessage(String string) {
-        this.string = string;
+    public DialogMessage(DialogType type, CompoundTag tag) {
+        this.type = type;
+        this.tag = tag;
     }
 
     public DialogMessage(FriendlyByteBuf buf) {
-        this(buf.readUtf());
+        this(ModDialogs.getRegistry().get(buf.readResourceLocation()), buf.readNbt());
     }
 
     public void write(FriendlyByteBuf buf) {
-        buf.writeUtf(this.string);
+        buf.writeUtf(ModDialogs.getRegistry().getKey(this.type).toString());
+        buf.writeNbt(this.tag);
     }
 
     @Override
@@ -38,8 +42,8 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
 
     public void handle(DialogMessage message, IPayloadContext context) {
         context.enqueueWork(() -> {
-            DialogType dialogType = new DialogType();
-            dialogType.setDialogueBase(Component.literal(message.string));
+            DialogType dialogType = message.type;
+            dialogType.readTag(message.tag);
             DialogHandler.INSTANCE.addOrReplaceDialogType("Command", dialogType);
         });
     }

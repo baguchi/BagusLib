@@ -2,6 +2,7 @@ package bagu_chan.bagus_lib.client.dialog;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -20,10 +21,30 @@ public class ImageDialogType extends DialogType {
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
         if (this.resourceLocation != null) {
             poseStack.pushPose();
+            poseStack.translate(0, renderDialogY, 0);
             poseStack.scale(this.scaleX, this.scaleY, 1.0f);
             guiGraphics.blitSprite(resourceLocation, this.posX, this.posY, this.sizeX, this.sizeY);
             poseStack.popPose();
         }
+    }
+
+    public CompoundTag writeTag() {
+        CompoundTag tag = super.writeTag();
+        if (resourceLocation != null) {
+            tag.putString("ImagePath", resourceLocation.toString());
+        }
+        tag.putInt("sizeX", sizeX);
+        tag.putInt("sizeY", sizeY);
+        return tag;
+    }
+
+    public void readTag(CompoundTag tag) {
+        super.readTag(tag);
+        if (tag.contains("ImagePath")) {
+            this.resourceLocation = ResourceLocation.tryParse(tag.getString("ImagePath"));
+        }
+        this.sizeX = tag.getInt("sizeX");
+        this.sizeY = tag.getInt("sizeY");
     }
 
     public void setSize(int sizeX, int sizeY) {

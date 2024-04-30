@@ -7,13 +7,18 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DialogType {
@@ -31,7 +36,6 @@ public class DialogType {
     protected int renderDialogY = 16;
 
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
-
     }
 
     public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
@@ -62,6 +66,48 @@ public class DialogType {
                 l += font.lineHeight + 4;
             }
         });
+    }
+
+    public CompoundTag writeTag() {
+        CompoundTag tag = new CompoundTag();
+        if (this.dialogueBase != null) {
+            tag.putString("message", this.dialogueBase.getString());
+        }
+        tag.putFloat("scaleX", this.scaleX);
+        tag.putFloat("scaleY", this.scaleY);
+        tag.putInt("posX", this.posX);
+        tag.putInt("posY", this.posY);
+        tag.putInt("dialogY", this.renderDialogY);
+        if (this.soundEvent != null) {
+            tag.putString("SoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.soundEvent.value()).toString());
+        }
+        return tag;
+    }
+
+    public void readTag(CompoundTag tag) {
+        if (tag.contains("message")) {
+            this.dialogueBase = Component.literal(tag.getString("message"));
+        }
+        if (tag.contains("scaleX")) {
+            this.scaleX = tag.getFloat("scaleX");
+        }
+        if (tag.contains("scaleY")) {
+            this.scaleY = tag.getFloat("scaleY");
+        }
+        if (tag.contains("posX")) {
+            this.posX = tag.getInt("posX");
+        }
+        if (tag.contains("posY")) {
+            this.posY = tag.getInt("posY");
+        }
+        if (tag.contains("dialogY")) {
+            this.renderDialogY = tag.getInt("dialogY");
+        }
+        if (tag.contains("SoundEvent")) {
+            Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
+                    .getHolder(new ResourceLocation(tag.getString("SoundEvent")));
+            soundEventHolder.ifPresent(soundEventReference -> this.soundEvent = soundEventReference);
+        }
     }
 
     public void setDialogueBase(@Nullable MutableComponent dialogueBase) {

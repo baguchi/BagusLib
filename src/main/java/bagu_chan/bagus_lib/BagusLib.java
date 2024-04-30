@@ -2,10 +2,7 @@ package bagu_chan.bagus_lib;
 
 import bagu_chan.bagus_lib.command.DialogCommand;
 import bagu_chan.bagus_lib.message.*;
-import bagu_chan.bagus_lib.register.ModEntities;
-import bagu_chan.bagus_lib.register.ModLootModifiers;
-import bagu_chan.bagus_lib.register.ModSensors;
-import bagu_chan.bagus_lib.register.ModStructureProcessorTypes;
+import bagu_chan.bagus_lib.register.*;
 import bagu_chan.bagus_lib.util.reward.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -36,6 +33,7 @@ public class BagusLib {
         ModStructureProcessorTypes.PROCESSOR_TYPE.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
+        ModDialogs.DIALOG.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupPackets);
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
@@ -58,7 +56,6 @@ public class BagusLib {
         registrar.playBidirectional(PlayerDataSyncMessage.TYPE, PlayerDataSyncMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(ImageDialogMessage.TYPE, ImageDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
     }
 
