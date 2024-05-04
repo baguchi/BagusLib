@@ -41,7 +41,7 @@ public class OneItemLootModifier extends LootModifier {
         ObjectArrayList<ItemStack> stacks = new ObjectArrayList<>();
         Optional<Holder.Reference<LootTable>> extraTable = context.getResolver().get(Registries.LOOT_TABLE, ResourceKey.create(Registries.LOOT_TABLE, this.lootTable));
         if (extraTable.isPresent()) {
-            extraTable.get().value().getRandomItemsRaw(context, generatedLoot::add);
+            extraTable.get().value().getRandomItemsRaw(context, stacks::add);
         }
         List<ItemStack> itemStacks = stacks.stream().filter(itemStack -> {
             return !itemStack.isEmpty();
