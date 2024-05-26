@@ -110,6 +110,12 @@ public class DialogType {
         }
     }
 
+    public DialogType getClone() {
+        DialogType dialogType = new DialogType();
+        dialogType.readTag(this.writeTag());
+        return dialogType;
+    }
+
     public void setDialogueBase(@Nullable MutableComponent dialogueBase) {
         this.dialogue = null;
         this.dialogueBase = dialogueBase;

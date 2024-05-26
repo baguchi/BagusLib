@@ -26,7 +26,7 @@ public class BagusLib {
     public static final String MODID = "bagus_lib";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public BagusLib(ModContainer modContainer, IEventBus modEventBus) {
+    public BagusLib(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
 
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);

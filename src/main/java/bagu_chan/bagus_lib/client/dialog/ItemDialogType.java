@@ -22,6 +22,13 @@ public class ItemDialogType extends DialogType {
         }
     }
 
+    @Override
+    public ItemDialogType getClone() {
+        ItemDialogType dialog = new ItemDialogType();
+        dialog.readTag(this.writeTag());
+        return dialog;
+    }
+
 
     public CompoundTag writeTag() {
         CompoundTag tag = super.writeTag();

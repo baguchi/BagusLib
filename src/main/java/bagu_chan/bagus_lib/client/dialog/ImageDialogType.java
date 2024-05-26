@@ -51,6 +51,13 @@ public class ImageDialogType extends DialogType {
         }
     }
 
+    @Override
+    public ImageDialogType getClone() {
+        ImageDialogType dialog = new ImageDialogType();
+        dialog.readTag(this.writeTag());
+        return dialog;
+    }
+
     public void setSize(int sizeX, int sizeY) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;

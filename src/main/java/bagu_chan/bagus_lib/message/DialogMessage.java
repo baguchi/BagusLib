@@ -43,8 +43,8 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
     public void handle(DialogMessage message, IPayloadContext context) {
         context.enqueueWork(() -> {
             DialogType dialogType = message.type;
-            dialogType.readTag(message.tag);
-            DialogHandler.INSTANCE.addOrReplaceDialogType("Command", dialogType);
+            dialogType.readTag(message.tag.copy());
+            DialogHandler.INSTANCE.addOrReplaceDialogType("Command", dialogType.getClone());
         });
     }
 }
