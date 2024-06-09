@@ -13,7 +13,7 @@ public class RemoveAllDialogMessage implements CustomPacketPayload, IPayloadHand
     public static final StreamCodec<FriendlyByteBuf, RemoveAllDialogMessage> STREAM_CODEC = CustomPacketPayload.codec(
             RemoveAllDialogMessage::write, RemoveAllDialogMessage::new
     );
-    public static final CustomPacketPayload.Type<RemoveAllDialogMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("remove_all_dialog").toString());
+    public static final CustomPacketPayload.Type<RemoveAllDialogMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("remove_all_dialog"));
 
 
 

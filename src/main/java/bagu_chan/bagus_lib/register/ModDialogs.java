@@ -19,7 +19,7 @@ import static net.minecraft.resources.ResourceKey.createRegistryKey;
 
 @EventBusSubscriber(modid = BagusLib.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModDialogs {
-    public static final ResourceKey<Registry<DialogType>> DIALOG_REGISTRY = createRegistryKey(new ResourceLocation(BagusLib.MODID, "dialog"));
+    public static final ResourceKey<Registry<DialogType>> DIALOG_REGISTRY = createRegistryKey(ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "dialog"));
 
     public static final DeferredRegister<DialogType> DIALOG = DeferredRegister.create(DIALOG_REGISTRY, BagusLib.MODID);
     public static final DeferredHolder<DialogType, DialogType> DIALOGS = DIALOG.register("dialog", DialogType::new);

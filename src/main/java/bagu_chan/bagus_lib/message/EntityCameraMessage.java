@@ -19,7 +19,7 @@ public class EntityCameraMessage implements CustomPacketPayload, IPayloadHandler
     public static final StreamCodec<FriendlyByteBuf, EntityCameraMessage> STREAM_CODEC = CustomPacketPayload.codec(
             EntityCameraMessage::write, EntityCameraMessage::new
     );
-    public static final CustomPacketPayload.Type<EntityCameraMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("entity_camera").toString());
+    public static final CustomPacketPayload.Type<EntityCameraMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("entity_camera"));
 
     private final int entityId;
 

@@ -20,8 +20,34 @@ public class SecondModelLayer<T extends Mob, M extends EntityModel<T>>
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T mob, float f, float g, float h, float j, float k, float l) {
-        SecondModelLayer.coloredCutoutModelCopyLayerRender(this.getParentModel(), this.layerModel, location, poseStack, multiBufferSource, i, mob, f, g, j, k, l, h, 1.0f, 1.0f, 1.0f);
+    public void render(
+            PoseStack p_116924_,
+            MultiBufferSource p_116925_,
+            int p_116926_,
+            T p_116927_,
+            float p_116928_,
+            float p_116929_,
+            float p_116930_,
+            float p_116931_,
+            float p_116932_,
+            float p_116933_
+    ) {
+        coloredCutoutModelCopyLayerRender(
+                this.getParentModel(),
+                this.layerModel,
+                this.location,
+                p_116924_,
+                p_116925_,
+                p_116926_,
+                p_116927_,
+                p_116928_,
+                p_116929_,
+                p_116931_,
+                p_116932_,
+                p_116933_,
+                p_116930_,
+                -1
+        );
     }
 }
 

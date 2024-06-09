@@ -8,7 +8,6 @@ import bagu_chan.bagus_lib.client.layer.IArmor;
 import bagu_chan.bagus_lib.entity.MiniBagu;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -43,11 +42,6 @@ public class MiniBaguModel<T extends MiniBagu> extends HierarchicalModel<T> impl
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
         this.animate(entity.attackAnimationState, TestAnimations.ATTACK, ageInTicks);
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override

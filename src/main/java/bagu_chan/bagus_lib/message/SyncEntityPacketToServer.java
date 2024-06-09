@@ -24,7 +24,7 @@ public class SyncEntityPacketToServer implements CustomPacketPayload, IPayloadHa
     public static final StreamCodec<FriendlyByteBuf, SyncEntityPacketToServer> STREAM_CODEC = CustomPacketPayload.codec(
             SyncEntityPacketToServer::write, SyncEntityPacketToServer::new
     );
-    public static final CustomPacketPayload.Type<SyncEntityPacketToServer> TYPE = CustomPacketPayload.createType(BagusLib.prefix("sync_entity").toString());
+    public static final CustomPacketPayload.Type<SyncEntityPacketToServer> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("sync_entity"));
 
 
     private final UUID uuid;

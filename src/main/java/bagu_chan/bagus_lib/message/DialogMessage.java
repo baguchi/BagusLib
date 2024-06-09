@@ -16,7 +16,7 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
     public static final StreamCodec<FriendlyByteBuf, DialogMessage> STREAM_CODEC = CustomPacketPayload.codec(
             DialogMessage::write, DialogMessage::new
     );
-    public static final CustomPacketPayload.Type<DialogMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("dialog").toString());
+    public static final CustomPacketPayload.Type<DialogMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("dialog"));
 
     private final DialogType type;
     private final CompoundTag tag;

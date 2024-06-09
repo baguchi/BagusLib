@@ -2,10 +2,7 @@ package bagu_chan.bagus_lib.client.game;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -173,15 +170,13 @@ public class WaterMelonCraft {
     private void renderBlockState(BlockState state, Fruit fruit, float offsetX, float offsetY, float size) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon(ModelData.EMPTY);
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         float f = size * fruit.getSize();
-        bufferbuilder.vertex(-f + offsetX, f + offsetY, 80.0D).uv(sprite.getU0(), sprite.getV1()).endVertex();
-        bufferbuilder.vertex(f + offsetX, f + offsetY, 80.0D).uv(sprite.getU1(), sprite.getV1()).endVertex();
-        bufferbuilder.vertex(f + offsetX, -f + offsetY, 80.0D).uv(sprite.getU1(), sprite.getV0()).endVertex();
-        bufferbuilder.vertex(-f + offsetX, -f + offsetY, 80.0D).uv(sprite.getU0(), sprite.getV0()).endVertex();
-        tesselator.end();
-
+        bufferbuilder.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1());
+        bufferbuilder.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1());
+        bufferbuilder.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0());
+        bufferbuilder.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0());
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
     public void render(Screen screen, GuiGraphics gui, float partialTick) {

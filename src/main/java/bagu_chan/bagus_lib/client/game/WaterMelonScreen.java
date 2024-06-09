@@ -3,11 +3,8 @@ package bagu_chan.bagus_lib.client.game;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 public class WaterMelonScreen extends Screen {
-    public static final ResourceLocation MENU_BACKGROUND = new ResourceLocation("textures/gui/menu_background.png");
-
 
     private WaterMelonCraft aprilFoolsWaterMelonCraft = null;
     private float scroll;

@@ -42,7 +42,7 @@ public class BagusLib {
     }
 
     public static ResourceLocation prefix(String name) {
-        return new ResourceLocation(MODID, name.toLowerCase(Locale.ROOT));
+        return ResourceLocation.fromNamespaceAndPath(MODID, name.toLowerCase(Locale.ROOT));
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

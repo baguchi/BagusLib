@@ -41,6 +41,6 @@ public class ClientRegistrar {
 
     @SubscribeEvent
     public static void overlayRegister(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(new ResourceLocation(BagusLib.MODID, "dialog"), new DialogOverlay());
+        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "dialog"), new DialogOverlay());
     }
 }

@@ -17,7 +17,7 @@ public class CameraMessage implements CustomPacketPayload, IPayloadHandler<Camer
     public static final StreamCodec<FriendlyByteBuf, CameraMessage> STREAM_CODEC = CustomPacketPayload.codec(
             CameraMessage::write, CameraMessage::new
     );
-    public static final CustomPacketPayload.Type<CameraMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("camera").toString());
+    public static final CustomPacketPayload.Type<CameraMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("camera"));
 
     private final int duration;
     private final int distance;

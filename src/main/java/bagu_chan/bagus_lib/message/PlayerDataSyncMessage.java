@@ -21,7 +21,7 @@ public class PlayerDataSyncMessage implements CustomPacketPayload, IPayloadHandl
     public static final StreamCodec<FriendlyByteBuf, PlayerDataSyncMessage> STREAM_CODEC = CustomPacketPayload.codec(
             PlayerDataSyncMessage::write, PlayerDataSyncMessage::new
     );
-    public static final CustomPacketPayload.Type<PlayerDataSyncMessage> TYPE = CustomPacketPayload.createType(BagusLib.prefix("player_data").toString());
+    public static final CustomPacketPayload.Type<PlayerDataSyncMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("player_data"));
 
 
     private final CompoundTag tag;
