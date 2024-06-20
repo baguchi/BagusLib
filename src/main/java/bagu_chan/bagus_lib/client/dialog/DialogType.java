@@ -1,11 +1,11 @@
 package bagu_chan.bagus_lib.client.dialog;
 
 import bagu_chan.bagus_lib.util.DialogHandler;
+import bagu_chan.bagus_lib.util.sound.SoundUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +15,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,9 +37,11 @@ public class DialogType {
     protected int posY = 1;
     protected int renderDialogY = 16;
 
+    @OnlyIn(Dist.CLIENT)
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
     }
 
+    @OnlyIn(Dist.CLIENT)
     public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
 
         Font font = Minecraft.getInstance().font;
@@ -50,7 +54,7 @@ public class DialogType {
 
         if (this.dialogue != null && this.dialogue.draw(g, 72, renderDialogY)) {
             if (this.soundEvent != null) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(soundEvent.value(), 1.0F, 0.75F));
+                SoundUtils.playClientSound(this.soundEvent);
             }
         }
     }

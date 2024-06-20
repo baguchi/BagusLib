@@ -1,11 +1,11 @@
 package bagu_chan.bagus_lib.client.dialog;
 
 import bagu_chan.bagus_lib.util.DialogHandler;
+import bagu_chan.bagus_lib.util.sound.SoundUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
@@ -24,13 +24,13 @@ public class WinDialogType extends DialogType {
         float g = (float) tickCount + f;
         if (this.dialogue == null && this.dialogueBase != null) {
             MutableComponent component = dialogueBase;
-            this.dialogue = beginString(guiGraphics, g, 1.5, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72, false);
+            this.dialogue = beginString(guiGraphics, g, 2.0, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
         }
 
 
         if (this.dialogue != null && this.dialogue.draw(g, 72, renderDialogY)) {
             if (this.soundEvent != null) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(soundEvent.value(), 1.0F, 0.75F));
+                SoundUtils.playClientSound(this.soundEvent);
             }
         }
     }
