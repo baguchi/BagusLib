@@ -45,8 +45,10 @@ public class DialogHandler {
         if (minecraft.level != null) {
             for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
                 DialogType dialogType = dialogue.getValue();
-                if (dialogType.getDialogRenderTime() < minecraft.level.getGameTime()) {
-                    dialogTypes.remove(dialogue.getKey());
+                if (dialogType.getDialogRenderTime() > 0) {
+                    if (dialogType.getDialogRenderTime() < minecraft.level.getGameTime()) {
+                        dialogTypes.remove(dialogue.getKey());
+                    }
                 }
             }
         }

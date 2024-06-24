@@ -36,7 +36,7 @@ public class DialogType {
     protected int posX = 1;
     protected int posY = 1;
     protected int renderDialogY = 16;
-    protected long dialogRenderTime;
+    protected long dialogRenderTime = -1;
 
     @OnlyIn(Dist.CLIENT)
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {

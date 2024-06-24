@@ -1,8 +1,6 @@
 package bagu_chan.bagus_lib.entity;
 
-import bagu_chan.bagus_lib.client.soundframe.TestSoundKeyframe;
 import bagu_chan.bagus_lib.entity.goal.ManyAnimateAttackGoal;
-import bagu_chan.bagus_lib.util.sound.SoundUtils;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -57,7 +55,6 @@ public class MiniBagu extends PathfinderMob {
             if (this.attackAnimationTick >= this.attackAnimationLength) {
                 this.attackAnimationState.stop();
             }
-            SoundUtils.playSound(this, this.attackAnimationState, TestSoundKeyframe.ATTACK);
         }
     }
 
