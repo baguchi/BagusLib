@@ -18,19 +18,22 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
     );
     public static final CustomPacketPayload.Type<DialogMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("dialog"));
 
+    private final String name;
     private final DialogType type;
     private final CompoundTag tag;
 
-    public DialogMessage(DialogType type, CompoundTag tag) {
+    public DialogMessage(String name, DialogType type, CompoundTag tag) {
+        this.name = name;
         this.type = type;
         this.tag = tag;
     }
 
     public DialogMessage(FriendlyByteBuf buf) {
-        this(ModDialogs.getRegistry().get(buf.readResourceLocation()), buf.readNbt());
+        this(buf.readUtf(), ModDialogs.getRegistry().get(buf.readResourceLocation()), buf.readNbt());
     }
 
     public void write(FriendlyByteBuf buf) {
+        buf.writeUtf(this.name);
         buf.writeUtf(ModDialogs.getRegistry().getKey(this.type).toString());
         buf.writeNbt(this.tag);
     }
@@ -44,7 +47,7 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
         context.enqueueWork(() -> {
             DialogType dialogType = message.type;
             dialogType.readTag(message.tag.copy());
-            DialogHandler.INSTANCE.addOrReplaceDialogType("Command", dialogType.getClone());
+            DialogHandler.INSTANCE.addOrReplaceDialogType(this.name, dialogType.getClone());
         });
     }
 }

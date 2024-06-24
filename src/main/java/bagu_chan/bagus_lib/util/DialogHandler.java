@@ -1,6 +1,7 @@
 package bagu_chan.bagus_lib.util;
 
 import bagu_chan.bagus_lib.client.dialog.DialogType;
+import bagu_chan.bagus_lib.message.DialogMessage;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -8,9 +9,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.Map;
@@ -23,34 +26,50 @@ public class DialogHandler {
 
     public final Map<String, DialogType> dialogTypes = Maps.newHashMap();
 
-
+    @OnlyIn(value = Dist.CLIENT)
     public void renderDialogue(GuiGraphics guiGraphics, float f, float tickCount) {
         Minecraft minecraft = Minecraft.getInstance();
         float g = (float) tickCount + f;
         PoseStack poseStack = guiGraphics.pose();
-        for (DialogType dialogue : dialogTypes.values()) {
+        for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
+            DialogType dialogType = dialogue.getValue();
+
             poseStack.pushPose();
-            dialogue.render(guiGraphics, poseStack, f, tickCount);
+            dialogType.render(guiGraphics, poseStack, f, tickCount);
             poseStack.popPose();
             poseStack.pushPose();
-            dialogue.renderText(guiGraphics, poseStack, f, tickCount);
+            dialogType.renderText(guiGraphics, poseStack, f, tickCount);
             poseStack.popPose();
+        }
+
+        if (minecraft.level != null) {
+            for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
+                DialogType dialogType = dialogue.getValue();
+                if (dialogType.getDialogRenderTime() < minecraft.level.getGameTime()) {
+                    dialogTypes.remove(dialogue.getKey());
+                }
+            }
         }
     }
 
-
+    @OnlyIn(value = Dist.CLIENT)
     public void addOrReplaceDialogType(String name, DialogType dialogType) {
         dialogTypes.remove(name);
         dialogTypes.put(name, dialogType);
     }
 
+    @OnlyIn(value = Dist.CLIENT)
     public void removeDialogType(String name) {
         dialogTypes.remove(name);
     }
 
-
+    @OnlyIn(value = Dist.CLIENT)
     public void removeAllDialogType() {
         dialogTypes.clear();
+    }
+
+    public static void addOrReplaceDialogTypeOnServer(ServerPlayer player, String name, DialogType dialogType) {
+        PacketDistributor.sendToPlayer(player, new DialogMessage(name, dialogType, dialogType.writeTag()));
     }
 
 
@@ -76,7 +95,7 @@ public class DialogHandler {
             this.charsPerTick = e;
             this.targetString = string;
             this.drawFunction = drawFunction;
-            this.ignoreWhiteSpace = true;
+            this.ignoreWhiteSpace = false;
         }
 
         public boolean draw(double d, int i, int j) {

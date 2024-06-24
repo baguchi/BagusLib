@@ -36,6 +36,7 @@ public class DialogType {
     protected int posX = 1;
     protected int posY = 1;
     protected int renderDialogY = 16;
+    protected long dialogRenderTime;
 
     @OnlyIn(Dist.CLIENT)
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
@@ -82,6 +83,7 @@ public class DialogType {
         tag.putInt("posX", this.posX);
         tag.putInt("posY", this.posY);
         tag.putInt("dialogY", this.renderDialogY);
+        tag.putLong("dialogRenderTime", this.dialogRenderTime);
         if (this.soundEvent != null) {
             tag.putString("SoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.soundEvent.value()).toString());
         }
@@ -106,6 +108,9 @@ public class DialogType {
         }
         if (tag.contains("dialogY")) {
             this.renderDialogY = tag.getInt("dialogY");
+        }
+        if (tag.contains("dialogRenderTime")) {
+            this.dialogRenderTime = tag.getInt("dialogRenderTime");
         }
         if (tag.contains("SoundEvent")) {
             Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
@@ -141,5 +146,13 @@ public class DialogType {
 
     public void setRenderDialogY(int renderDialogY) {
         this.renderDialogY = renderDialogY;
+    }
+
+    public long getDialogRenderTime() {
+        return dialogRenderTime;
+    }
+
+    public void setDialogRenderTime(long dialogRenderTime) {
+        this.dialogRenderTime = dialogRenderTime;
     }
 }

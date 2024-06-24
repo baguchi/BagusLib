@@ -49,7 +49,7 @@ public class DialogCommand {
                                 )
                                 ))));
         LiteralCommandNode<CommandSourceStack> literalcommandnode4 = p_138061_.register(
-                Commands.literal("bagus_dialog").requires(p_136627_ -> p_136627_.hasPermission(2)).then(Commands.literal("remove_all_dialog")
+                Commands.literal("bagus_lib").requires(p_136627_ -> p_136627_.hasPermission(2)).then(Commands.literal("remove_all_dialog")
                         .then(
                                 Commands.argument("targets", EntityArgument.players()).executes(p_248155_ -> {
                                     Collection<ServerPlayer> collection = EntityArgument.getPlayers(p_248155_, "targets");
@@ -98,7 +98,7 @@ public class DialogCommand {
 
     private static void sendDialogMessage(CommandSourceStack p_250209_, Collection<ServerPlayer> p_252344_, Holder.Reference<DialogType> p_249416_, CompoundTag p_139379_) {
         for (ServerPlayer serverplayer : p_252344_) {
-            PacketDistributor.sendToPlayer(serverplayer, new DialogMessage(p_249416_.value(), p_139379_));
+            PacketDistributor.sendToPlayer(serverplayer, new DialogMessage("Command", p_249416_.value(), p_139379_));
 
         }
         p_250209_.sendSystemMessage(Component.translatable("command.bagus_lib.dialog"));
