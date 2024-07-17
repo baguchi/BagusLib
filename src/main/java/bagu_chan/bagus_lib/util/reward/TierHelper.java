@@ -30,14 +30,17 @@ public class TierHelper {
 
             return new BufferedReader(reader);
         } catch (Exception e) { // Malformed URL, Offline, etc.
-            e.printStackTrace();
+            //e.printStackTrace();
+            BagusLib.LOGGER.warn("Failed to load Bagus Lib Supporter online.");
         }
 
         try { // Backup
-            BagusLib.LOGGER.info("Load Bagus Lib Supporter failed. trying Load Backup file");
+            BagusLib.LOGGER.info("trying Load Backup file...");
             return new BufferedReader(new InputStreamReader(TierHelper.class.getClass().getClassLoader().getResourceAsStream(SUPPORTER_PATH), StandardCharsets.UTF_8));
         } catch (NullPointerException e) { // Can't parse backupFileLoc
-            e.printStackTrace();
+            //e.printStackTrace();
+            BagusLib.LOGGER.error("Failed to load Backup file!");
+            BagusLib.LOGGER.error("at bagu_chan.bagus_lib.util.reward.TierHelper.java");
         }
 
         return null;
