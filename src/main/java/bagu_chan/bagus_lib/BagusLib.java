@@ -57,6 +57,7 @@ public class BagusLib {
         registrar.playBidirectional(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(SyncBagusAnimationsMessage.TYPE, SyncBagusAnimationsMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
     }
 
     private void registerCommands(RegisterCommandsEvent evt) {
