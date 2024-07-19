@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.entity;
 
+import bagu_chan.bagus_lib.animation.BaguAnimationController;
 import bagu_chan.bagus_lib.entity.goal.ManyAnimateAttackGoal;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 //example Entity
 public class MiniBagu extends PathfinderMob {
 
-    public final AnimationState attackAnimationState = new AnimationState();
+    public final BaguAnimationController<MiniBagu> animationController = new BaguAnimationController<>(this, 1);
 
     public int attackAnimationTick;
     private final int attackAnimationLength = (int) (20);
@@ -57,7 +58,7 @@ public class MiniBagu extends PathfinderMob {
             }
 
             if (this.attackAnimationTick >= this.attackAnimationLength) {
-                this.attackAnimationState.stop();
+                this.animationController.getAnimationState(0).stop();
             }
         }
     }
@@ -65,7 +66,7 @@ public class MiniBagu extends PathfinderMob {
     @Override
     public void handleEntityEvent(byte p_21375_) {
         if (p_21375_ == 4) {
-            this.attackAnimationState.start(this.tickCount);
+            this.animationController.getAnimationState(0).start(this.tickCount);
 
             this.attackAnimationTick = 0;
         } else {

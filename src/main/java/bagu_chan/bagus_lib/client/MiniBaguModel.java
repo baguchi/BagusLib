@@ -41,7 +41,7 @@ public class MiniBaguModel<T extends MiniBagu> extends HierarchicalModel<T> impl
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
-        this.animate(entity.attackAnimationState, TestAnimations.ATTACK, ageInTicks);
+        this.animate(entity.animationController.getAnimationState(0), TestAnimations.ATTACK, ageInTicks);
     }
 
     @Override

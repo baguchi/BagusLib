@@ -1,7 +1,7 @@
 package bagu_chan.bagus_lib.client.dialog;
 
 import bagu_chan.bagus_lib.util.DialogHandler;
-import bagu_chan.bagus_lib.util.sound.SoundUtils;
+import bagu_chan.bagus_lib.util.client.SoundUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

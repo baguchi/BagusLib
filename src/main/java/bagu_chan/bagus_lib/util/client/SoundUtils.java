@@ -1,4 +1,4 @@
-package bagu_chan.bagus_lib.util.sound;
+package bagu_chan.bagus_lib.util.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
