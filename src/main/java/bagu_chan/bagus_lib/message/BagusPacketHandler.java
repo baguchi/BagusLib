@@ -32,6 +32,8 @@ public class BagusPacketHandler {
                 ItemStackDialogMessage::writeToPacket, ItemStackDialogMessage::readFromPacket, ItemStackDialogMessage::handle);
         CHANNEL.registerMessage(7, RemoveAllDialogMessage.class,
                 RemoveAllDialogMessage::writeToPacket, RemoveAllDialogMessage::readFromPacket, RemoveAllDialogMessage::handle);
+        CHANNEL.registerMessage(8, SyncBagusAnimationsMessage.class,
+                SyncBagusAnimationsMessage::writeToPacket, SyncBagusAnimationsMessage::readFromPacket, SyncBagusAnimationsMessage::handle);
 
     }
 }
