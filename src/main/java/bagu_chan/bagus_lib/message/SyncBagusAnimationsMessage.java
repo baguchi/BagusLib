@@ -16,7 +16,7 @@ public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayload
     public static final StreamCodec<FriendlyByteBuf, SyncBagusAnimationsMessage> STREAM_CODEC = CustomPacketPayload.codec(
             SyncBagusAnimationsMessage::write, SyncBagusAnimationsMessage::new
     );
-    public static final CustomPacketPayload.Type<SyncBagusAnimationsMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("entity_camera"));
+    public static final CustomPacketPayload.Type<SyncBagusAnimationsMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("syc_anim"));
 
     private final int entityId;
 
