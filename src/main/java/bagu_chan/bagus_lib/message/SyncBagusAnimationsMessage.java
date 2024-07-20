@@ -1,9 +1,10 @@
 package bagu_chan.bagus_lib.message;
 
 
-import bagu_chan.bagus_lib.util.client.ClientUtil;
+import bagu_chan.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
@@ -13,20 +14,20 @@ import java.util.function.Supplier;
 public class SyncBagusAnimationsMessage {
     private final int entityId;
 
-    private final int index;
+    private final ResourceLocation name;
 
-    public SyncBagusAnimationsMessage(int entityId, int index) {
+    public SyncBagusAnimationsMessage(int entityId, ResourceLocation name) {
         this.entityId = entityId;
-        this.index = index;
+        this.name = name;
     }
 
     public void writeToPacket(FriendlyByteBuf buf) {
         buf.writeInt(this.entityId);
-        buf.writeInt(this.index);
+        buf.writeResourceLocation(this.name);
     }
 
     public static SyncBagusAnimationsMessage readFromPacket(FriendlyByteBuf buf) {
-        return new SyncBagusAnimationsMessage(buf.readInt(), buf.readInt());
+        return new SyncBagusAnimationsMessage(buf.readInt(), buf.readResourceLocation());
     }
 
     public static void handle(SyncBagusAnimationsMessage message, Supplier<NetworkEvent.Context> context) {
@@ -36,7 +37,7 @@ public class SyncBagusAnimationsMessage {
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            ClientUtil.handleAnimationPacket(entity, message.index);
+            AnimationUtil.handleAnimationPacket(entity, message.name);
         });
     }
 }

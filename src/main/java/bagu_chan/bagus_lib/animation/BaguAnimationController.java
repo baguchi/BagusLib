@@ -1,33 +1,39 @@
 package bagu_chan.bagus_lib.animation;
 
+import com.google.common.collect.Maps;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
-import org.apache.commons.compress.utils.Lists;
 
-import java.util.List;
+import java.util.Map;
 
-//this animation controller make handle animation in mixin
+//this animation controller make handle animation on Event
 public class BaguAnimationController<T extends Entity> {
     private final T entity;
-    private final List<AnimationState> animationStateList;
+    private final Map<ResourceLocation, AnimationState> animationStateMap = Maps.newHashMap();
 
-    public BaguAnimationController(T entity, int animationSize) {
+    public BaguAnimationController(T entity) {
         this.entity = entity;
-        this.animationStateList = Lists.newArrayList();
-        for (int i = 0; i < animationSize; i++) {
-            this.animationStateList.add(new AnimationState());
-        }
     }
 
-    public void startAnimation(int index) {
-        this.animationStateList.get(index).start(entity.tickCount);
+    //DON'T USE DIRECTLY
+    @Deprecated
+    public void addAnimation(ResourceLocation resourceLocation) {
+        this.animationStateMap.put(resourceLocation, new AnimationState());
+    }
+
+    public void startAnimation(ResourceLocation resourceLocation) {
+        this.animationStateMap.get(resourceLocation).start(entity.tickCount);
     }
 
     public void stopAllAnimation() {
-        this.animationStateList.forEach(AnimationState::stop);
+        this.animationStateMap.values().forEach(AnimationState::stop);
     }
 
-    public AnimationState getAnimationState(int index) {
-        return animationStateList.get(index);
+    public AnimationState getAnimationState(ResourceLocation index) {
+        if (animationStateMap.containsKey(index)) {
+            return animationStateMap.get(index);
+        }
+        return new AnimationState();
     }
 }
