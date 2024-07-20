@@ -1,10 +1,13 @@
 package bagu_chan.bagus_lib.client.event;
 
+import bagu_chan.bagus_lib.api.client.IRootModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
+
+import javax.annotation.Nullable;
 
 public abstract class BagusModelEvent extends Event {
     private LivingEntity entityIn;
@@ -27,6 +30,14 @@ public abstract class BagusModelEvent extends Event {
 
     public float getPartialTick() {
         return partialTick;
+    }
+
+    @Nullable
+    public IRootModel getRootModel() {
+        if (model instanceof IRootModel rootModel) {
+            return rootModel;
+        }
+        return null;
     }
 
     public static class Scale extends BagusModelEvent {

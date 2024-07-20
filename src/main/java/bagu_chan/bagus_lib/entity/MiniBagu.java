@@ -1,7 +1,7 @@
 package bagu_chan.bagus_lib.entity;
 
-import bagu_chan.bagus_lib.animation.BaguAnimationController;
-import bagu_chan.bagus_lib.entity.goal.ManyAnimateAttackGoal;
+import bagu_chan.bagus_lib.CommonEvent;
+import bagu_chan.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -9,10 +9,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,12 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 //example Entity
 public class MiniBagu extends PathfinderMob {
-
-    public final BaguAnimationController<MiniBagu> animationController = new BaguAnimationController<>(this, 1);
-
-    public int attackAnimationTick;
-    private final int attackAnimationLength = (int) (20);
-
     public MiniBagu(EntityType<? extends PathfinderMob> p_21683_, Level p_21684_) {
         super(p_21683_, p_21684_);
     }
@@ -42,7 +33,7 @@ public class MiniBagu extends PathfinderMob {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new ManyAnimateAttackGoal(this, 1.1D, new int[]{10, 18}, 20));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.25D, true));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
@@ -50,28 +41,10 @@ public class MiniBagu extends PathfinderMob {
     }
 
     @Override
-    public void baseTick() {
-        super.baseTick();
-        if (this.level().isClientSide) {
-            if (this.attackAnimationTick < this.attackAnimationLength) {
-                this.attackAnimationTick++;
-            }
+    public boolean doHurtTarget(Entity p_21372_) {
 
-            if (this.attackAnimationTick >= this.attackAnimationLength) {
-                this.animationController.getAnimationState(0).stop();
-            }
-        }
-    }
-
-    @Override
-    public void handleEntityEvent(byte p_21375_) {
-        if (p_21375_ == 4) {
-            this.animationController.getAnimationState(0).start(this.tickCount);
-
-            this.attackAnimationTick = 0;
-        } else {
-            super.handleEntityEvent(p_21375_);
-        }
+        AnimationUtil.sendAnimation(this, CommonEvent.TEST);
+        return super.doHurtTarget(p_21372_);
     }
 
     @Nullable

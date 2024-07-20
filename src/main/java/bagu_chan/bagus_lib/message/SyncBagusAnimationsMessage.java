@@ -1,11 +1,12 @@
 package bagu_chan.bagus_lib.message;
 
 import bagu_chan.bagus_lib.BagusLib;
-import bagu_chan.bagus_lib.util.client.ClientUtil;
+import bagu_chan.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -20,20 +21,20 @@ public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayload
 
     private final int entityId;
 
-    private final int index;
+    private final ResourceLocation resourceLocation;
 
-    public SyncBagusAnimationsMessage(int entityId, int index) {
+    public SyncBagusAnimationsMessage(int entityId, ResourceLocation resourceLocation) {
         this.entityId = entityId;
-        this.index = index;
+        this.resourceLocation = resourceLocation;
     }
 
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.entityId);
-        buf.writeInt(this.index);
+        buf.writeResourceLocation(this.resourceLocation);
     }
 
     public SyncBagusAnimationsMessage(FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readInt());
+        this(buf.readInt(), buf.readResourceLocation());
     }
 
     public void handle(SyncBagusAnimationsMessage message, IPayloadContext context) {
@@ -43,7 +44,7 @@ public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayload
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            ClientUtil.handleAnimationPacket(entity, message.index);
+            AnimationUtil.handleAnimationPacket(entity, message.resourceLocation);
         });
     }
 
