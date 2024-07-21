@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.animation;
 
+import bagu_chan.bagus_lib.BagusLib;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.AnimationState;
@@ -23,7 +24,11 @@ public class BaguAnimationController<T extends Entity> {
     }
 
     public void startAnimation(ResourceLocation resourceLocation) {
-        this.animationStateMap.get(resourceLocation).start(entity.tickCount);
+        if (this.animationStateMap.get(resourceLocation) != null) {
+            this.animationStateMap.get(resourceLocation).start(entity.tickCount);
+        } else {
+            BagusLib.LOGGER.error("Animation(" + resourceLocation.toString() + ") has not found!");
+        }
     }
 
     public void stopAllAnimation() {
