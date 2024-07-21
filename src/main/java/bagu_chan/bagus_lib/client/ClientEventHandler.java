@@ -1,7 +1,14 @@
 package bagu_chan.bagus_lib.client;
 
 import bagu_chan.bagus_lib.BagusLib;
+import bagu_chan.bagus_lib.CommonEvent;
+import bagu_chan.bagus_lib.animation.BaguAnimationController;
+import bagu_chan.bagus_lib.api.client.IRootModel;
+import bagu_chan.bagus_lib.client.animation.TestAnimations;
+import bagu_chan.bagus_lib.client.event.BagusModelEvent;
 import bagu_chan.bagus_lib.util.DialogHandler;
+import bagu_chan.bagus_lib.util.client.AnimationUtil;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -37,4 +44,21 @@ public class ClientEventHandler {
             }
         }
     }*/
+
+    @SubscribeEvent
+    public static void animationEvent(BagusModelEvent.Init bagusModelEvent) {
+        IRootModel rootModel = bagusModelEvent.getRootModel();
+        if (rootModel != null) {
+            rootModel.getBagusRoot().getAllParts().forEach(ModelPart::resetPose);
+        }
+    }
+
+    @SubscribeEvent
+    public static void animationEvent(BagusModelEvent.PostAnimate bagusModelEvent) {
+        IRootModel rootModel = bagusModelEvent.getRootModel();
+        BaguAnimationController animationController = AnimationUtil.getAnimationController(bagusModelEvent.getEntity());
+        if (rootModel != null && animationController != null) {
+            rootModel.animateBagu(animationController.getAnimationState(CommonEvent.TEST), TestAnimations.ATTACK, bagusModelEvent.getAgeInTick());
+        }
+    }
 }

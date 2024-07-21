@@ -22,10 +22,10 @@ public class EntityMixin implements IBaguAnimate {
     @Inject(method = "<init>", at = @At("TAIL"))
     public void init(EntityType p_19870_, Level p_19871_, CallbackInfo ci) {
         RegisterBagusAnimationEvents events = new RegisterBagusAnimationEvents(((Entity) (Object) this));
+        MinecraftForge.EVENT_BUS.post(events);
         for (ResourceLocation resourceLocations : events.getAnimationStateMap().keySet()) {
             BAGU_ANIMATION_CONTROLLER.addAnimation(resourceLocations);
         }
-        MinecraftForge.EVENT_BUS.post(events);
     }
 
     @Override

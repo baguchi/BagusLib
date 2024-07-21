@@ -1,13 +1,18 @@
 package bagu_chan.bagus_lib;
 
+import bagu_chan.bagus_lib.event.RegisterBagusAnimationEvents;
 import bagu_chan.bagus_lib.util.MiscUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = BagusLib.MODID)
 public class CommonEvent {
+    public static final ResourceLocation TEST = new ResourceLocation(BagusLib.MODID, "attack");
+
+
     /*@SubscribeEvent
     public static void event(LivingHurtEvent livingAttackEvent) {
         if (livingAttackEvent.getEntity().level.isClientSide()) {
@@ -28,5 +33,10 @@ public class CommonEvent {
                 MiscUtils.updateCosmetic(MiscUtils.BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void entityAnimationRegister(RegisterBagusAnimationEvents events) {
+        events.addAnimationState(TEST);
     }
 }
