@@ -52,5 +52,13 @@ public class BagusPacketHandler {
                 .encoder(SyncBagusAnimationsMessage::writeToPacket).decoder(SyncBagusAnimationsMessage::readFromPacket)
                 .consumerMainThread(SyncBagusAnimationsMessage::handle)
                 .add();
+        CHANNEL.messageBuilder(SyncBagusAnimationsStopMessage.class, 9)
+                .encoder(SyncBagusAnimationsStopMessage::writeToPacket).decoder(SyncBagusAnimationsStopMessage::readFromPacket)
+                .consumerMainThread(SyncBagusAnimationsStopMessage::handle)
+                .add();
+        CHANNEL.messageBuilder(SyncBagusAnimationsStopAllMessage.class, 10)
+                .encoder(SyncBagusAnimationsStopAllMessage::writeToPacket).decoder(SyncBagusAnimationsStopAllMessage::readFromPacket)
+                .consumerMainThread(SyncBagusAnimationsStopAllMessage::handle)
+                .add();
     }
 }
