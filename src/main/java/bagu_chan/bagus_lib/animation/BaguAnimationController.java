@@ -31,6 +31,14 @@ public class BaguAnimationController<T extends Entity> {
         }
     }
 
+    public void stopAnimation(ResourceLocation resourceLocation) {
+        if (this.animationStateMap.get(resourceLocation) != null) {
+            this.animationStateMap.get(resourceLocation).stop();
+        } else {
+            BagusLib.LOGGER.error("Animation(" + resourceLocation.toString() + ") has not found!");
+        }
+    }
+
     public void stopAllAnimation() {
         this.animationStateMap.values().forEach(AnimationState::stop);
     }
