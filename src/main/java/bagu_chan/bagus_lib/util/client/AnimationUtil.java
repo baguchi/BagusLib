@@ -12,6 +12,12 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * This util handle animate every different type mob(of course. You can animate them separately.)
+ * In ResourceLocation, enter the id of the animation you want to start or stop.
+ * of course. you need register id on bagu_chan.bagus_lib.event.RegisterBagusAnimationEvents.class
+ * @author bagu_chan
+ */
 public class AnimationUtil {
     @OnlyIn(Dist.CLIENT)
     public static void handleAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
