@@ -48,7 +48,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void animationEvent(BagusModelEvent.Init bagusModelEvent) {
         IRootModel rootModel = bagusModelEvent.getRootModel();
-        if (rootModel != null) {
+        if (rootModel != null && rootModel.getBagusRoot() != null) {
             rootModel.getBagusRoot().getAllParts().forEach(ModelPart::resetPose);
         }
     }
@@ -57,7 +57,7 @@ public class ClientEventHandler {
     public static void animationEvent(BagusModelEvent.PostAnimate bagusModelEvent) {
         IRootModel rootModel = bagusModelEvent.getRootModel();
         BaguAnimationController animationController = AnimationUtil.getAnimationController(bagusModelEvent.getEntity());
-        if (rootModel != null && animationController != null) {
+        if (rootModel != null && animationController != null && rootModel.getBagusRoot() != null) {
             rootModel.animateBagu(animationController.getAnimationState(CommonEvent.TEST), TestAnimations.ATTACK, bagusModelEvent.getAgeInTick());
         }
     }
