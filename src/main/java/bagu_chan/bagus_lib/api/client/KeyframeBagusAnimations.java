@@ -13,11 +13,11 @@ import java.util.Optional;
 
 public class KeyframeBagusAnimations {
     //[VanillaCopy] of {@link net.minecraft.client.animation.KeyframeAnimations}
-    public static void animate(IRootModel p_232320_, AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
-        float f = getElapsedSeconds(p_232321_, p_232322_);
+    public static void animate(IRootModel rootModel, AnimationDefinition animationDefinition, long time, float scale, Vector3f animationCache) {
+        float f = getElapsedSeconds(animationDefinition, time);
 
-        for (Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
-            Optional<ModelPart> optional = p_232320_.getBetterAnyDescendantWithName(entry.getKey());
+        for (Map.Entry<String, List<AnimationChannel>> entry : animationDefinition.boneAnimations().entrySet()) {
+            Optional<ModelPart> optional = rootModel.getBetterAnyDescendantWithName(entry.getKey());
             List<AnimationChannel> list = entry.getValue();
             optional.ifPresent(p_232330_ -> list.forEach(p_288241_ -> {
                 Keyframe[] akeyframe = p_288241_.keyframes();
@@ -33,8 +33,8 @@ public class KeyframeBagusAnimations {
                     f2 = 0.0F;
                 }
 
-                keyframe1.interpolation().apply(p_253861_, f2, akeyframe, i, j, p_232323_);
-                p_288241_.target().apply(p_232330_, p_253861_);
+                keyframe1.interpolation().apply(animationCache, f2, akeyframe, i, j, scale);
+                p_288241_.target().apply(p_232330_, animationCache);
             }));
         }
     }
