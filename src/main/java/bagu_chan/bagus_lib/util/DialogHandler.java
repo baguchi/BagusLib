@@ -92,9 +92,9 @@ public class DialogHandler {
             this.ignoreWhiteSpace = ignoreWhiteSpace;
         }
 
-        public DrawString(double d, double e, String string, DrawFunction drawFunction) {
-            this.lastTick = d;
-            this.charsPerTick = e;
+        public DrawString(double lastTick, double charsPerTick, String string, DrawFunction drawFunction) {
+            this.lastTick = lastTick;
+            this.charsPerTick = charsPerTick;
             this.targetString = string;
             this.drawFunction = drawFunction;
             this.ignoreWhiteSpace = false;
