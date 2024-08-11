@@ -19,7 +19,7 @@ public class WinDialogType extends DialogType {
         float g = (float) tickCount + f;
         if (this.dialogue == null && this.dialogueBase != null) {
             MutableComponent component = dialogueBase;
-            this.dialogue = beginString(guiGraphics, g, 2.0, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
+            this.dialogue = beginString(guiGraphics, g, 3, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
         }
 
 

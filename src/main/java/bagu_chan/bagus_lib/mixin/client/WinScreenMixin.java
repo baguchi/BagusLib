@@ -67,9 +67,9 @@ public abstract class WinScreenMixin extends Screen {
                         if (chat.getString().length() <= 0) {
                             bagusLib$talkTimer = 10;
                         } else if (bagusLib$lineIndex == this.talkLines.size() - 2) {
-                            bagusLib$talkTimer = (int) ((400 + chat.getString().length() * 2));
+                            bagusLib$talkTimer = (int) (60 + (chat.getString().length() * 1.5F));
                         } else {
-                            bagusLib$talkTimer = (int) ((100 + chat.getString().length() * 2));
+                            bagusLib$talkTimer = (int) (60 + (chat.getString().length() * 1.5F));
                         }
                     } else {
                         bagusLib$talkTimer = 100;
@@ -83,7 +83,7 @@ public abstract class WinScreenMixin extends Screen {
     @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo callbackInfo) {
         if (BagusConfigs.CLIENT.coolerEndPoem.get()) {
-            bagusLib$talkTimer -= (int) scrollSpeed + 1;
+            bagusLib$talkTimer -= (int) 1;
             bagusLib$ticks++;
         }
     }
