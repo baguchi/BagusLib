@@ -15,6 +15,10 @@ public interface IRootModel {
     Vector3f getCacheVec();
 
     default Optional<ModelPart> getBetterAnyDescendantWithName(String name) {
+        if (this.getBagusRoot() == null) {
+            return Optional.empty();
+        }
+
         return name.equals("root") ? Optional.of(this.getBagusRoot()) : this.getBagusRoot().getAllParts().filter((p_233400_) -> {
             return p_233400_.hasChild(name);
         }).findFirst().map((p_233397_) -> {
