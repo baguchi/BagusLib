@@ -63,7 +63,8 @@ public class BagusLayer<T extends LivingEntity, M extends EntityModel<T> & IArmo
         renderer.getModel().headPartArmors().forEach(part -> {
             matrixStackIn.pushPose();
 
-            matrixStackIn.translate(0, -1.85F, 0);
+            part.translateAndRotate(matrixStackIn);
+            matrixStackIn.translate(0, -1.9F, 0);
             modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
             matrixStackIn.popPose();
         });
