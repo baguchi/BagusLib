@@ -18,7 +18,6 @@ public class MiniBaguModel<T extends MiniBagu> extends HierarchicalModel<T> impl
     private final ModelPart head;
 
     public MiniBaguModel(ModelPart root) {
-        super(BagusRenderType::entityAnimation);
         this.root = root.getChild("root");
         this.head = this.root.getChild("head");
     }
