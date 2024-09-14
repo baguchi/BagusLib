@@ -1,6 +1,7 @@
 package bagu_chan.bagus_lib.entity;
 
 import bagu_chan.bagus_lib.CommonEvent;
+import bagu_chan.bagus_lib.util.CollideUtil;
 import bagu_chan.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -47,6 +48,17 @@ public class MiniBagu extends PathfinderMob {
         return super.doHurtTarget(p_21372_);
     }
 
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+        CollideUtil.collideEntities(this);
+    }
+
+    @Override
+    public void push(Entity p_21294_) {
+    }
+
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, @Nullable SpawnGroupData p_21437_) {
@@ -57,5 +69,10 @@ public class MiniBagu extends PathfinderMob {
         stack.set(DataComponents.TRIM, new ArmorTrim(registry1.getHolderOrThrow(TrimMaterials.DIAMOND), registry.getHolderOrThrow(TrimPatterns.HOST)));
         this.setItemSlot(EquipmentSlot.HEAD, stack);
         return super.finalizeSpawn(p_21434_, p_21435_, p_21436_, p_21437_);
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
     }
 }
