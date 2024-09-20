@@ -40,6 +40,10 @@ public abstract class BagusModelEvent extends Event {
         return null;
     }
 
+    public boolean isSupportedAnimateModel() {
+        return getRootModel() != null && getRootModel().getBagusRoot() != null;
+    }
+
     public static class Scale extends BagusModelEvent {
         private PoseStack poseStack;
 
