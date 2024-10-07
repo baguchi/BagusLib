@@ -16,6 +16,7 @@
     "client.HumanoidModelMixin",
     "client.LivingEntityRendererMixin",
     "client.PlayerModelMixin",
+    "client.PlayerRendererMixin",
     "client.QuadrupedModelMixin",
     "client.WinScreenMixin"
   ],

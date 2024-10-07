@@ -85,4 +85,15 @@ public abstract class BagusModelEvent extends Event {
             return (float) getPartialTick() + getEntity().tickCount;
         }
     }
+
+    public static class FirstPersonArmAnimate extends BagusModelEvent {
+
+        public FirstPersonArmAnimate(LivingEntity entityIn, EntityModel model, float partialTick) {
+            super(entityIn, model, partialTick);
+        }
+
+        public float getAgeInTick() {
+            return (float) getPartialTick() + getEntity().tickCount;
+        }
+    }
 }

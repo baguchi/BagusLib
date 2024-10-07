@@ -77,4 +77,14 @@ public class ClientEventHandler {
             rootModel.animateBagu(animationController.getAnimationState(CommonEvent.TEST), TestAnimations.ATTACK, bagusModelEvent.getAgeInTick());
         }
     }
+
+    /*@SubscribeEvent
+    public static void animationEvent(BagusModelEvent.FirstPersonArmAnimate event) {
+        IRootModel rootModel = event.getRootModel();
+        BaguAnimationController animationController = AnimationUtil.getAnimationController(event.getEntity());
+        if (event.isSupportedAnimateModel() && animationController != null) {
+            rootModel.animateBagu(animationController.getAnimationState(CommonEvent.TEST), TestAnimations.ATTACK, event.getAgeInTick());
+        }
+    }*/
+
 }
