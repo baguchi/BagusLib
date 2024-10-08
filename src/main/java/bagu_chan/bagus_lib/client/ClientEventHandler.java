@@ -6,6 +6,7 @@ import bagu_chan.bagus_lib.CommonEvent;
 import bagu_chan.bagus_lib.animation.BaguAnimationController;
 import bagu_chan.bagus_lib.api.client.IRootModel;
 import bagu_chan.bagus_lib.client.animation.TestAnimations;
+import bagu_chan.bagus_lib.client.animation.TestPlayerAnimations;
 import bagu_chan.bagus_lib.client.event.BagusModelEvent;
 import bagu_chan.bagus_lib.client.game.WaterMelonScreen;
 import bagu_chan.bagus_lib.util.DialogHandler;
@@ -13,16 +14,25 @@ import bagu_chan.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import static bagu_chan.bagus_lib.CommonEvent.PAT;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = BagusLib.MODID)
 public class ClientEventHandler {
@@ -62,7 +72,7 @@ public class ClientEventHandler {
 
 
     @SubscribeEvent
-    public static void animationEvent(BagusModelEvent.Init bagusModelEvent) {
+    public static void animationInitEvent(BagusModelEvent.Init bagusModelEvent) {
         IRootModel rootModel = bagusModelEvent.getRootModel();
         if (bagusModelEvent.isSupportedAnimateModel()) {
             rootModel.getBagusRoot().getAllParts().forEach(ModelPart::resetPose);
@@ -70,21 +80,74 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void animationEvent(BagusModelEvent.PostAnimate bagusModelEvent) {
+    public static void animationnInitEvent(BagusModelEvent.PostAnimate bagusModelEvent) {
         IRootModel rootModel = bagusModelEvent.getRootModel();
         BaguAnimationController animationController = AnimationUtil.getAnimationController(bagusModelEvent.getEntity());
         if (bagusModelEvent.isSupportedAnimateModel() && animationController != null) {
             rootModel.animateBagu(animationController.getAnimationState(CommonEvent.TEST), TestAnimations.ATTACK, bagusModelEvent.getAgeInTick());
+
+            if (animationController.getAnimationState(PAT).isStarted()) {
+                if (bagusModelEvent.getModel() instanceof PlayerModel<?> playerModel) {
+                    playerModel.leftArm.resetPose();
+                    playerModel.rightArm.resetPose();
+                }
+                if (bagusModelEvent.getEntity() instanceof LivingEntity livingEntity && livingEntity.getUsedItemHand() == InteractionHand.MAIN_HAND) {
+                    rootModel.animateBagu(animationController.getAnimationState(PAT), TestPlayerAnimations.pat_right, bagusModelEvent.getAgeInTick());
+                } else {
+                    rootModel.animateBagu(animationController.getAnimationState(PAT), TestPlayerAnimations.pat_left, bagusModelEvent.getAgeInTick());
+                }
+
+            }
+
+            if (bagusModelEvent.getModel() instanceof PlayerModel<?> playerModel) {
+                playerModel.leftSleeve.copyFrom(playerModel.leftArm);
+                playerModel.rightSleeve.copyFrom(playerModel.rightArm);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void animationArmEvent(RenderHandEvent event) {
+        PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(Minecraft.getInstance().player);
+        EntityModel entityModel = playerrenderer.getModel();
+        if (entityModel instanceof IRootModel rootModel) {
+            BaguAnimationController animationController = AnimationUtil.getAnimationController(Minecraft.getInstance().player);
+            if (isSupportedAnimateModel(rootModel) && animationController != null) {
+                BagusModelEvent.FirstPersonArmAnimate event2 = new BagusModelEvent.FirstPersonArmAnimate(Minecraft.getInstance().player, entityModel, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks(), event.getHand(), event.getPoseStack());
+                NeoForge.EVENT_BUS.post(event2);
+            }
         }
     }
 
     /*@SubscribeEvent
-    public static void animationEvent(BagusModelEvent.FirstPersonArmAnimate event) {
-        IRootModel rootModel = event.getRootModel();
-        BaguAnimationController animationController = AnimationUtil.getAnimationController(event.getEntity());
-        if (event.isSupportedAnimateModel() && animationController != null) {
-            rootModel.animateBagu(animationController.getAnimationState(CommonEvent.TEST), TestAnimations.ATTACK, event.getAgeInTick());
+    public static void patTestEvent(BagusModelEvent.FirstPersonArmAnimate bagusModelEvent) {
+        IRootModel rootModel = bagusModelEvent.getRootModel();
+        BaguAnimationController animationController = AnimationUtil.getAnimationController(bagusModelEvent.getEntity());
+        if (bagusModelEvent.isSupportedAnimateModel() && animationController != null) {
+            if(bagusModelEvent.getModel() instanceof PlayerModel<?> playerModel) {
+                rootModel.getBagusRoot().getAllParts().forEach(ModelPart::resetPose);
+                if(animationController.getAnimationState(PAT).isStarted()) {
+                    ModelPart modelPart;
+                    if (bagusModelEvent.getArm() == InteractionHand.MAIN_HAND) {
+                        rootModel.animateBagu(animationController.getAnimationState(PAT), TestPlayerAnimations.pat_right, bagusModelEvent.getAgeInTick());
+                        modelPart = playerModel.rightArm;
+                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotateAxis(45, 1, 0, 0));
+                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotationZYX(modelPart.zRot, modelPart.yRot, modelPart.xRot));
+                    } else {
+                        rootModel.animateBagu(animationController.getAnimationState(PAT), TestPlayerAnimations.pat_left, bagusModelEvent.getAgeInTick());
+                        modelPart = playerModel.leftArm;
+                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotateAxis(45, 1, 0, 0));
+                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotationZYX(modelPart.zRot, modelPart.yRot, modelPart.xRot));
+                    }
+                    playerModel.leftSleeve.copyFrom(playerModel.leftArm);
+                    playerModel.rightSleeve.copyFrom(playerModel.rightArm);
+                }
+            }
         }
-    }*/
+    }
+*/
 
+    public static boolean isSupportedAnimateModel(IRootModel rootModel) {
+        return rootModel != null && rootModel.getBagusRoot() != null;
+    }
 }

@@ -3,6 +3,7 @@ package bagu_chan.bagus_lib.client.event;
 import bagu_chan.bagus_lib.api.client.IRootModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
@@ -88,12 +89,25 @@ public abstract class BagusModelEvent extends Event {
 
     public static class FirstPersonArmAnimate extends BagusModelEvent {
 
-        public FirstPersonArmAnimate(LivingEntity entityIn, EntityModel model, float partialTick) {
+        private final InteractionHand arm;
+        private final PoseStack poseStack;
+
+        public FirstPersonArmAnimate(LivingEntity entityIn, EntityModel model, float partialTick, InteractionHand arm, PoseStack poseStack) {
             super(entityIn, model, partialTick);
+            this.arm = arm;
+            this.poseStack = poseStack;
         }
 
         public float getAgeInTick() {
             return (float) getPartialTick() + getEntity().tickCount;
+        }
+
+        public InteractionHand getArm() {
+            return this.arm;
+        }
+
+        public PoseStack getPoseStack() {
+            return poseStack;
         }
     }
 }
