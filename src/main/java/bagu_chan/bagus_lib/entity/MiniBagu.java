@@ -65,9 +65,4 @@ public class MiniBagu extends PathfinderMob {
 
         return super.finalizeSpawn(p_21434_, p_21435_, p_363352_, p_21437_);
     }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
 }
