@@ -60,7 +60,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     protected void checkAndPerformAttack(E entity, LivingEntity p_29589_, ServerLevel serverLevel) {
         if (this.cooldownTick == this.leftActionPoint) {
             if (this.canPerformAttack(entity, p_29589_)) {
-                entity.doHurtTarget(p_29589_);
+                entity.doHurtTarget(serverLevel, p_29589_);
             }
 
             if (this.cooldownTick == 0) {

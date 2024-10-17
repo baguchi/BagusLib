@@ -23,15 +23,15 @@ public class JigsawHelper {
 
     public static void registerJigsaw(MinecraftServer server, ResourceLocation poolLocation, ResourceLocation nbtLocation, int weight) {
         RegistryAccess manager = server.registryAccess();
-        Registry<StructureTemplatePool> templatePoolRegistry = manager.registry(Registries.TEMPLATE_POOL).orElseThrow();
-        Registry<StructureProcessorList> processorListRegistry = manager.registry(Registries.PROCESSOR_LIST).orElseThrow();
-        StructureTemplatePool pool = templatePoolRegistry.get(poolLocation);
+        Registry<StructureTemplatePool> templatePoolRegistry = manager.lookupOrThrow(Registries.TEMPLATE_POOL);
+        Registry<StructureProcessorList> processorListRegistry = manager.lookupOrThrow(Registries.PROCESSOR_LIST);
+        StructureTemplatePool pool = templatePoolRegistry.getValue(poolLocation);
 
         if (pool == null) return;
 
         ObjectArrayList<StructurePoolElement> elements = pool.templates;
 
-        Holder<StructureProcessorList> processorListHolder = processorListRegistry.getHolderOrThrow(EMPTY_PROCESSOR_LIST_KEY);
+        Holder<StructureProcessorList> processorListHolder = processorListRegistry.getOrThrow(EMPTY_PROCESSOR_LIST_KEY);
 
         StructurePoolElement element = SinglePoolElement.legacy(nbtLocation.toString(), processorListHolder).apply(StructureTemplatePool.Projection.RIGID);
         for (int i = 0; i < weight; i++) {

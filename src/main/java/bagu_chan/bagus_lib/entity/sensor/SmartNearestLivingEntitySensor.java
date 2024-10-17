@@ -24,7 +24,7 @@ public class SmartNearestLivingEntitySensor<T extends LivingEntity> extends Sens
         list.sort(Comparator.comparingDouble(entity::distanceToSqr));
         Brain<?> brain = entity.getBrain();
         brain.setMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES, list);
-        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, new NearestVisibleLivingEntities(entity, list));
+        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, new NearestVisibleLivingEntities(level, entity, list));
     }
 
     protected int radiusXZ(T entity) {

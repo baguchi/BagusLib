@@ -114,7 +114,7 @@ public class DialogType {
         }
         if (tag.contains("SoundEvent")) {
             Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
-                    .getHolder(ResourceLocation.tryParse(tag.getString("SoundEvent")));
+                    .get(ResourceLocation.tryParse(tag.getString("SoundEvent")));
             soundEventHolder.ifPresent(soundEventReference -> this.soundEvent = soundEventReference);
         }
     }

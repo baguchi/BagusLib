@@ -54,8 +54,8 @@ public class BaseProcessor extends StructureProcessor {
             BlockPos.MutableBlockPos mutable = blockInfoGlobal.pos().mutable().move(Direction.DOWN);
             BlockState currBlockState = levelReader.getBlockState(mutable);
 
-            while (mutable.getY() > levelReader.getMinBuildHeight()
-                    && mutable.getY() < levelReader.getMaxBuildHeight()
+            while (mutable.getY() > levelReader.getMinY()
+                    && mutable.getY() < levelReader.getMaxY()
                     && (currBlockState.isAir() || !levelReader.getFluidState(mutable).isEmpty())) {
                 levelReader.getChunk(mutable).setBlockState(mutable, this.replaceBlock.defaultBlockState(), false);
                 mutable.move(Direction.DOWN);

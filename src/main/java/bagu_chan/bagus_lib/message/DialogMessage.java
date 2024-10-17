@@ -29,7 +29,7 @@ public class DialogMessage implements CustomPacketPayload, IPayloadHandler<Dialo
     }
 
     public DialogMessage(FriendlyByteBuf buf) {
-        this(buf.readUtf(), ModDialogs.getRegistry().get(buf.readResourceLocation()), buf.readNbt());
+        this(buf.readUtf(), ModDialogs.getRegistry().getValue(buf.readResourceLocation()), buf.readNbt());
     }
 
     public void write(FriendlyByteBuf buf) {

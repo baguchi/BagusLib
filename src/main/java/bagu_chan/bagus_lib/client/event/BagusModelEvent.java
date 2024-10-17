@@ -1,27 +1,22 @@
 package bagu_chan.bagus_lib.client.event;
 
-import bagu_chan.bagus_lib.api.client.IRootModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
 
-import javax.annotation.Nullable;
-
 public abstract class BagusModelEvent extends Event {
-    private LivingEntity entityIn;
+    private final LivingEntityRenderState entityIn;
 
-    private EntityModel model;
-    private float partialTick;
-    public BagusModelEvent(LivingEntity entityIn, EntityModel model, float partialTick) {
+    private final EntityModel model;
+
+    public BagusModelEvent(LivingEntityRenderState entityIn, EntityModel model) {
         this.entityIn = entityIn;
         this.model = model;
-        this.partialTick = partialTick;
     }
 
-    public Entity getEntity() {
+    public LivingEntityRenderState getEntityRenderState() {
         return entityIn;
     }
 
@@ -29,27 +24,11 @@ public abstract class BagusModelEvent extends Event {
         return model;
     }
 
-    public float getPartialTick() {
-        return partialTick;
-    }
-
-    @Nullable
-    public IRootModel getRootModel() {
-        if (model instanceof IRootModel rootModel) {
-            return rootModel;
-        }
-        return null;
-    }
-
-    public boolean isSupportedAnimateModel() {
-        return getRootModel() != null && getRootModel().getBagusRoot() != null;
-    }
-
     public static class Scale extends BagusModelEvent {
-        private PoseStack poseStack;
+        private final PoseStack poseStack;
 
-        public Scale(LivingEntity entityIn, EntityModel model, float partialTick, PoseStack poseStack) {
-            super(entityIn, model, partialTick);
+        public Scale(LivingEntityRenderState entityIn, EntityModel model, PoseStack poseStack) {
+            super(entityIn, model);
             this.poseStack = poseStack;
         }
 
@@ -58,32 +37,10 @@ public abstract class BagusModelEvent extends Event {
         }
     }
 
-    public static class Init extends BagusModelEvent {
-
-        public Init(LivingEntity entityIn, EntityModel model, float partialTick) {
-            super(entityIn, model, partialTick);
-        }
-    }
-
-    public static class PreAnimate extends BagusModelEvent {
-
-        public PreAnimate(LivingEntity entityIn, EntityModel model, float partialTick) {
-            super(entityIn, model, partialTick);
-        }
-
-        public float getAgeInTick() {
-            return (float) getPartialTick() + getEntity().tickCount;
-        }
-    }
-
     public static class PostAnimate extends BagusModelEvent {
 
-        public PostAnimate(LivingEntity entityIn, EntityModel model, float partialTick) {
-            super(entityIn, model, partialTick);
-        }
-
-        public float getAgeInTick() {
-            return (float) getPartialTick() + getEntity().tickCount;
+        public PostAnimate(LivingEntityRenderState entityIn, EntityModel model) {
+            super(entityIn, model);
         }
     }
 
@@ -92,16 +49,11 @@ public abstract class BagusModelEvent extends Event {
         private final InteractionHand arm;
         private final PoseStack poseStack;
 
-        public FirstPersonArmAnimate(LivingEntity entityIn, EntityModel model, float partialTick, InteractionHand arm, PoseStack poseStack) {
-            super(entityIn, model, partialTick);
+        public FirstPersonArmAnimate(LivingEntityRenderState entityIn, EntityModel model, InteractionHand arm, PoseStack poseStack) {
+            super(entityIn, model);
             this.arm = arm;
             this.poseStack = poseStack;
         }
-
-        public float getAgeInTick() {
-            return (float) getPartialTick() + getEntity().tickCount;
-        }
-
         public InteractionHand getArm() {
             return this.arm;
         }

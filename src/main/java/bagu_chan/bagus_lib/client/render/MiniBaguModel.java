@@ -1,23 +1,24 @@
-package bagu_chan.bagus_lib.client;// Made with Blockbench 4.7.4
+package bagu_chan.bagus_lib.client.render;// Made with Blockbench 4.7.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
 
 import bagu_chan.bagus_lib.client.layer.IArmor;
-import bagu_chan.bagus_lib.entity.MiniBagu;
+import bagu_chan.bagus_lib.client.render.state.MiniBaguRenderState;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-public class MiniBaguModel<T extends MiniBagu> extends HierarchicalModel<T> implements IArmor {
+public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T> implements IArmor {
     private final ModelPart root;
     private final ModelPart head;
 
     public MiniBaguModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.head = this.root.getChild("head");
     }
@@ -37,15 +38,9 @@ public class MiniBaguModel<T extends MiniBagu> extends HierarchicalModel<T> impl
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.root().getAllParts().forEach(ModelPart::resetPose);
-        this.head.yRot = Mth.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount;
-        //this.animate(entity.animationController.getAnimationState(0), TestAnimations.ATTACK, ageInTicks);
-    }
-
-    @Override
-    public ModelPart root() {
-        return this.root;
+    public void setupAnim(T entity) {
+        super.setupAnim(entity);
+        this.head.yRot = Mth.cos(entity.walkAnimationPos * 0.6662F) * 0.4F * entity.walkAnimationSpeed;
     }
 
     @Override

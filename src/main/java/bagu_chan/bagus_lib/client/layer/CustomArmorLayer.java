@@ -1,14 +1,13 @@
 package bagu_chan.bagus_lib.client.layer;
 
+import bagu_chan.bagus_lib.api.IBagusExtraRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -16,194 +15,192 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.EquipmentModelSet;
 import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.armortrim.ArmorTrim;
-import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.equipment.EquipmentModel;
+import net.minecraft.world.item.equipment.Equippable;
 import net.neoforged.neoforge.client.ClientHooks;
-import org.joml.Quaternionf;
 
 
 /*
  * https://github.com/AlexModGuy/AlexsMobs/blob/1.19.4/src/main/java/com/github/alexthe666/alexsmobs/client/render/layer/LayerKangarooArmor.java
  * Thanks Alex!
  */
-public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> & IArmor> extends RenderLayer<T, M> {
+public class CustomArmorLayer<S extends LivingEntityRenderState, M extends EntityModel<S> & IArmor, A extends EntityModel<S>> extends RenderLayer<S, M> {
     private final HumanoidModel defaultBipedModel;
     private final HumanoidModel innerModel;
-    private RenderLayerParent<T, M> renderer;
+    private RenderLayerParent<S, M> renderer;
     private final TextureAtlas armorTrimAtlas;
+    private final EquipmentModelSet equipmentModelSet;
 
-    public CustomArmorLayer(RenderLayerParent<T, M> render, EntityRendererProvider.Context context) {
+    public CustomArmorLayer(RenderLayerParent<S, M> render, EntityRendererProvider.Context context) {
         super(render);
         defaultBipedModel = new HumanoidModel(context.bakeLayer(ModelLayers.ARMOR_STAND_OUTER_ARMOR));
         this.innerModel = new HumanoidModel(context.bakeLayer(ModelLayers.ARMOR_STAND_INNER_ARMOR));
         this.renderer = render;
         this.armorTrimAtlas = context.getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET);
+        this.equipmentModelSet = context.getEquipmentModels();
     }
 
-    public CustomArmorLayer(RenderLayerParent<T, M> render, EntityModelSet modelSet, ModelManager modelManager) {
+    public CustomArmorLayer(RenderLayerParent<S, M> render, EntityModelSet modelSet, ModelManager modelManager, EquipmentModelSet equipmentModelSet) {
         super(render);
         defaultBipedModel = new HumanoidModel(modelSet.bakeLayer(ModelLayers.ARMOR_STAND_OUTER_ARMOR));
         this.innerModel = new HumanoidModel(modelSet.bakeLayer(ModelLayers.ARMOR_STAND_INNER_ARMOR));
         this.renderer = render;
         this.armorTrimAtlas = modelManager.getAtlas(Sheets.ARMOR_TRIMS_SHEET);
+        this.equipmentModelSet = equipmentModelSet;
     }
 
-    public static ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack, ArmorMaterial.Layer material, EquipmentSlot slot, boolean usesInner) {
-        ArmorItem item = (ArmorItem) stack.getItem();
-        String texture = item.getMaterial().getRegisteredName();
-        String domain = "minecraft";
-        int idx = texture.indexOf(':');
-        if (idx != -1) {
-            domain = texture.substring(0, idx);
-            texture = texture.substring(idx + 1);
-        }
-        ResourceLocation s1 = ClientHooks.getArmorTexture(entity, stack, material, usesInner, slot);
-        return s1;
-    }
-
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        {
-            matrixStackIn.pushPose();
-            ItemStack headItem = entity.getItemBySlot(EquipmentSlot.HEAD);
+    @Override
+    public void render(PoseStack poseStack, MultiBufferSource bufferIn, int light, S entity, float p_117353_, float p_117354_) {
+        if (entity instanceof IBagusExtraRenderState bagusExtraRenderState) {
+            poseStack.pushPose();
+            ItemStack headItem = entity.headItem;
             if (headItem.getItem() instanceof ArmorItem) {
                 ArmorItem armoritem = (ArmorItem) headItem.getItem();
-                if (headItem.canEquip(EquipmentSlot.HEAD, entity)) {
-                    for (ArmorMaterial.Layer armormaterial$layer : armoritem.getMaterial().value().layers()) {
-                        boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot());
-
-                        HumanoidModel a = defaultBipedModel;
-                        a = getArmorModelHook(entity, headItem, EquipmentSlot.HEAD, a);
-                        boolean notAVanillaModel = a != defaultBipedModel;
-                        this.setModelSlotVisible(a, EquipmentSlot.HEAD);
-                        boolean flag1 = headItem.hasFoil();
-                        int clampedLight = packedLightIn;
-                        if (headItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                            int i = FastColor.ARGB32.opaque(DyedItemColor.getOrDefault(headItem, -6265536));
-                            renderHelmet(headItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, headItem, armormaterial$layer, EquipmentSlot.HEAD, flag), notAVanillaModel);
-                            renderHelmet(headItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, headItem, armormaterial$layer, EquipmentSlot.HEAD, flag), notAVanillaModel);
-                        } else {
-                            renderHelmet(headItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, FastColor.ARGB32.colorFromFloat(1, 1, 1, 1), getArmorResource(entity, headItem, armormaterial$layer, EquipmentSlot.HEAD, flag), notAVanillaModel);
-                        }
-                    }
-                }
+                EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.HEAD)
+                        ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                        : EquipmentModel.LayerType.HUMANOID;
+                HumanoidModel a = defaultBipedModel;
+                a = getArmorModelHook(headItem, equipmentmodel$layerType, a);
+                boolean notAVanillaModel = a != defaultBipedModel;
+                this.setModelSlotVisible(a, EquipmentSlot.HEAD);
+                boolean flag1 = headItem.hasFoil();
+                int clampedLight = light;
+                if (headItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                    net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
+                    int i = extensions.getDefaultDyeColor(headItem);
+                    renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                    renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                 } else {
-                renderer.getModel().headPartArmors().forEach(part -> {
-                    this.renderer.getModel().translateToHead(part, matrixStackIn);
-                    matrixStackIn.translate(0, -0.25, 0.0F);
-                    matrixStackIn.mulPose((new Quaternionf()).rotateX((float) Math.PI));
-                    matrixStackIn.mulPose((new Quaternionf()).rotateY((float) Math.PI));
-                    matrixStackIn.scale(0.625F, 0.625F, 0.625F);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.HEAD, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.level(), 0);
-                });
-            }
-                matrixStackIn.popPose();
-            }
-            {
-                matrixStackIn.pushPose();
-                ItemStack chestItem = entity.getItemBySlot(EquipmentSlot.CHEST);
-                if (chestItem.getItem() instanceof ArmorItem) {
-                    ArmorItem armoritem = (ArmorItem) chestItem.getItem();
-                    if (armoritem.getEquipmentSlot() == EquipmentSlot.CHEST) {
-                        for (ArmorMaterial.Layer armormaterial$layer : armoritem.getMaterial().value().layers()) {
-                            boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot());
-                            HumanoidModel a = defaultBipedModel;
-                            a = getArmorModelHook(entity, chestItem, EquipmentSlot.CHEST, a);
-                            boolean notAVanillaModel = a != defaultBipedModel;
-                            this.setModelSlotVisible(a, EquipmentSlot.CHEST);
+                    net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
+                    int i = extensions.getDefaultDyeColor(headItem);
 
-                            boolean flag1 = chestItem.hasFoil();
-                            int clampedLight = packedLightIn;
-                            if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                                int i = FastColor.ARGB32.opaque(DyedItemColor.getOrDefault(chestItem, -6265536));
-                                float f = (float) (i >> 16 & 255) / 255.0F;
-                                float f1 = (float) (i >> 8 & 255) / 255.0F;
-                                float f2 = (float) (i & 255) / 255.0F;
-                                renderChestplate(chestItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, chestItem, armormaterial$layer, EquipmentSlot.CHEST, flag), notAVanillaModel);
-                                renderChestplate(chestItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, chestItem, armormaterial$layer, EquipmentSlot.CHEST, flag), notAVanillaModel);
-                            } else {
-                                renderChestplate(chestItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, FastColor.ARGB32.colorFromFloat(1, 1, 1, 1), getArmorResource(entity, chestItem, armormaterial$layer, EquipmentSlot.CHEST, flag), notAVanillaModel);
-                            }
-                        }
+                    renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                    }
+
+            }/* else {
+                getParentModel().headPartArmors().forEach(part -> {
+                    this.getParentModel().translateToHead(part, poseStack);
+                    poseStack.translate(0, -0.25, 0.0F);
+                    poseStack.mulPose((new Quaternionf()).rotateX((float) Math.PI));
+                    poseStack.mulPose((new Quaternionf()).rotateY((float) Math.PI));
+                    poseStack.scale(0.625F, 0.625F, 0.625F);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(headItem, ItemDisplayContext.HEAD, light, OverlayTexture.NO_OVERLAY, poseStack, bufferIn, entity.level(), 0);
+                });
+            }*/
+            poseStack.popPose();
+
+            poseStack.pushPose();
+            ItemStack chestItem = bagusExtraRenderState.getBagusLib$chestItem();
+            if (chestItem.getItem() instanceof ArmorItem) {
+                ArmorItem armoritem = (ArmorItem) chestItem.getItem();
+                if (armoritem.getEquipmentSlot(chestItem) == EquipmentSlot.CHEST) {
+                    EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.CHEST)
+                            ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                            : EquipmentModel.LayerType.HUMANOID;
+                    boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(chestItem));
+                    HumanoidModel a = defaultBipedModel;
+                    a = getArmorModelHook(chestItem, equipmentmodel$layerType, a);
+                    boolean notAVanillaModel = a != defaultBipedModel;
+                    this.setModelSlotVisible(a, EquipmentSlot.CHEST);
+
+                    boolean flag1 = chestItem.hasFoil();
+                    int clampedLight = light;
+                    if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
+                        int i = extensions.getDefaultDyeColor(chestItem);
+                        float f = (float) (i >> 16 & 255) / 255.0F;
+                        float f1 = (float) (i >> 8 & 255) / 255.0F;
+                        float f2 = (float) (i & 255) / 255.0F;
+                        renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                        renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                    } else {
+                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
+                        int i = extensions.getDefaultDyeColor(chestItem);
+
+                        renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
                 }
-                matrixStackIn.popPose();
             }
-        {
-            matrixStackIn.pushPose();
-            ItemStack legItem = entity.getItemBySlot(EquipmentSlot.LEGS);
+            poseStack.popPose();
+
+            poseStack.pushPose();
+            ItemStack legItem = bagusExtraRenderState.getBagusLib$legItem();
             if (legItem.getItem() instanceof ArmorItem) {
                 ArmorItem armoritem = (ArmorItem) legItem.getItem();
-                if (armoritem.getEquipmentSlot() == EquipmentSlot.LEGS) {
-                    for (ArmorMaterial.Layer armormaterial$layer : armoritem.getMaterial().value().layers()) {
-                        boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot());
+                if (armoritem.getEquipmentSlot(legItem) == EquipmentSlot.LEGS) {
+                    EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.LEGS)
+                            ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                            : EquipmentModel.LayerType.HUMANOID;
+                    boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(legItem));
 
-                        HumanoidModel a = this.innerModel;
-                        a = getArmorModelHook(entity, legItem, EquipmentSlot.LEGS, a);
-                        boolean notAVanillaModel = a != defaultBipedModel;
-                        this.setModelSlotVisible(a, EquipmentSlot.LEGS);
+                    HumanoidModel a = this.innerModel;
+                    a = getArmorModelHook(legItem, equipmentmodel$layerType, a);
+                    boolean notAVanillaModel = a != defaultBipedModel;
+                    this.setModelSlotVisible(a, EquipmentSlot.LEGS);
 
-                        boolean flag1 = legItem.hasFoil();
-                        int clampedLight = packedLightIn;
-                        if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                            int i = FastColor.ARGB32.opaque(DyedItemColor.getOrDefault(legItem, -6265536));
-                            float f = (float) (i >> 16 & 255) / 255.0F;
-                            float f1 = (float) (i >> 8 & 255) / 255.0F;
-                            float f2 = (float) (i & 255) / 255.0F;
-                            renderLeg(legItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, legItem, armormaterial$layer, EquipmentSlot.LEGS, flag), notAVanillaModel);
-                            renderLeg(legItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, legItem, armormaterial$layer, EquipmentSlot.LEGS, flag), notAVanillaModel);
-                        } else {
-                            renderLeg(legItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, FastColor.ARGB32.colorFromFloat(1, 1, 1, 1), getArmorResource(entity, legItem, armormaterial$layer, EquipmentSlot.LEGS, flag), notAVanillaModel);
-                        }
+                    boolean flag1 = legItem.hasFoil();
+                    int clampedLight = light;
+                    if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
+                        int i = extensions.getDefaultDyeColor(legItem);
+                        float f = (float) (i >> 16 & 255) / 255.0F;
+                        float f1 = (float) (i >> 8 & 255) / 255.0F;
+                        float f2 = (float) (i & 255) / 255.0F;
+                        renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                        renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                    } else {
+                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
+                        int i = extensions.getDefaultDyeColor(legItem);
+
+                        renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
                 }
             }
-            matrixStackIn.popPose();
-        }
-        {
-            matrixStackIn.pushPose();
-            ItemStack feetItem = entity.getItemBySlot(EquipmentSlot.FEET);
+            poseStack.popPose();
+
+            poseStack.pushPose();
+            ItemStack feetItem = bagusExtraRenderState.getBagusLib$feetItem();
             if (feetItem.getItem() instanceof ArmorItem) {
                 ArmorItem armoritem = (ArmorItem) feetItem.getItem();
-                if (armoritem.getEquipmentSlot() == EquipmentSlot.FEET) {
-                    for (ArmorMaterial.Layer armormaterial$layer : armoritem.getMaterial().value().layers()) {
-                        boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot());
+                if (armoritem.getEquipmentSlot(feetItem) == EquipmentSlot.FEET) {
+                    EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.FEET)
+                            ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                            : EquipmentModel.LayerType.HUMANOID;
+                    boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(feetItem));
 
-                        HumanoidModel a = defaultBipedModel;
-                        a = getArmorModelHook(entity, feetItem, EquipmentSlot.FEET, a);
-                        boolean notAVanillaModel = a != defaultBipedModel;
-                        this.setModelSlotVisible(a, EquipmentSlot.FEET);
+                    HumanoidModel a = defaultBipedModel;
+                    a = getArmorModelHook(feetItem, equipmentmodel$layerType, a);
+                    boolean notAVanillaModel = a != defaultBipedModel;
+                    this.setModelSlotVisible(a, EquipmentSlot.FEET);
 
-                        boolean flag1 = feetItem.hasFoil();
-                        int clampedLight = packedLightIn;
-                        if (feetItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                            int i = FastColor.ARGB32.opaque(DyedItemColor.getOrDefault(feetItem, -6265536));
-                            float f = (float) (i >> 16 & 255) / 255.0F;
-                            float f1 = (float) (i >> 8 & 255) / 255.0F;
-                            float f2 = (float) (i & 255) / 255.0F;
-                            renderBoot(feetItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, feetItem, armormaterial$layer, EquipmentSlot.FEET, flag), notAVanillaModel);
-                            renderBoot(feetItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, i, getArmorResource(entity, feetItem, armormaterial$layer, EquipmentSlot.FEET, flag), notAVanillaModel);
-                        } else {
-                            renderBoot(feetItem, entity, matrixStackIn, bufferIn, clampedLight, flag1, a, FastColor.ARGB32.colorFromFloat(1, 1, 1, 1), getArmorResource(entity, feetItem, armormaterial$layer, EquipmentSlot.FEET, flag), notAVanillaModel);
-                        }
+                    boolean flag1 = feetItem.hasFoil();
+                    int clampedLight = light;
+                    if (feetItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
+                        int i = extensions.getDefaultDyeColor(feetItem);
+                        float f = (float) (i >> 16 & 255) / 255.0F;
+                        float f1 = (float) (i >> 8 & 255) / 255.0F;
+                        float f2 = (float) (i & 255) / 255.0F;
+                        renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                        renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+                    } else {
+                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
+                        int i = extensions.getDefaultDyeColor(feetItem);
+                        renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
                 }
             }
-            matrixStackIn.popPose();
+            poseStack.popPose();
         }
 
     }
@@ -212,186 +209,206 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         return p_117129_ == EquipmentSlot.LEGS;
     }
 
-    private HumanoidModel getArmorModel(EquipmentSlot p_117079_) {
-        return (usesInnerModel(p_117079_) ? this.innerModel : this.defaultBipedModel);
-    }
+    private void renderLeg(ItemStack legItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+        Equippable equippable = legItem.get(DataComponents.EQUIPPABLE);
+        if (equippable != null && !equippable.model().isEmpty()) {
+            int idx = 0;
+            for (EquipmentModel.Layer layer : this.equipmentModelSet.get(equippable.model().get()).layers().get(EquipmentModel.LayerType.HUMANOID)) {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
 
-    private void renderTrim(ModelPart part, Holder<ArmorMaterial> p_267946_, PoseStack p_268019_, MultiBufferSource p_268023_, int p_268190_, ArmorTrim p_267984_, boolean p_267965_, HumanoidModel p_267949_, boolean p_268259_, int color) {
-        TextureAtlasSprite textureatlassprite = this.armorTrimAtlas.getSprite(p_268259_ ? p_267984_.innerTexture(p_267946_) : p_267984_.outerTexture(p_267946_));
-        VertexConsumer vertexconsumer = textureatlassprite.wrap(ItemRenderer.getFoilBufferDirect(p_268023_, Sheets.armorTrimsSheet(p_267984_.pattern().value().decal()), true, p_267965_));
-        part.render(p_268019_, vertexconsumer, p_268190_, OverlayTexture.NO_OVERLAY, color);
-    }
+                int j = extensions.getArmorLayerTintColor(legItem, layer, idx, color);
+                if (j != 0) {
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
 
-    private void renderTrim(ModelPart part, ItemStack item, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, EquipmentSlot equipmentSlot, HumanoidModel modelIn) {
-        if (item.getItem() instanceof ArmorItem armorItem) {
-            ArmorTrim armortrim = item.get(DataComponents.TRIM);
-            if (armortrim != null) {
-                this.renderTrim(part, armorItem.getMaterial(), matrixStackIn, bufferIn, packedLightIn, armortrim, glintIn, modelIn, this.usesInnerModel(equipmentSlot), FastColor.ARGB32.colorFromFloat(1, 1, 1, 1));
+                    modelIn.body.xRot = 0F;
+                    modelIn.body.yRot = 0;
+                    modelIn.body.zRot = 0;
+                    modelIn.body.x = 0;
+                    modelIn.body.y = 0F;
+                    modelIn.body.z = 0F;
+                    modelIn.rightLeg.x = 0F;
+                    modelIn.rightLeg.xRot = 0F;
+                    modelIn.rightLeg.yRot = 0F;
+                    modelIn.rightLeg.zRot = 0F;
+                    modelIn.leftLeg.x = 0F;
+                    modelIn.leftLeg.xRot = 0F;
+                    modelIn.leftLeg.yRot = 0F;
+                    modelIn.leftLeg.zRot = 0F;
+                    modelIn.leftLeg.y = 0F;
+                    modelIn.rightLeg.y = 0F;
+                    modelIn.leftLeg.z = 0F;
+                    modelIn.rightLeg.z = 0F;
+                    getParentModel().rightLegPartArmors().forEach(part -> {
+                                poseStack.pushPose();
+                                getParentModel().translateToLeg(part, poseStack);
+
+                                modelIn.rightLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                                poseStack.popPose();
+                            }
+                    );
+                    getParentModel().leftLegPartArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        getParentModel().translateToLeg(part, poseStack);
+
+                        modelIn.leftLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        poseStack.popPose();
+                    });
+                    getParentModel().bodyPartArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        this.getParentModel().translateToChest(part, poseStack);
+
+                        modelIn.body.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        poseStack.popPose();
+                    });
+                }
+                idx++;
             }
         }
     }
 
-    private void renderLeg(ItemStack legItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
-        renderer.getModel().copyPropertiesTo(modelIn);
-        modelIn.body.xRot = 0F;
-        modelIn.body.yRot = 0;
-        modelIn.body.zRot = 0;
-        modelIn.body.x = 0;
-        modelIn.body.y = 0F;
-        modelIn.body.z = 0F;
-        modelIn.rightLeg.x = 0F;
-        modelIn.rightLeg.xRot = 0F;
-        modelIn.rightLeg.yRot = 0F;
-        modelIn.rightLeg.zRot = 0F;
-        modelIn.leftLeg.x = 0F;
-        modelIn.leftLeg.xRot = 0F;
-        modelIn.leftLeg.yRot = 0F;
-        modelIn.leftLeg.zRot = 0F;
-        modelIn.leftLeg.y = 0F;
-        modelIn.rightLeg.y = 0F;
-        modelIn.leftLeg.z = 0F;
-        modelIn.rightLeg.z = 0F;
-        renderer.getModel().rightLegPartArmors().forEach(part -> {
-                    matrixStackIn.pushPose();
-                    renderer.getModel().translateToLeg(part, matrixStackIn);
+    private void renderBoot(ItemStack feetItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+        Equippable equippable = feetItem.get(DataComponents.EQUIPPABLE);
+        if (equippable != null && !equippable.model().isEmpty()) {
+            int idx = 0;
+            for (EquipmentModel.Layer layer : this.equipmentModelSet.get(equippable.model().get()).layers().get(EquipmentModel.LayerType.HUMANOID)) {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
 
-            modelIn.rightLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-                    renderTrim(modelIn.rightLeg, legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+                int j = extensions.getArmorLayerTintColor(feetItem, layer, idx, color);
+                if (j != 0) {
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
 
-                    matrixStackIn.popPose();
+                    modelIn.rightLeg.x = 0F;
+                    modelIn.rightLeg.xRot = 0F;
+                    modelIn.rightLeg.yRot = 0F;
+                    modelIn.rightLeg.zRot = 0F;
+                    modelIn.leftLeg.x = 0F;
+                    modelIn.leftLeg.xRot = 0F;
+                    modelIn.leftLeg.yRot = 0F;
+                    modelIn.leftLeg.zRot = 0F;
+                    modelIn.leftLeg.y = 0F;
+                    modelIn.rightLeg.y = 0F;
+                    modelIn.leftLeg.z = 0F;
+                    modelIn.rightLeg.z = 0F;
+                    getParentModel().rightLegPartArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        getParentModel().translateToLeg(part, poseStack);
+                        modelIn.rightLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        poseStack.popPose();
+                    });
+                    getParentModel().leftLegPartArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        getParentModel().translateToLeg(part, poseStack);
+                        modelIn.leftLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        poseStack.popPose();
+                    });
                 }
-        );
-        renderer.getModel().leftLegPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            renderer.getModel().translateToLeg(part, matrixStackIn);
-
-            modelIn.leftLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.leftLeg, legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
-
-            matrixStackIn.popPose();
-        });
-        renderer.getModel().bodyPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            this.renderer.getModel().translateToChest(part, matrixStackIn);
-
-            modelIn.body.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.body, legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
-
-            matrixStackIn.popPose();
-        });
-    }
-
-    private void renderBoot(ItemStack feetItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
-        renderer.getModel().copyPropertiesTo(modelIn);
-        modelIn.rightLeg.x = 0F;
-        modelIn.rightLeg.xRot = 0F;
-        modelIn.rightLeg.yRot = 0F;
-        modelIn.rightLeg.zRot = 0F;
-        modelIn.leftLeg.x = 0F;
-        modelIn.leftLeg.xRot = 0F;
-        modelIn.leftLeg.yRot = 0F;
-        modelIn.leftLeg.zRot = 0F;
-        modelIn.leftLeg.y = 0F;
-        modelIn.rightLeg.y = 0F;
-        modelIn.leftLeg.z = 0F;
-        modelIn.rightLeg.z = 0F;
-        renderer.getModel().rightLegPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            renderer.getModel().translateToLeg(part, matrixStackIn);
-            modelIn.rightLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.rightLeg, feetItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.FEET, modelIn);
-
-            matrixStackIn.popPose();
-        });
-        renderer.getModel().leftLegPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            renderer.getModel().translateToLeg(part, matrixStackIn);
-            modelIn.leftLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.leftLeg, feetItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.FEET, modelIn);
-
-            matrixStackIn.popPose();
-        });
-
+                idx++;
+            }
+        }
     }
 
 
-    private void renderChestplate(ItemStack chestItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
-        renderer.getModel().copyPropertiesTo(modelIn);
-        modelIn.body.xRot = 0F;
-        modelIn.body.yRot = 0;
-        modelIn.body.zRot = 0;
-        modelIn.body.x = 0;
-        modelIn.body.y = 0F;
-        modelIn.body.z = 0F;
-        modelIn.rightArm.x = 0F;
-        modelIn.rightArm.y = 0F;
-        modelIn.rightArm.z = 0F;
-        modelIn.rightArm.xRot = 0F;
-        modelIn.rightArm.yRot = 0F;
-        modelIn.rightArm.zRot = 0F;
-        modelIn.leftArm.x = 0F;
-        modelIn.leftArm.y = 0F;
-        modelIn.leftArm.z = 0F;
-        modelIn.leftArm.xRot = 0F;
-        modelIn.leftArm.yRot = 0F;
-        modelIn.leftArm.zRot = 0F;
-        modelIn.leftArm.y = 0F;
-        modelIn.rightArm.y = 0F;
-        modelIn.leftArm.z = 0F;
-        modelIn.rightArm.z = 0F;
-        renderer.getModel().rightHandArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            renderer.getModel().translateToChestPat(part, matrixStackIn);
-            modelIn.rightArm.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.rightArm, chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
+    private void renderChestplate(ItemStack chestItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+        Equippable equippable = chestItem.get(DataComponents.EQUIPPABLE);
 
-            matrixStackIn.popPose();
-        });
-        renderer.getModel().leftHandArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            renderer.getModel().translateToChestPat(part, matrixStackIn);
-            modelIn.leftArm.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.leftArm, chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
+        if (equippable != null && !equippable.model().isEmpty()) {
+            int idx = 0;
+            for (EquipmentModel.Layer layer : this.equipmentModelSet.get(equippable.model().get()).layers().get(EquipmentModel.LayerType.HUMANOID)) {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
 
-            matrixStackIn.popPose();
-        });
-        renderer.getModel().bodyPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            this.renderer.getModel().translateToChest(part, matrixStackIn);
+                int j = extensions.getArmorLayerTintColor(chestItem, layer, idx, color);
+                if (j != 0) {
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
 
-            modelIn.body.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.body, chestItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.CHEST, modelIn);
+                    modelIn.body.xRot = 0F;
+                    modelIn.body.yRot = 0;
+                    modelIn.body.zRot = 0;
+                    modelIn.body.x = 0;
+                    modelIn.body.y = 0F;
+                    modelIn.body.z = 0F;
+                    modelIn.rightArm.x = 0F;
+                    modelIn.rightArm.y = 0F;
+                    modelIn.rightArm.z = 0F;
+                    modelIn.rightArm.xRot = 0F;
+                    modelIn.rightArm.yRot = 0F;
+                    modelIn.rightArm.zRot = 0F;
+                    modelIn.leftArm.x = 0F;
+                    modelIn.leftArm.y = 0F;
+                    modelIn.leftArm.z = 0F;
+                    modelIn.leftArm.xRot = 0F;
+                    modelIn.leftArm.yRot = 0F;
+                    modelIn.leftArm.zRot = 0F;
+                    modelIn.leftArm.y = 0F;
+                    modelIn.rightArm.y = 0F;
+                    modelIn.leftArm.z = 0F;
+                    modelIn.rightArm.z = 0F;
+                    getParentModel().rightHandArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        getParentModel().translateToChestPat(part, poseStack);
+                        modelIn.rightArm.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
 
-            matrixStackIn.popPose();
-        });
+                        poseStack.popPose();
+                    });
+                    getParentModel().leftHandArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        getParentModel().translateToChestPat(part, poseStack);
+                        modelIn.leftArm.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        poseStack.popPose();
+                    });
+                    getParentModel().bodyPartArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        this.getParentModel().translateToChest(part, poseStack);
+
+                        modelIn.body.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        poseStack.popPose();
+                    });
+                }
+                idx++;
+            }
+        }
     }
 
-    private void renderHelmet(ItemStack headItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
-        renderer.getModel().copyPropertiesTo(modelIn);
-        modelIn.head.xRot = 0F;
-        modelIn.head.yRot = 0F;
-        modelIn.head.zRot = 0F;
-        modelIn.hat.xRot = 0F;
-        modelIn.hat.yRot = 0F;
-        modelIn.hat.zRot = 0F;
-        modelIn.head.x = 0F;
-        modelIn.head.y = 0F;
-        modelIn.head.z = 0F;
-        modelIn.hat.x = 0F;
-        modelIn.hat.y = 0F;
-        modelIn.hat.z = 0F;
-        renderer.getModel().headPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            this.renderer.getModel().translateToHead(part, matrixStackIn);
-            modelIn.head.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.head, headItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.HEAD, modelIn);
-            matrixStackIn.popPose();
-        });
+    private void renderHelmet(ItemStack headItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+        Equippable equippable = headItem.get(DataComponents.EQUIPPABLE);
+        if (equippable != null && !equippable.model().isEmpty()) {
+            int idx = 0;
+            for (EquipmentModel.Layer layer : this.equipmentModelSet.get(equippable.model().get()).layers().get(EquipmentModel.LayerType.HUMANOID)) {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
 
+                int j = extensions.getArmorLayerTintColor(headItem, layer, idx, color);
+                if (j != 0) {
+                    //getParentModel().copyPropertiesTo(modelIn);
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
+
+                    modelIn.head.xRot = 0F;
+                    modelIn.head.yRot = 0F;
+                    modelIn.head.zRot = 0F;
+                    modelIn.hat.xRot = 0F;
+                    modelIn.hat.yRot = 0F;
+                    modelIn.hat.zRot = 0F;
+                    modelIn.head.x = 0F;
+                    modelIn.head.y = 0F;
+                    modelIn.head.z = 0F;
+                    modelIn.hat.x = 0F;
+                    modelIn.hat.y = 0F;
+                    modelIn.hat.z = 0F;
+                    getParentModel().headPartArmors().forEach(part -> {
+                        poseStack.pushPose();
+                        this.getParentModel().translateToHead(part, poseStack);
+                        modelIn.head.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                        poseStack.popPose();
+                    });
+                }
+                idx++;
+            }
+        }
     }
 
 
@@ -423,8 +440,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
     }
 
 
-    protected HumanoidModel<?> getArmorModelHook(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, HumanoidModel model) {
-        Model basicModel = ClientHooks.getArmorModel(entity, itemStack, slot, model);
+    protected HumanoidModel<?> getArmorModelHook(ItemStack itemStack, EquipmentModel.LayerType slot, HumanoidModel model) {
+        Model basicModel = ClientHooks.getArmorModel(itemStack, slot, model);
         return basicModel instanceof HumanoidModel ? (HumanoidModel<?>) basicModel : model;
     }
 }

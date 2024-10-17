@@ -39,7 +39,7 @@ public class OneItemLootModifier extends LootModifier {
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ObjectArrayList<ItemStack> stacks = new ObjectArrayList<>();
-        Optional<Holder.Reference<LootTable>> extraTable = context.getResolver().get(Registries.LOOT_TABLE, ResourceKey.create(Registries.LOOT_TABLE, this.lootTable));
+        Optional<Holder.Reference<LootTable>> extraTable = context.getResolver().get(ResourceKey.create(Registries.LOOT_TABLE, this.lootTable));
         if (extraTable.isPresent()) {
             extraTable.get().value().getRandomItemsRaw(context, stacks::add);
         }

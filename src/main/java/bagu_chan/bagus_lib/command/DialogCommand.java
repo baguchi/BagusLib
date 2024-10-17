@@ -69,7 +69,7 @@ public class DialogCommand {
     }
 
     private static <T> Registry<T> getRegistry(CommandContext<CommandSourceStack> p_212379_, ResourceKey<? extends Registry<T>> p_212380_) {
-        return p_212379_.getSource().getServer().registryAccess().registryOrThrow(p_212380_);
+        return p_212379_.getSource().getServer().registryAccess().lookupOrThrow(p_212380_);
     }
 
     private static <T> ResourceKey<T> getRegistryKey(
@@ -84,7 +84,7 @@ public class DialogCommand {
             CommandContext<CommandSourceStack> p_248662_, String p_252172_, ResourceKey<Registry<T>> p_249701_, DynamicCommandExceptionType p_249790_
     ) throws CommandSyntaxException {
         ResourceKey<T> resourcekey = getRegistryKey(p_248662_, p_252172_, p_249701_, p_249790_);
-        return getRegistry(p_248662_, p_249701_).getHolder(resourcekey).orElseThrow(() -> p_249790_.create(resourcekey.location()));
+        return getRegistry(p_248662_, p_249701_).get(resourcekey).orElseThrow(() -> p_249790_.create(resourcekey.location()));
     }
 
     private static void sendRemoveAllDialogMessage(CommandSourceStack p_250209_, Collection<ServerPlayer> p_252344_) {

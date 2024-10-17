@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.entity.goal;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -59,7 +60,9 @@ public class AnimateAttackGoal extends MeleeAttackGoal {
     }
 
     protected void doAttack(LivingEntity living) {
-        this.mob.doHurtTarget(living);
+        if (living.level() instanceof ServerLevel serverLevel) {
+            this.mob.doHurtTarget(serverLevel, living);
+        }
     }
 
     protected boolean canPerformAttack(LivingEntity target) {

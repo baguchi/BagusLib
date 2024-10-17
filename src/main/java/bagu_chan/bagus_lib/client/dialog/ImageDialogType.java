@@ -2,6 +2,7 @@ package bagu_chan.bagus_lib.client.dialog;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
@@ -23,7 +24,7 @@ public class ImageDialogType extends DialogType {
             poseStack.pushPose();
             poseStack.translate(0, renderDialogY, 0);
             poseStack.scale(this.scaleX, this.scaleY, 1.0f);
-            guiGraphics.blitSprite(resourceLocation, this.posX, this.posY, this.sizeX, this.sizeY);
+            guiGraphics.blitSprite(RenderType::guiTextured, resourceLocation, this.posX, this.posY, this.sizeX, this.sizeY);
             poseStack.popPose();
         }
     }

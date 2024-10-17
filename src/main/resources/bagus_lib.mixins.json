@@ -12,11 +12,9 @@
   ],
   "client": [
     "client.ClientPacketListenerMixin",
-    "client.HierarchicalModelMixin",
-    "client.HumanoidModelMixin",
     "client.LivingEntityRendererMixin",
+    "client.LivingEntityRenderState",
     "client.PlayerModelMixin",
-    "client.QuadrupedModelMixin",
     "client.WinScreenMixin"
   ],
   "injectors": {
