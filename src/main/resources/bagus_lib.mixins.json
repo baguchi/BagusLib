@@ -13,7 +13,7 @@
   "client": [
     "client.ClientPacketListenerMixin",
     "client.LivingEntityRendererMixin",
-    "client.LivingEntityRenderState",
+    "client.LivingEntityRenderStateMixin",
     "client.PlayerModelMixin",
     "client.WinScreenMixin"
   ],

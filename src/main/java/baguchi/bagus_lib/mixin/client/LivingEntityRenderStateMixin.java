@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(net.minecraft.client.renderer.entity.state.LivingEntityRenderState.class)
-public class LivingEntityRenderState implements IBagusExtraRenderState {
+public class LivingEntityRenderStateMixin implements IBagusExtraRenderState {
     @Unique
     public ItemStack bagusLib$chestItem;
     @Unique
