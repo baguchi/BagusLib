@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public class EntityMixin implements IBaguAnimate {
     @Unique
-    public final BaguAnimationController BAGU_ANIMATION_CONTROLLER = new BaguAnimationController(((Entity) (Object) this));
+    public BaguAnimationController BAGU_ANIMATION_CONTROLLER = new BaguAnimationController(((Entity) (Object) this));
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void init(EntityType p_19870_, Level p_19871_, CallbackInfo ci) {

@@ -1,5 +1,6 @@
 package baguchi.bagus_lib.mixin.client;
 
+import baguchi.bagus_lib.api.IBaguAnimate;
 import baguchi.bagus_lib.api.IBagusExtraRenderState;
 import baguchi.bagus_lib.client.event.BagusModelEvent;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -48,6 +49,9 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
             bagusExtraRenderState.setBagusLib$chestItem(p_362733_.getItemBySlot(EquipmentSlot.CHEST));
             bagusExtraRenderState.setBagusLib$legItem(p_362733_.getItemBySlot(EquipmentSlot.LEGS));
             bagusExtraRenderState.setBagusLib$feetItem(p_362733_.getItemBySlot(EquipmentSlot.FEET));
+            if (p_362733_ instanceof IBaguAnimate baguAnimate) {
+                bagusExtraRenderState.bagusLib$setBaguAnimationController(baguAnimate.getBaguController());
+            }
         }
     }
 }

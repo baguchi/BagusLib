@@ -1,5 +1,7 @@
 package baguchi.bagus_lib.client.event;
 
+import baguchi.bagus_lib.animation.BaguAnimationController;
+import baguchi.bagus_lib.api.IBagusExtraRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.EntityModel;
@@ -7,6 +9,7 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.AnimationState;
 import net.neoforged.bus.api.Event;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BagusModelEvent extends Event {
     private final LivingEntityRenderState entityIn;
@@ -21,6 +24,12 @@ public abstract class BagusModelEvent extends Event {
     public LivingEntityRenderState getEntityRenderState() {
         return entityIn;
     }
+
+    @Nullable
+    public BaguAnimationController getBaguAnimationController() {
+        return entityIn instanceof IBagusExtraRenderState bagusExtraRenderState ? bagusExtraRenderState.bagusLib$getBaguAnimationController() : null;
+    }
+
 
     public EntityModel getModel() {
         return model;

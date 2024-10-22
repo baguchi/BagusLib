@@ -1,5 +1,6 @@
 package baguchi.bagus_lib.mixin.client;
 
+import baguchi.bagus_lib.animation.BaguAnimationController;
 import baguchi.bagus_lib.api.IBagusExtraRenderState;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,19 @@ public class LivingEntityRenderStateMixin implements IBagusExtraRenderState {
     public ItemStack bagusLib$legItem;
     @Unique
     public ItemStack bagusLib$feetItem;
+
+    @Unique
+    public BaguAnimationController bagusLib$baguAnimationController;
+
+    @Unique
+    public void bagusLib$setBaguAnimationController(BaguAnimationController baguAnimationController) {
+        this.bagusLib$baguAnimationController = baguAnimationController;
+    }
+
+    @Unique
+    public BaguAnimationController bagusLib$getBaguAnimationController() {
+        return bagusLib$baguAnimationController;
+    }
 
     @Unique
     public ItemStack getBagusLib$chestItem() {
