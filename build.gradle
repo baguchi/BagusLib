@@ -76,14 +76,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 repositories {
-    maven {
-        name 'Maven for PR #1590' // https://github.com/neoforged/NeoForge/pull/1590
-        url 'https://prmaven.neoforged.net/NeoForge/pr1590'
-        content {
-            includeModule('net.neoforged', 'neoforge')
-            includeModule('net.neoforged', 'testframework')
-        }
-    }
 }
 
 dependencies {
