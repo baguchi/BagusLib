@@ -5,7 +5,6 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +17,6 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class OneItemLootModifier extends LootModifier {
@@ -39,10 +37,12 @@ public class OneItemLootModifier extends LootModifier {
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ObjectArrayList<ItemStack> stacks = new ObjectArrayList<>();
-        Optional<Holder.Reference<LootTable>> extraTable = context.getResolver().get(ResourceKey.create(Registries.LOOT_TABLE, this.lootTable));
-        if (extraTable.isPresent()) {
-            extraTable.get().value().getRandomItemsRaw(context, stacks::add);
-        }
+        context.getResolver().lookupOrThrow(Registries.LOOT_TABLE).get(ResourceKey.create(Registries.LOOT_TABLE, this.lootTable)).ifPresent(extraTable -> {
+            // Don't run loot modifiers for subtables;
+            // the added loot will be modifiable by downstream loot modifiers modifying the target table,
+            // so if we modify it here then it could get modified twice.
+            extraTable.value().getRandomItemsRaw(context, LootTable.createStackSplitter(context.getLevel(), stacks::add));
+        });
         List<ItemStack> itemStacks = stacks.stream().filter(itemStack -> {
             return !itemStack.isEmpty();
         }).toList();
