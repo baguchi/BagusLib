@@ -2,5 +2,10 @@
   "bagus_lib.config.shakeCameraForVanilla": "カメラの揺れをバニラでも有効にする",
   "baguslib.config.aprilFeature": "エイプリルフールジョークを有効にする",
   "baguslib.config.betterEndPoem": "よりよいエンドポエム",
-  "bagus_lib.watermelon": "スイカゲーム"
+  "bagus_lib.watermelon": "スイカゲーム",
+  "command.bagus_lib.remove_all_dialog": "すべてのダイアログを削除しました",
+  "command.bagus_lib.item_dialog": "アイテムダイアログを生成しました",
+  "command.bagus_lib.dialog": "ダイアログを生成しました",
+  "command.bagus_lib.image_dialog": "画像付きダイアログを生成しました",
+  "item.bagus_lib.bagu": "ばぐち"
 }

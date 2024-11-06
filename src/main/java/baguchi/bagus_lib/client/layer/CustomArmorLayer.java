@@ -27,7 +27,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentModel;
 import net.minecraft.world.item.equipment.Equippable;
@@ -84,9 +83,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         if (entity instanceof IBagusExtraRenderState bagusExtraRenderState) {
             poseStack.pushPose();
             ItemStack headItem = entity.headItem;
-            if (headItem.getItem() instanceof ArmorItem) {
-                ArmorItem armoritem = (ArmorItem) headItem.getItem();
-                EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.HEAD)
+            EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.HEAD)
                         ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                         : EquipmentModel.LayerType.HUMANOID;
                 Model a = getArmorModelHook(headItem, equipmentmodel$layerType, this.defaultBipedModel);
@@ -102,8 +99,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                     renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
-
-            }/* else {
+                /* else {
                 getParentModel().headPartArmors().forEach(part -> {
                     this.getParentModel().translateToHead(part, poseStack);
                     poseStack.translate(0, -0.25, 0.0F);
@@ -117,17 +113,13 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
             poseStack.pushPose();
             ItemStack chestItem = bagusExtraRenderState.getBagusLib$chestItem();
-            if (chestItem.getItem() instanceof ArmorItem) {
-                ArmorItem armoritem = (ArmorItem) chestItem.getItem();
-                if (armoritem.getEquipmentSlot(chestItem) == EquipmentSlot.CHEST) {
-                    EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.CHEST)
+            equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.CHEST)
                             ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                             : EquipmentModel.LayerType.HUMANOID;
-                    boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(chestItem));
-                    Model a = getArmorModelHook(chestItem, equipmentmodel$layerType, this.defaultBipedModel);
+            a = getArmorModelHook(chestItem, equipmentmodel$layerType, this.defaultBipedModel);
 
-                    boolean flag1 = chestItem.hasFoil();
-                    int clampedLight = light;
+            flag1 = chestItem.hasFoil();
+            clampedLight = light;
                     if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
                         net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
                         int i = extensions.getDefaultDyeColor(chestItem);
@@ -141,23 +133,16 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                         renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
-                }
-            }
             poseStack.popPose();
 
             poseStack.pushPose();
             ItemStack legItem = bagusExtraRenderState.getBagusLib$legItem();
-            if (legItem.getItem() instanceof ArmorItem) {
-                ArmorItem armoritem = (ArmorItem) legItem.getItem();
-                if (armoritem.getEquipmentSlot(legItem) == EquipmentSlot.LEGS) {
-                    EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.LEGS)
+            equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.LEGS)
                             ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                             : EquipmentModel.LayerType.HUMANOID;
-                    boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(legItem));
-
-                    Model a = getArmorModelHook(legItem, equipmentmodel$layerType, this.innerModel);
-                    boolean flag1 = legItem.hasFoil();
-                    int clampedLight = light;
+            a = getArmorModelHook(legItem, equipmentmodel$layerType, this.innerModel);
+            flag1 = legItem.hasFoil();
+            clampedLight = light;
                     if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
                         net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
                         int i = extensions.getDefaultDyeColor(legItem);
@@ -171,25 +156,18 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                         renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
-                }
-            }
             poseStack.popPose();
 
             poseStack.pushPose();
             ItemStack feetItem = bagusExtraRenderState.getBagusLib$feetItem();
-            if (feetItem.getItem() instanceof ArmorItem) {
-                ArmorItem armoritem = (ArmorItem) feetItem.getItem();
-                if (armoritem.getEquipmentSlot(feetItem) == EquipmentSlot.FEET) {
-                    EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.FEET)
+            equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.FEET)
                             ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                             : EquipmentModel.LayerType.HUMANOID;
-                    boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(feetItem));
-
-                    Model a = getArmorModelHook(feetItem, equipmentmodel$layerType, this.defaultBipedModel);
+            a = getArmorModelHook(feetItem, equipmentmodel$layerType, this.defaultBipedModel);
                     boolean notAVanillaModel = a != defaultBipedModel;
 
-                    boolean flag1 = feetItem.hasFoil();
-                    int clampedLight = light;
+            flag1 = feetItem.hasFoil();
+            clampedLight = light;
                     if (feetItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
                         net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
                         int i = extensions.getDefaultDyeColor(feetItem);
@@ -202,8 +180,6 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         int i = extensions.getDefaultDyeColor(feetItem);
                         renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     }
-                }
-            }
             poseStack.popPose();
         }
 
@@ -231,7 +207,9 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                 int j = extensions.getArmorLayerTintColor(legItem, layer, idx, color);
                 if (j != 0) {
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS)), false, glintIn);
+                    ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(legItem, EquipmentModel.LayerType.HUMANOID_LEGGINGS, layer, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS));
+
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
 
                     getParentModel().rightLegPartArmors().forEach(part -> {
                                 poseStack.pushPose();
@@ -280,7 +258,9 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                 int j = extensions.getArmorLayerTintColor(feetItem, layer, idx, color);
                 if (j != 0) {
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
+                    ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(feetItem, EquipmentModel.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID));
+
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().rightLegPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         getParentModel().translateToLeg(part, poseStack);
@@ -318,7 +298,9 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                 int j = extensions.getArmorLayerTintColor(chestItem, layer, idx, color);
                 if (j != 0) {
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
+                    ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(chestItem, EquipmentModel.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID));
+
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().rightHandArmors().forEach(part -> {
                         poseStack.pushPose();
                         getParentModel().translateToChestPat(part, poseStack);
@@ -366,7 +348,9 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 int j = extensions.getArmorLayerTintColor(headItem, layer, idx, color);
                 if (j != 0) {
                     //getParentModel().copyPropertiesTo(modelIn);
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
+                    ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(headItem, EquipmentModel.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID));
+
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().headPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         this.getParentModel().translateToHead(part, poseStack);
@@ -385,7 +369,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
     protected Model getArmorModelHook(ItemStack itemStack, EquipmentModel.LayerType slot, Model model) {
-        Model model2 = IClientItemExtensions.of(itemStack.getItem()).getHumanoidArmorModel(itemStack, slot, model);
+        Model model2 = IClientItemExtensions.of(itemStack.getItem()).getGenericArmorModel(itemStack, slot, model);
 
         return model2;
     }

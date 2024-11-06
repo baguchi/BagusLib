@@ -47,6 +47,7 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
     public void translateToHead(ModelPart part, PoseStack poseStack) {
         this.root.translateAndRotate(poseStack);
         part.translateAndRotate(poseStack);
+        poseStack.scale(1.1F, 1.1F, 1.1F);
     }
 
     @Override

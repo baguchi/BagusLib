@@ -1,6 +1,7 @@
 package baguchi.bagus_lib;
 
 import baguchi.bagus_lib.command.DialogCommand;
+import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.message.*;
 import baguchi.bagus_lib.register.*;
 import baguchi.bagus_lib.util.reward.TierHelper;
@@ -29,6 +30,7 @@ public class BagusLib {
     public BagusLib(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
 
+        ModItems.ITEM_REGISTRY.register(modEventBus);
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
         ModStructureProcessorTypes.PROCESSOR_TYPE.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);

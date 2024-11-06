@@ -1,10 +1,8 @@
 package baguchi.bagus_lib.entity;
 
 import baguchi.bagus_lib.CommonEvent;
+import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.util.client.AnimationUtil;
-import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -14,8 +12,6 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
@@ -55,12 +51,7 @@ public class MiniBagu extends PathfinderMob {
     }
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, EntitySpawnReason p_363352_, @Nullable SpawnGroupData p_21437_) {
-        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
-        Registry<TrimPattern> registry = p_21434_.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
-        Registry<TrimMaterial> registry1 = p_21434_.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL);
-
-        stack.set(DataComponents.TRIM, new ArmorTrim(registry1.getOrThrow(TrimMaterials.DIAMOND), registry.getOrThrow(TrimPatterns.HOST)));
-        this.setItemSlot(EquipmentSlot.HEAD, stack);
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.BAGU.get()));
 
 
         return super.finalizeSpawn(p_21434_, p_21435_, p_363352_, p_21437_);
