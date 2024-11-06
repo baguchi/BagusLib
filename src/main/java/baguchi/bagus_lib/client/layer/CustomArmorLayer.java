@@ -89,8 +89,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.HEAD)
                         ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                         : EquipmentModel.LayerType.HUMANOID;
-                Model a = defaultBipedModel;
-                a = getArmorModelHook(headItem, equipmentmodel$layerType, a);
+                Model a = getArmorModelHook(headItem, equipmentmodel$layerType, this.defaultBipedModel);
                 boolean flag1 = headItem.hasFoil();
                 int clampedLight = light;
                 if (headItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
@@ -125,8 +124,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                             ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                             : EquipmentModel.LayerType.HUMANOID;
                     boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(chestItem));
-                    Model a = defaultBipedModel;
-                    a = getArmorModelHook(chestItem, equipmentmodel$layerType, a);
+                    Model a = getArmorModelHook(chestItem, equipmentmodel$layerType, this.defaultBipedModel);
+
                     boolean flag1 = chestItem.hasFoil();
                     int clampedLight = light;
                     if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
@@ -156,8 +155,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                             : EquipmentModel.LayerType.HUMANOID;
                     boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(legItem));
 
-                    Model a = this.innerModel;
-                    a = getArmorModelHook(legItem, equipmentmodel$layerType, a);
+                    Model a = getArmorModelHook(legItem, equipmentmodel$layerType, this.innerModel);
                     boolean flag1 = legItem.hasFoil();
                     int clampedLight = light;
                     if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
@@ -187,8 +185,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                             : EquipmentModel.LayerType.HUMANOID;
                     boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(feetItem));
 
-                    Model a = defaultBipedModel;
-                    a = getArmorModelHook(feetItem, equipmentmodel$layerType, a);
+                    Model a = getArmorModelHook(feetItem, equipmentmodel$layerType, this.defaultBipedModel);
                     boolean notAVanillaModel = a != defaultBipedModel;
 
                     boolean flag1 = feetItem.hasFoil();
