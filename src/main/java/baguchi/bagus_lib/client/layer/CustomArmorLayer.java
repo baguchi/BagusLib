@@ -34,7 +34,7 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -388,8 +388,9 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
     protected Model getArmorModelHook(ItemStack itemStack, EquipmentModel.LayerType slot, Model model) {
-        Model basicModel = ClientHooks.getArmorModel(itemStack, slot, model);
-        return basicModel;
+        Model model2 = IClientItemExtensions.of(itemStack.getItem()).getHumanoidArmorModel(itemStack, slot, model);
+
+        return model2;
     }
 
     @OnlyIn(Dist.CLIENT)
