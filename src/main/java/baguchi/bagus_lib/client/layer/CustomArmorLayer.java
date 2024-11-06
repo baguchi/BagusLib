@@ -242,7 +242,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_leg");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), color);
+                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), j);
                         }
                                 poseStack.popPose();
                             }
@@ -254,7 +254,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_leg");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), color);
+                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -264,7 +264,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("body");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), color);
+                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -290,7 +290,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_leg");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(feetItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                            renderTrim(feetItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -300,7 +300,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_leg");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(feetItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                            renderTrim(feetItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -328,7 +328,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_arm");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -338,7 +338,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_arm");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -349,7 +349,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("body");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
@@ -377,7 +377,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("head");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-                            renderTrim(headItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                            renderTrim(headItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), j);
                         }
                         poseStack.popPose();
                     });
