@@ -3,11 +3,13 @@ package baguchi.bagus_lib.client.layer;
 import baguchi.bagus_lib.api.IBagusExtraRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.Util;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -18,16 +20,24 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentModelSet;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentModel;
 import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.ClientHooks;
+
+import java.util.Optional;
+import java.util.function.Function;
 
 
 /*
@@ -40,6 +50,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     private RenderLayerParent<S, M> renderer;
     private final TextureAtlas armorTrimAtlas;
     private final EquipmentModelSet equipmentModelSet;
+    private final Function<TrimSpriteKey, TextureAtlasSprite> trimSpriteLookup;
+
 
     public CustomArmorLayer(RenderLayerParent<S, M> render, EntityRendererProvider.Context context) {
         super(render);
@@ -48,6 +60,10 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         this.renderer = render;
         this.armorTrimAtlas = context.getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET);
         this.equipmentModelSet = context.getEquipmentModels();
+        this.trimSpriteLookup = Util.memoize(p_371220_ -> {
+            ResourceLocation resourcelocation = p_371220_.trim.getTexture(p_371220_.layerType, p_371220_.equipmentModelId);
+            return this.armorTrimAtlas.getSprite(resourcelocation);
+        });
     }
 
     public CustomArmorLayer(RenderLayerParent<S, M> render, EntityModelSet modelSet, ModelManager modelManager, EquipmentModelSet equipmentModelSet) {
@@ -57,6 +73,10 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         this.renderer = render;
         this.armorTrimAtlas = modelManager.getAtlas(Sheets.ARMOR_TRIMS_SHEET);
         this.equipmentModelSet = equipmentModelSet;
+        this.trimSpriteLookup = Util.memoize(p_371220_ -> {
+            ResourceLocation resourcelocation = p_371220_.trim.getTexture(p_371220_.layerType, p_371220_.equipmentModelId);
+            return this.armorTrimAtlas.getSprite(resourcelocation);
+        });
     }
 
     @Override
@@ -69,16 +89,13 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.HEAD)
                         ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                         : EquipmentModel.LayerType.HUMANOID;
-                HumanoidModel a = defaultBipedModel;
+                Model a = defaultBipedModel;
                 a = getArmorModelHook(headItem, equipmentmodel$layerType, a);
-                boolean notAVanillaModel = a != defaultBipedModel;
-                this.setModelSlotVisible(a, EquipmentSlot.HEAD);
                 boolean flag1 = headItem.hasFoil();
                 int clampedLight = light;
                 if (headItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
                     net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
                     int i = extensions.getDefaultDyeColor(headItem);
-                    renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                 } else {
                     net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
@@ -108,11 +125,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                             ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
                             : EquipmentModel.LayerType.HUMANOID;
                     boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(chestItem));
-                    HumanoidModel a = defaultBipedModel;
+                    Model a = defaultBipedModel;
                     a = getArmorModelHook(chestItem, equipmentmodel$layerType, a);
-                    boolean notAVanillaModel = a != defaultBipedModel;
-                    this.setModelSlotVisible(a, EquipmentSlot.CHEST);
-
                     boolean flag1 = chestItem.hasFoil();
                     int clampedLight = light;
                     if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
@@ -121,7 +135,6 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         float f = (float) (i >> 16 & 255) / 255.0F;
                         float f1 = (float) (i >> 8 & 255) / 255.0F;
                         float f2 = (float) (i & 255) / 255.0F;
-                        renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                         renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     } else {
                         net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
@@ -143,11 +156,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                             : EquipmentModel.LayerType.HUMANOID;
                     boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(legItem));
 
-                    HumanoidModel a = this.innerModel;
+                    Model a = this.innerModel;
                     a = getArmorModelHook(legItem, equipmentmodel$layerType, a);
-                    boolean notAVanillaModel = a != defaultBipedModel;
-                    this.setModelSlotVisible(a, EquipmentSlot.LEGS);
-
                     boolean flag1 = legItem.hasFoil();
                     int clampedLight = light;
                     if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
@@ -156,7 +166,6 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         float f = (float) (i >> 16 & 255) / 255.0F;
                         float f1 = (float) (i >> 8 & 255) / 255.0F;
                         float f2 = (float) (i & 255) / 255.0F;
-                        renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                         renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     } else {
                         net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
@@ -178,10 +187,9 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                             : EquipmentModel.LayerType.HUMANOID;
                     boolean flag = this.usesInnerModel(armoritem.getEquipmentSlot(feetItem));
 
-                    HumanoidModel a = defaultBipedModel;
+                    Model a = defaultBipedModel;
                     a = getArmorModelHook(feetItem, equipmentmodel$layerType, a);
                     boolean notAVanillaModel = a != defaultBipedModel;
-                    this.setModelSlotVisible(a, EquipmentSlot.FEET);
 
                     boolean flag1 = feetItem.hasFoil();
                     int clampedLight = light;
@@ -191,7 +199,6 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         float f = (float) (i >> 16 & 255) / 255.0F;
                         float f1 = (float) (i >> 8 & 255) / 255.0F;
                         float f2 = (float) (i & 255) / 255.0F;
-                        renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                         renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
                     } else {
                         net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
@@ -205,45 +212,38 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
     }
 
+    private void renderTrim(ItemStack itemStack, PoseStack poseStack, MultiBufferSource bufferIn, EquipmentModel.LayerType layerType, ResourceLocation resourceLocation, ModelPart a, int i) {
+        ArmorTrim armortrim = itemStack.get(DataComponents.TRIM);
+        if (armortrim != null) {
+            TextureAtlasSprite textureatlassprite = trimSpriteLookup.apply(new TrimSpriteKey(armortrim, layerType, resourceLocation));
+            VertexConsumer vertexconsumer1 = textureatlassprite.wrap(bufferIn.getBuffer(Sheets.armorTrimsSheet(armortrim.pattern().value().decal())));
+            a.render(poseStack, vertexconsumer1, i, OverlayTexture.NO_OVERLAY);
+        }
+    }
+
     private static boolean usesInnerModel(EquipmentSlot p_117129_) {
         return p_117129_ == EquipmentSlot.LEGS;
     }
 
-    private void renderLeg(ItemStack legItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+    private void renderLeg(ItemStack legItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, Model modelIn, int color) {
         Equippable equippable = legItem.get(DataComponents.EQUIPPABLE);
         if (equippable != null && !equippable.model().isEmpty()) {
             int idx = 0;
-            for (EquipmentModel.Layer layer : this.equipmentModelSet.get(equippable.model().get()).layers().get(EquipmentModel.LayerType.HUMANOID)) {
+            for (EquipmentModel.Layer layer : this.equipmentModelSet.get(equippable.model().get()).layers().get(EquipmentModel.LayerType.HUMANOID_LEGGINGS)) {
                 net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
 
                 int j = extensions.getArmorLayerTintColor(legItem, layer, idx, color);
                 if (j != 0) {
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS)), false, glintIn);
 
-                    modelIn.body.xRot = 0F;
-                    modelIn.body.yRot = 0;
-                    modelIn.body.zRot = 0;
-                    modelIn.body.x = 0;
-                    modelIn.body.y = 0F;
-                    modelIn.body.z = 0F;
-                    modelIn.rightLeg.x = 0F;
-                    modelIn.rightLeg.xRot = 0F;
-                    modelIn.rightLeg.yRot = 0F;
-                    modelIn.rightLeg.zRot = 0F;
-                    modelIn.leftLeg.x = 0F;
-                    modelIn.leftLeg.xRot = 0F;
-                    modelIn.leftLeg.yRot = 0F;
-                    modelIn.leftLeg.zRot = 0F;
-                    modelIn.leftLeg.y = 0F;
-                    modelIn.rightLeg.y = 0F;
-                    modelIn.leftLeg.z = 0F;
-                    modelIn.rightLeg.z = 0F;
                     getParentModel().rightLegPartArmors().forEach(part -> {
                                 poseStack.pushPose();
                                 getParentModel().translateToLeg(part, poseStack);
-
-                                modelIn.rightLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_leg");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), color);
+                        }
                                 poseStack.popPose();
                             }
                     );
@@ -251,16 +251,21 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                         poseStack.pushPose();
                         getParentModel().translateToLeg(part, poseStack);
 
-                        modelIn.leftLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_leg");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                     getParentModel().bodyPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         this.getParentModel().translateToChest(part, poseStack);
-
-                        modelIn.body.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("body");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(legItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID_LEGGINGS), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                 }
@@ -269,7 +274,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         }
     }
 
-    private void renderBoot(ItemStack feetItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+    private void renderBoot(ItemStack feetItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, Model modelIn, int color) {
         Equippable equippable = feetItem.get(DataComponents.EQUIPPABLE);
         if (equippable != null && !equippable.model().isEmpty()) {
             int idx = 0;
@@ -279,31 +284,24 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 int j = extensions.getArmorLayerTintColor(feetItem, layer, idx, color);
                 if (j != 0) {
                     VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
-
-                    modelIn.rightLeg.x = 0F;
-                    modelIn.rightLeg.xRot = 0F;
-                    modelIn.rightLeg.yRot = 0F;
-                    modelIn.rightLeg.zRot = 0F;
-                    modelIn.leftLeg.x = 0F;
-                    modelIn.leftLeg.xRot = 0F;
-                    modelIn.leftLeg.yRot = 0F;
-                    modelIn.leftLeg.zRot = 0F;
-                    modelIn.leftLeg.y = 0F;
-                    modelIn.rightLeg.y = 0F;
-                    modelIn.leftLeg.z = 0F;
-                    modelIn.rightLeg.z = 0F;
                     getParentModel().rightLegPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         getParentModel().translateToLeg(part, poseStack);
-                        modelIn.rightLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_leg");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(feetItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                     getParentModel().leftLegPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         getParentModel().translateToLeg(part, poseStack);
-                        modelIn.leftLeg.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_leg");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(feetItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                 }
@@ -313,7 +311,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
 
-    private void renderChestplate(ItemStack chestItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+    private void renderChestplate(ItemStack chestItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, Model modelIn, int color) {
         Equippable equippable = chestItem.get(DataComponents.EQUIPPABLE);
 
         if (equippable != null && !equippable.model().isEmpty()) {
@@ -324,49 +322,35 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 int j = extensions.getArmorLayerTintColor(chestItem, layer, idx, color);
                 if (j != 0) {
                     VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
-
-                    modelIn.body.xRot = 0F;
-                    modelIn.body.yRot = 0;
-                    modelIn.body.zRot = 0;
-                    modelIn.body.x = 0;
-                    modelIn.body.y = 0F;
-                    modelIn.body.z = 0F;
-                    modelIn.rightArm.x = 0F;
-                    modelIn.rightArm.y = 0F;
-                    modelIn.rightArm.z = 0F;
-                    modelIn.rightArm.xRot = 0F;
-                    modelIn.rightArm.yRot = 0F;
-                    modelIn.rightArm.zRot = 0F;
-                    modelIn.leftArm.x = 0F;
-                    modelIn.leftArm.y = 0F;
-                    modelIn.leftArm.z = 0F;
-                    modelIn.leftArm.xRot = 0F;
-                    modelIn.leftArm.yRot = 0F;
-                    modelIn.leftArm.zRot = 0F;
-                    modelIn.leftArm.y = 0F;
-                    modelIn.rightArm.y = 0F;
-                    modelIn.leftArm.z = 0F;
-                    modelIn.rightArm.z = 0F;
                     getParentModel().rightHandArmors().forEach(part -> {
                         poseStack.pushPose();
                         getParentModel().translateToChestPat(part, poseStack);
-                        modelIn.rightArm.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_arm");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                     getParentModel().leftHandArmors().forEach(part -> {
                         poseStack.pushPose();
                         getParentModel().translateToChestPat(part, poseStack);
-                        modelIn.leftArm.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_arm");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                     getParentModel().bodyPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         this.getParentModel().translateToChest(part, poseStack);
 
-                        modelIn.body.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
-
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("body");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(chestItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                 }
@@ -375,7 +359,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         }
     }
 
-    private void renderHelmet(ItemStack headItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color) {
+    private void renderHelmet(ItemStack headItem, S entity, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, Model modelIn, int color) {
         Equippable equippable = headItem.get(DataComponents.EQUIPPABLE);
         if (equippable != null && !equippable.model().isEmpty()) {
             int idx = 0;
@@ -386,23 +370,15 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 if (j != 0) {
                     //getParentModel().copyPropertiesTo(modelIn);
                     VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID)), false, glintIn);
-
-                    modelIn.head.xRot = 0F;
-                    modelIn.head.yRot = 0F;
-                    modelIn.head.zRot = 0F;
-                    modelIn.hat.xRot = 0F;
-                    modelIn.hat.yRot = 0F;
-                    modelIn.hat.zRot = 0F;
-                    modelIn.head.x = 0F;
-                    modelIn.head.y = 0F;
-                    modelIn.head.z = 0F;
-                    modelIn.hat.x = 0F;
-                    modelIn.hat.y = 0F;
-                    modelIn.hat.z = 0F;
                     getParentModel().headPartArmors().forEach(part -> {
                         poseStack.pushPose();
                         this.getParentModel().translateToHead(part, poseStack);
-                        modelIn.head.render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+
+                        Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("head");
+                        if (optional.isPresent()) {
+                            optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
+                            renderTrim(headItem, poseStack, bufferIn, EquipmentModel.LayerType.HUMANOID, layer.getTextureLocation(EquipmentModel.LayerType.HUMANOID), optional.get(), color);
+                        }
                         poseStack.popPose();
                     });
                 }
@@ -411,37 +387,13 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         }
     }
 
-
-    protected void setModelSlotVisible(HumanoidModel p_188359_1_, EquipmentSlot slotIn) {
-        this.setModelVisible(p_188359_1_);
-        switch (slotIn) {
-            case HEAD:
-                p_188359_1_.head.visible = true;
-                p_188359_1_.hat.visible = true;
-                break;
-            case CHEST:
-                p_188359_1_.body.visible = true;
-                p_188359_1_.rightArm.visible = true;
-                p_188359_1_.leftArm.visible = true;
-                break;
-            case LEGS:
-                p_188359_1_.body.visible = true;
-                p_188359_1_.rightLeg.visible = true;
-                p_188359_1_.leftLeg.visible = true;
-                break;
-            case FEET:
-                p_188359_1_.rightLeg.visible = true;
-                p_188359_1_.leftLeg.visible = true;
-        }
-    }
-
-    protected void setModelVisible(HumanoidModel model) {
-        model.setAllVisible(false);
-    }
-
-
-    protected HumanoidModel<?> getArmorModelHook(ItemStack itemStack, EquipmentModel.LayerType slot, HumanoidModel model) {
+    protected Model getArmorModelHook(ItemStack itemStack, EquipmentModel.LayerType slot, Model model) {
         Model basicModel = ClientHooks.getArmorModel(itemStack, slot, model);
-        return basicModel instanceof HumanoidModel ? (HumanoidModel<?>) basicModel : model;
+        return basicModel;
     }
+
+    @OnlyIn(Dist.CLIENT)
+    static record TrimSpriteKey(ArmorTrim trim, EquipmentModel.LayerType layerType, ResourceLocation equipmentModelId) {
+    }
+
 }
