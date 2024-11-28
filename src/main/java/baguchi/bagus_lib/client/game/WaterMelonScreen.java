@@ -8,7 +8,7 @@ public class WaterMelonScreen extends Screen {
 
     private WaterMelonCraft aprilFoolsWaterMelonCraft = null;
     private float scroll;
-    private float scrollSpeed;
+    private final float scrollSpeed;
     private final float unmodifiedScrollSpeed;
 
     public WaterMelonScreen(Component p_96550_) {

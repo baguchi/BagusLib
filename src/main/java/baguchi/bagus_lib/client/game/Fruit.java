@@ -14,9 +14,9 @@ public enum Fruit {
     NETHER_WART(5, 46, Blocks.NETHER_WART_BLOCK),
     PUMPKIN(6, 58, Blocks.PUMPKIN),
     WATERMELON(7, 66, Blocks.MELON);
-    private int size;
-    private int score;
-    private Block fruit;
+    private final int size;
+    private final int score;
+    private final Block fruit;
 
     Fruit(int size, int score, Block fruit) {
         this.size = size;

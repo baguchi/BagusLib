@@ -83,7 +83,7 @@ public abstract class WinScreenMixin extends Screen {
     @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo callbackInfo) {
         if (BagusConfigs.CLIENT.coolerEndPoem.get()) {
-            bagusLib$talkTimer -= (int) 1;
+            bagusLib$talkTimer -= 1;
             bagusLib$ticks++;
         }
     }

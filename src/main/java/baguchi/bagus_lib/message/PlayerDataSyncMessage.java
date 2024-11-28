@@ -25,7 +25,7 @@ public class PlayerDataSyncMessage implements CustomPacketPayload, IPayloadHandl
 
 
     private final CompoundTag tag;
-    private int entityId;
+    private final int entityId;
 
     public PlayerDataSyncMessage(CompoundTag tag, Entity entity) {
         this.tag = tag;

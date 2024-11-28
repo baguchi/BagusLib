@@ -32,8 +32,8 @@ public class WaterMelonCraft {
     private float fallingX;
     private int finishTime = 0;
     private int keyCooldown;
-    private static int HEIGHT = 7;
-    private static int WIDTH = 5;
+    private static final int HEIGHT = 7;
+    private static final int WIDTH = 5;
     private FruitObject tossFruit;
     private final List<FruitObject> fruitObjects = Lists.newArrayList();
     private boolean gameOver = false;

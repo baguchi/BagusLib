@@ -46,7 +46,7 @@ public class DialogType {
     public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
 
         Font font = Minecraft.getInstance().font;
-        float g = (float) tickCount + f;
+        float g = tickCount + f;
         if (this.dialogue == null && this.dialogueBase != null) {
             MutableComponent component = dialogueBase;
             this.dialogue = beginString(guiGraphics, g, 2.0, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);

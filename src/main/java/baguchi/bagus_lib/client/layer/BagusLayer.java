@@ -28,7 +28,7 @@ import net.minecraft.resources.ResourceLocation;
 public class BagusLayer<T extends LivingEntityRenderState, M extends EntityModel<T> & IArmor> extends RenderLayer<T, M> {
 
     private final MiniBaguModel bagumodel;
-    private RenderLayerParent<T, M> renderer;
+    private final RenderLayerParent<T, M> renderer;
 
     public BagusLayer(RenderLayerParent<T, M> render, EntityRendererProvider.Context context) {
         super(render);

@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class SmartNearestLivingEntitySensor<T extends LivingEntity> extends Sensor<T> {
     protected void doTick(ServerLevel level, T entity) {
-        AABB aabb = entity.getBoundingBox().inflate((double) this.radiusXZ(entity), (double) this.radiusY(entity), (double) this.radiusXZ(entity));
+        AABB aabb = entity.getBoundingBox().inflate(this.radiusXZ(entity), this.radiusY(entity), this.radiusXZ(entity));
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, aabb, (p_26717_) -> {
             return p_26717_ != entity && p_26717_.isAlive();
         });

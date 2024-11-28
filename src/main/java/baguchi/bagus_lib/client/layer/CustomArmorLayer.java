@@ -46,7 +46,7 @@ import java.util.function.Function;
 public class CustomArmorLayer<S extends LivingEntityRenderState, M extends EntityModel<S> & IArmor, A extends EntityModel<S>> extends RenderLayer<S, M> {
     private final HumanoidModel defaultBipedModel;
     private final HumanoidModel innerModel;
-    private RenderLayerParent<S, M> renderer;
+    private final RenderLayerParent<S, M> renderer;
     private final TextureAtlas armorTrimAtlas;
     private final EquipmentModelSet equipmentModelSet;
     private final Function<TrimSpriteKey, TextureAtlasSprite> trimSpriteLookup;
@@ -83,22 +83,22 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         if (entity instanceof IBagusExtraRenderState bagusExtraRenderState) {
             poseStack.pushPose();
             ItemStack headItem = entity.headItem;
-            EquipmentModel.LayerType equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.HEAD)
-                        ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
-                        : EquipmentModel.LayerType.HUMANOID;
-                Model a = getArmorModelHook(headItem, equipmentmodel$layerType, this.defaultBipedModel);
-                boolean flag1 = headItem.hasFoil();
-                int clampedLight = light;
-                if (headItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                    net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
-                    int i = extensions.getDefaultDyeColor(headItem);
-                    renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                } else {
-                    net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
-                    int i = extensions.getDefaultDyeColor(headItem);
+            EquipmentModel.LayerType equipmentmodel$layerType = usesInnerModel(EquipmentSlot.HEAD)
+                    ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                    : EquipmentModel.LayerType.HUMANOID;
+            Model a = getArmorModelHook(headItem, equipmentmodel$layerType, this.defaultBipedModel);
+            boolean flag1 = headItem.hasFoil();
+            int clampedLight = light;
+            if (headItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
+                int i = extensions.getDefaultDyeColor(headItem);
+                renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            } else {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
+                int i = extensions.getDefaultDyeColor(headItem);
 
-                    renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    }
+                renderHelmet(headItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            }
                 /* else {
                 getParentModel().headPartArmors().forEach(part -> {
                     this.getParentModel().translateToHead(part, poseStack);
@@ -113,73 +113,73 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
             poseStack.pushPose();
             ItemStack chestItem = bagusExtraRenderState.getBagusLib$chestItem();
-            equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.CHEST)
-                            ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
-                            : EquipmentModel.LayerType.HUMANOID;
+            equipmentmodel$layerType = usesInnerModel(EquipmentSlot.CHEST)
+                    ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                    : EquipmentModel.LayerType.HUMANOID;
             a = getArmorModelHook(chestItem, equipmentmodel$layerType, this.defaultBipedModel);
 
             flag1 = chestItem.hasFoil();
             clampedLight = light;
-                    if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
-                        int i = extensions.getDefaultDyeColor(chestItem);
-                        float f = (float) (i >> 16 & 255) / 255.0F;
-                        float f1 = (float) (i >> 8 & 255) / 255.0F;
-                        float f2 = (float) (i & 255) / 255.0F;
-                        renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    } else {
-                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
-                        int i = extensions.getDefaultDyeColor(chestItem);
+            if (chestItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
+                int i = extensions.getDefaultDyeColor(chestItem);
+                float f = (float) (i >> 16 & 255) / 255.0F;
+                float f1 = (float) (i >> 8 & 255) / 255.0F;
+                float f2 = (float) (i & 255) / 255.0F;
+                renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            } else {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
+                int i = extensions.getDefaultDyeColor(chestItem);
 
-                        renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    }
+                renderChestplate(chestItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            }
             poseStack.popPose();
 
             poseStack.pushPose();
             ItemStack legItem = bagusExtraRenderState.getBagusLib$legItem();
-            equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.LEGS)
-                            ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
-                            : EquipmentModel.LayerType.HUMANOID;
+            equipmentmodel$layerType = usesInnerModel(EquipmentSlot.LEGS)
+                    ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                    : EquipmentModel.LayerType.HUMANOID;
             a = getArmorModelHook(legItem, equipmentmodel$layerType, this.innerModel);
             flag1 = legItem.hasFoil();
             clampedLight = light;
-                    if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
-                        int i = extensions.getDefaultDyeColor(legItem);
-                        float f = (float) (i >> 16 & 255) / 255.0F;
-                        float f1 = (float) (i >> 8 & 255) / 255.0F;
-                        float f2 = (float) (i & 255) / 255.0F;
-                        renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    } else {
-                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
-                        int i = extensions.getDefaultDyeColor(legItem);
+            if (legItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
+                int i = extensions.getDefaultDyeColor(legItem);
+                float f = (float) (i >> 16 & 255) / 255.0F;
+                float f1 = (float) (i >> 8 & 255) / 255.0F;
+                float f2 = (float) (i & 255) / 255.0F;
+                renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            } else {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
+                int i = extensions.getDefaultDyeColor(legItem);
 
-                        renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    }
+                renderLeg(legItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            }
             poseStack.popPose();
 
             poseStack.pushPose();
             ItemStack feetItem = bagusExtraRenderState.getBagusLib$feetItem();
-            equipmentmodel$layerType = this.usesInnerModel(EquipmentSlot.FEET)
-                            ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
-                            : EquipmentModel.LayerType.HUMANOID;
+            equipmentmodel$layerType = usesInnerModel(EquipmentSlot.FEET)
+                    ? EquipmentModel.LayerType.HUMANOID_LEGGINGS
+                    : EquipmentModel.LayerType.HUMANOID;
             a = getArmorModelHook(feetItem, equipmentmodel$layerType, this.defaultBipedModel);
-                    boolean notAVanillaModel = a != defaultBipedModel;
+            boolean notAVanillaModel = a != defaultBipedModel;
 
             flag1 = feetItem.hasFoil();
             clampedLight = light;
-                    if (feetItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
-                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
-                        int i = extensions.getDefaultDyeColor(feetItem);
-                        float f = (float) (i >> 16 & 255) / 255.0F;
-                        float f1 = (float) (i >> 8 & 255) / 255.0F;
-                        float f2 = (float) (i & 255) / 255.0F;
-                        renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    } else {
-                        net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
-                        int i = extensions.getDefaultDyeColor(feetItem);
-                        renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
-                    }
+            if (feetItem.is(ItemTags.DYEABLE)) { // Allow this for anything, not only cloth
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
+                int i = extensions.getDefaultDyeColor(feetItem);
+                float f = (float) (i >> 16 & 255) / 255.0F;
+                float f1 = (float) (i >> 8 & 255) / 255.0F;
+                float f2 = (float) (i & 255) / 255.0F;
+                renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            } else {
+                net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
+                int i = extensions.getDefaultDyeColor(feetItem);
+                renderBoot(feetItem, entity, poseStack, bufferIn, clampedLight, flag1, a, i);
+            }
             poseStack.popPose();
         }
 
@@ -375,7 +375,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
     @OnlyIn(Dist.CLIENT)
-    static record TrimSpriteKey(ArmorTrim trim, EquipmentModel.LayerType layerType, ResourceLocation equipmentModelId) {
+    record TrimSpriteKey(ArmorTrim trim, EquipmentModel.LayerType layerType, ResourceLocation equipmentModelId) {
     }
 
 }

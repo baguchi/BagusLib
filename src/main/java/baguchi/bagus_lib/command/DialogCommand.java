@@ -37,7 +37,6 @@ public class DialogCommand {
                 Commands.literal("bagus_lib").requires(p_136627_ -> p_136627_.hasPermission(2)).then(Commands.literal("dialog")
                         .then(
                                 Commands.argument("targets", EntityArgument.players()).then(Commands.argument("dialog_type", ResourceKeyArgument.key(ModDialogs.DIALOG_REGISTRY)).then(Commands.argument("tag", CompoundTagArgument.compoundTag()).executes(p_248155_ -> {
-                                            ;
                                             Collection<ServerPlayer> collection = EntityArgument.getPlayers(p_248155_, "targets");
 
                                             if (!collection.isEmpty()) {

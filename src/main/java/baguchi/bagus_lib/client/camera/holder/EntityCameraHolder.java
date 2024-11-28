@@ -4,7 +4,7 @@ import baguchi.bagus_lib.util.GlobalVec3;
 import net.minecraft.world.entity.Entity;
 
 public class EntityCameraHolder<T extends Entity> extends CameraHolder {
-    private T entity;
+    private final T entity;
 
     public EntityCameraHolder(int distance, int duration, float amount, GlobalVec3 pos, T entity) {
         super(distance, duration, amount, pos);

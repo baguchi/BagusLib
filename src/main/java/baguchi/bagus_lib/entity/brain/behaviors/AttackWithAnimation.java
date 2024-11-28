@@ -96,7 +96,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     @Override
     protected void stop(ServerLevel p_22548_, E p_22549_, long p_22550_) {
         super.stop(p_22548_, p_22549_, p_22550_);
-        p_22549_.getBrain().setMemoryWithExpiry(MemoryModuleType.ATTACK_COOLING_DOWN, true, (long) this.cooldownBetweenAttacks);
+        p_22549_.getBrain().setMemoryWithExpiry(MemoryModuleType.ATTACK_COOLING_DOWN, true, this.cooldownBetweenAttacks);
     }
 
     private LivingEntity getAttackTarget(E p_23533_) {

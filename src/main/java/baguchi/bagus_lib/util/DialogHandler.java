@@ -29,7 +29,7 @@ public class DialogHandler {
     @OnlyIn(value = Dist.CLIENT)
     public void renderDialogue(GuiGraphics guiGraphics, float f, float tickCount) {
         Minecraft minecraft = Minecraft.getInstance();
-        float g = (float) tickCount + f;
+        float g = tickCount + f;
         PoseStack poseStack = guiGraphics.pose();
         for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
             DialogType dialogType = dialogue.getValue();
@@ -106,7 +106,7 @@ public class DialogHandler {
                 this.drawFunction.apply(this.targetString, i, j);
                 return false;
             }
-            int k = Mth.floor((double) ((d - this.lastTick) * this.charsPerTick));
+            int k = Mth.floor((d - this.lastTick) * this.charsPerTick);
             if (k == 0) {
                 this.drawFunction.apply(this.subString, i, j);
                 return false;
@@ -130,8 +130,8 @@ public class DialogHandler {
         }
 
         @OnlyIn(value = Dist.CLIENT)
-        public static interface DrawFunction {
-            public void apply(String var1, int var2, int var3);
+        public interface DrawFunction {
+            void apply(String var1, int var2, int var3);
         }
     }
 
