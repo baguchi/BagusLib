@@ -5,11 +5,14 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Unique;
 
 public interface IBagusExtraRenderState {
+    ItemStack getBagusLib$headItem();
     ItemStack getBagusLib$chestItem();
 
     ItemStack getBagusLib$feetItem();
 
     ItemStack getBagusLib$legItem();
+
+    void setBagusLib$headItem(ItemStack bagusLib$headItem);
 
     void setBagusLib$chestItem(ItemStack bagusLib$chestItem);
 

@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(net.minecraft.client.renderer.entity.state.LivingEntityRenderState.class)
 public class LivingEntityRenderStateMixin implements IBagusExtraRenderState {
     @Unique
+    public ItemStack bagusLib$headItem;
+    @Unique
     public ItemStack bagusLib$chestItem;
     @Unique
     public ItemStack bagusLib$legItem;
@@ -28,6 +30,11 @@ public class LivingEntityRenderStateMixin implements IBagusExtraRenderState {
         return bagusLib$baguAnimationController;
     }
 
+    @Override
+    public ItemStack getBagusLib$headItem() {
+        return bagusLib$headItem;
+    }
+
     @Unique
     public ItemStack getBagusLib$chestItem() {
         return bagusLib$chestItem;
@@ -41,6 +48,11 @@ public class LivingEntityRenderStateMixin implements IBagusExtraRenderState {
     @Unique
     public ItemStack getBagusLib$legItem() {
         return bagusLib$legItem;
+    }
+
+    @Override
+    public void setBagusLib$headItem(ItemStack bagusLib$headItem) {
+        this.bagusLib$headItem = bagusLib$headItem;
     }
 
     @Unique
