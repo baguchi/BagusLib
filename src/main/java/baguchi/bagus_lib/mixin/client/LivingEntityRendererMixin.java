@@ -46,6 +46,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     public void extractRenderState(T p_362733_, S p_360515_, float p_361157_, CallbackInfo ci) {
         if (p_360515_ instanceof IBagusExtraRenderState bagusExtraRenderState) {
+            bagusExtraRenderState.setBagusLib$headItem(p_362733_.getItemBySlot(EquipmentSlot.HEAD));
             bagusExtraRenderState.setBagusLib$chestItem(p_362733_.getItemBySlot(EquipmentSlot.CHEST));
             bagusExtraRenderState.setBagusLib$legItem(p_362733_.getItemBySlot(EquipmentSlot.LEGS));
             bagusExtraRenderState.setBagusLib$feetItem(p_362733_.getItemBySlot(EquipmentSlot.FEET));
