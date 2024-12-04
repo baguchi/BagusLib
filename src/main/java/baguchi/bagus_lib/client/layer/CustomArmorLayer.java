@@ -285,7 +285,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
                 int j = extensions.getArmorLayerTintColor(chestItem, layer, idx, color);
                 if (j != 0) {
-                    ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(chestItem, EquipmentClientInfo.LayerType.HUMANOID, layer, equippable.assetId().get().location());
+                    ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(chestItem, EquipmentClientInfo.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentClientInfo.LayerType.HUMANOID));
 
                     VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().rightHandArmors().forEach(part -> {
