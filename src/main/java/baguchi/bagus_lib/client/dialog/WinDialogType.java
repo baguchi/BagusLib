@@ -5,11 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.sounds.SoundEvent;
-
-import javax.annotation.Nullable;
 
 public class WinDialogType extends DialogType {
 
@@ -30,26 +27,9 @@ public class WinDialogType extends DialogType {
         }
     }
 
-    public void setDialogueBase(@Nullable MutableComponent dialogueBase) {
-        this.dialogue = null;
-        this.dialogueBase = dialogueBase;
-    }
-
-    public void setScale(float scaleX, float scaleY) {
-        this.scaleX = scaleX;
-        this.scaleY = scaleY;
-    }
-
-    public void setPos(int posX, int posY) {
-        this.posX = posX;
-        this.posY = posY;
-    }
-
-    public void setSoundEvent(@Nullable Holder<SoundEvent> soundEvent) {
-        this.soundEvent = soundEvent;
-    }
-
-    public void setRenderDialogY(int renderDialogY) {
-        this.renderDialogY = renderDialogY;
+    public WinDialogType getClone(CompoundTag compoundTag) {
+        WinDialogType dialogType = new WinDialogType();
+        dialogType.readTag(compoundTag);
+        return dialogType;
     }
 }

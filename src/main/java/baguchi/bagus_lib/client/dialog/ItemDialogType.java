@@ -22,15 +22,7 @@ public class ItemDialogType extends DialogType {
         }
     }
 
-    @Override
-    public ItemDialogType getClone() {
-        ItemDialogType dialog = new ItemDialogType();
-        dialog.readTag(this.writeTag());
-        return dialog;
-    }
-
-
-    public CompoundTag writeTag() {
+    protected CompoundTag writeTag() {
         CompoundTag tag = super.writeTag();
         if (itemStack != null) {
             tag.putString("Item", BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString());
@@ -38,7 +30,7 @@ public class ItemDialogType extends DialogType {
         return tag;
     }
 
-    public void readTag(CompoundTag tag) {
+    protected void readTag(CompoundTag tag) {
         super.readTag(tag);
         if (tag.contains("Item")) {
             BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(tag.getString("Item"))).ifPresent(itemReference -> {
@@ -48,7 +40,9 @@ public class ItemDialogType extends DialogType {
         }
     }
 
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
+    public ItemDialogType getClone(CompoundTag compoundTag) {
+        ItemDialogType dialogType = new ItemDialogType();
+        dialogType.readTag(compoundTag);
+        return dialogType;
     }
 }

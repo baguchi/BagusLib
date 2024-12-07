@@ -1,6 +1,7 @@
 package baguchi.bagus_lib.util;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
+import baguchi.bagus_lib.client.dialog.builder.DialogBuilder;
 import baguchi.bagus_lib.message.DialogMessage;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -55,6 +56,13 @@ public class DialogHandler {
     }
 
     @OnlyIn(value = Dist.CLIENT)
+    public void addOrReplaceDialogType(String name, DialogType dialogType, DialogBuilder builder) {
+        dialogTypes.remove(name);
+        dialogTypes.put(name, dialogType.getClone(builder.writeTag()));
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    @Deprecated
     public void addOrReplaceDialogType(String name, DialogType dialogType) {
         dialogTypes.remove(name);
         dialogTypes.put(name, dialogType);
@@ -70,8 +78,8 @@ public class DialogHandler {
         dialogTypes.clear();
     }
 
-    public static void addOrReplaceDialogTypeOnServer(ServerPlayer player, String name, DialogType dialogType) {
-        PacketDistributor.sendToPlayer(player, new DialogMessage(name, dialogType, dialogType.writeTag()));
+    public static void addOrReplaceDialogTypeOnServer(ServerPlayer player, String name, DialogType dialogType, DialogBuilder builder) {
+        PacketDistributor.sendToPlayer(player, new DialogMessage(name, dialogType, builder.writeTag()));
     }
 
 
