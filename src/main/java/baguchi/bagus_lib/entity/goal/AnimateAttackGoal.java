@@ -60,7 +60,7 @@ public class AnimateAttackGoal extends MeleeAttackGoal {
     }
 
     protected void doAttack(LivingEntity living) {
-        if (living.level() instanceof ServerLevel serverLevel) {
+        if (this.mob.level() instanceof ServerLevel serverLevel) {
             this.mob.doHurtTarget(serverLevel, living);
         }
     }

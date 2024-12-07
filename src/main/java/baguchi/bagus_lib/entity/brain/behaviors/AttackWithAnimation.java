@@ -3,6 +3,7 @@ package baguchi.bagus_lib.entity.brain.behaviors;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -13,17 +14,17 @@ import net.minecraft.world.entity.ai.memory.WalkTarget;
 public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     protected boolean attack;
 
-    protected final int leftActionPoint;
+    protected final int actionPoint;
     protected final int attackLength;
 
     private final int cooldownBetweenAttacks;
 
-    private int cooldownTick;
-    private final double speed;
+    private int attackTicks;
+    private final float speed;
 
-    public AttackWithAnimation(int leftActionPoint, int attackLength, int cooldownBetweenAttacks, double speed) {
+    public AttackWithAnimation(int actionPoint, int attackLength, int cooldownBetweenAttacks, float speed) {
         super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
-        this.leftActionPoint = leftActionPoint;
+        this.actionPoint = actionPoint;
         this.attackLength = attackLength;
         this.cooldownBetweenAttacks = cooldownBetweenAttacks;
         this.speed = speed;
@@ -37,6 +38,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     protected void start(ServerLevel p_23524_, E p_23525_, long p_23526_) {
         LivingEntity livingentity = this.getAttackTarget(p_23525_);
         p_23525_.lookAt(EntityAnchorArgument.Anchor.EYES, livingentity.position());
+        this.attackTicks = 0;
     }
 
     @Override
@@ -46,9 +48,9 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
         LivingEntity livingentity = this.getAttackTarget(p_22552_);
         if (livingentity != null) {
             p_22552_.lookAt(EntityAnchorArgument.Anchor.EYES, livingentity.position());
-            p_22552_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(livingentity.position(), 1.0F, 0));
+            p_22552_.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(livingentity.position(), this.speed, 0));
             checkAndPerformAttack(p_22552_, livingentity, p_22551_);
-            this.cooldownTick = Math.max(this.cooldownTick - 1, 0);
+
         }
     }
 
@@ -57,29 +59,39 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
         return true;
     }
 
-    protected void checkAndPerformAttack(E entity, LivingEntity p_29589_, ServerLevel serverLevel) {
-        if (this.cooldownTick == this.leftActionPoint) {
-            if (this.canPerformAttack(entity, p_29589_)) {
-                entity.doHurtTarget(serverLevel, p_29589_);
+    protected void checkAndPerformAttack(E entity, LivingEntity target, ServerLevel serverLevel) {
+        if (this.isTimeToAttack()) {
+            if (this.canPerformAttack(entity, target)) {
+                this.doAttack(entity, target);
             }
-
-            if (this.cooldownTick == 0) {
-                this.resetAttackCooldown();
-            }
-        } else if (this.canPerformAttack(entity, p_29589_) && this.cooldownTick >= this.attackLength) {
-            if (this.cooldownTick == this.attackLength) {
-                this.doTheAnimation(entity, serverLevel);
-                this.attack = true;
-            }
-
-            if (this.cooldownTick == 0 && this.cooldownTick >= this.attackLength) {
-                this.resetAttackCooldown();
-            }
-        } else if (this.cooldownTick == 0 || !this.attack) {
+        } else if (this.attackTicks >= this.attackLength) {
             this.resetAttackCooldown();
+            this.attack = false;
+        } else if (this.attackTicks == 0 || !this.attack) {
+            if (!this.canPerformAttack(entity, target)) {
+                this.resetAttackCooldown();
+            } else {
+                this.attack = true;
+                this.doTheAnimation(entity, serverLevel);
+            }
         }
-
+        if (this.attack) {
+            this.attackTicks = Mth.clamp(this.attackTicks + 1, 0, this.attackLength);
+        } else {
+            this.attackTicks = 0;
+        }
     }
+
+    protected void doAttack(E attacker, LivingEntity living) {
+        if (attacker.level() instanceof ServerLevel serverLevel) {
+            attacker.doHurtTarget(serverLevel, living);
+        }
+    }
+
+    protected boolean isTimeToAttack() {
+        return this.attackTicks == this.actionPoint;
+    }
+
 
     protected boolean canPerformAttack(E entity, LivingEntity p_301160_) {
         return entity.isWithinMeleeAttackRange(p_301160_) && entity.getSensing().hasLineOfSight(p_301160_);
@@ -90,12 +102,13 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     }
 
     private void resetAttackCooldown() {
-        cooldownTick = attackLength + 1;
+        attackTicks = 0;
     }
 
     @Override
     protected void stop(ServerLevel p_22548_, E p_22549_, long p_22550_) {
         super.stop(p_22548_, p_22549_, p_22550_);
+        this.attack = false;
         p_22549_.getBrain().setMemoryWithExpiry(MemoryModuleType.ATTACK_COOLING_DOWN, true, this.cooldownBetweenAttacks);
     }
 
