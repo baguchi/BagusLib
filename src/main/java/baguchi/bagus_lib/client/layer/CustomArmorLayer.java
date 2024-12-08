@@ -195,12 +195,11 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 int j = extensions.getArmorLayerTintColor(legItem, layer, idx, color);
                 if (j != 0) {
                     ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(legItem, EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, layer, layer.getTextureLocation(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS));
-
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
-
                     getParentModel().rightLegPartArmors().forEach(part -> {
                                 poseStack.pushPose();
-                                getParentModel().translateToLeg(part, poseStack);
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
+                        getParentModel().translateToLeg(part, poseStack);
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_leg");
                         if (optional.isPresent()) {
                             optional.get().render(poseStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, j);
@@ -211,6 +210,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                     );
                     getParentModel().leftLegPartArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         getParentModel().translateToLeg(part, poseStack);
 
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_leg");
@@ -222,6 +223,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                     });
                     getParentModel().bodyPartArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         this.getParentModel().translateToChest(part, poseStack);
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("body");
                         if (optional.isPresent()) {
@@ -247,9 +250,10 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 if (j != 0) {
                     ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(feetItem, EquipmentClientInfo.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentClientInfo.LayerType.HUMANOID));
 
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().rightLegPartArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         getParentModel().translateToLeg(part, poseStack);
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_leg");
                         if (optional.isPresent()) {
@@ -260,6 +264,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                     });
                     getParentModel().leftLegPartArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         getParentModel().translateToLeg(part, poseStack);
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_leg");
                         if (optional.isPresent()) {
@@ -287,9 +293,10 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 if (j != 0) {
                     ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(chestItem, EquipmentClientInfo.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentClientInfo.LayerType.HUMANOID));
 
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().rightHandArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         getParentModel().translateToChestPat(part, poseStack);
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("right_arm");
                         if (optional.isPresent()) {
@@ -300,6 +307,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                     });
                     getParentModel().leftHandArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         getParentModel().translateToChestPat(part, poseStack);
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("left_arm");
                         if (optional.isPresent()) {
@@ -310,6 +319,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                     });
                     getParentModel().bodyPartArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         this.getParentModel().translateToChest(part, poseStack);
 
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("body");
@@ -336,10 +347,10 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 if (j != 0) {
                     //getParentModel().copyPropertiesTo(modelIn);
                     ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(headItem, EquipmentClientInfo.LayerType.HUMANOID, layer, layer.getTextureLocation(EquipmentClientInfo.LayerType.HUMANOID));
-
-                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
                     getParentModel().headPartArmors().forEach(part -> {
                         poseStack.pushPose();
+                        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(resourcelocation), false, glintIn);
+
                         this.getParentModel().translateToHead(part, poseStack);
 
                         Optional<ModelPart> optional = modelIn.getAnyDescendantWithName("head");
