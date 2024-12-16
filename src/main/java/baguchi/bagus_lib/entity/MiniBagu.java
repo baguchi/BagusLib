@@ -61,6 +61,9 @@ public class MiniBagu extends PathfinderMob {
         ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         stack.set(DataComponents.TRIM, new ArmorTrim(registrylookup1.getOrThrow(TrimMaterials.EMERALD), registrylookup2.getOrThrow(TrimPatterns.SENTRY)));
         this.setItemSlot(EquipmentSlot.HEAD, stack);
+        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
         this.setDropChance(EquipmentSlot.HEAD, 0.0F);
         return super.finalizeSpawn(p_21434_, p_21435_, p_363352_, p_21437_);
     }

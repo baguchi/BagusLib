@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class MiniBaguRenderer extends MobRenderer<MiniBagu, MiniBaguRenderState, MiniBaguModel<MiniBaguRenderState>> {
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "textures/entity/mini_bagu.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "textures/entity/mini_bagu_furry.png");
 
     public MiniBaguRenderer(EntityRendererProvider.Context p_174304_) {
-        super(p_174304_, new MiniBaguModel(p_174304_.bakeLayer(ModModelLayers.MINI_BAGU)), 0.3F);
-        this.addLayer(new CustomArmorLayer(this, p_174304_));
+        super(p_174304_, new MiniBaguModel<>(p_174304_.bakeLayer(ModModelLayers.MINI_BAGU)), 0.5F);
+        this.addLayer(new CustomArmorLayer<>(this, p_174304_));
     }
 
     @Override

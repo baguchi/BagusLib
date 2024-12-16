@@ -189,7 +189,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         Equippable equippable = legItem.get(DataComponents.EQUIPPABLE);
         if (equippable != null && !equippable.assetId().isEmpty()) {
             int idx = 0;
-            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).layers().get(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
+            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).getLayers(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
                 net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
 
                 int j = extensions.getArmorLayerTintColor(legItem, layer, idx, color);
@@ -243,7 +243,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         Equippable equippable = feetItem.get(DataComponents.EQUIPPABLE);
         if (equippable != null && !equippable.assetId().isEmpty()) {
             int idx = 0;
-            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).layers().get(EquipmentClientInfo.LayerType.HUMANOID)) {
+            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).getLayers(EquipmentClientInfo.LayerType.HUMANOID)) {
                 net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(feetItem);
 
                 int j = extensions.getArmorLayerTintColor(feetItem, layer, idx, color);
@@ -286,7 +286,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
         if (equippable != null && !equippable.assetId().isEmpty()) {
             int idx = 0;
-            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).layers().get(EquipmentClientInfo.LayerType.HUMANOID)) {
+            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).getLayers(EquipmentClientInfo.LayerType.HUMANOID)) {
                 net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(chestItem);
 
                 int j = extensions.getArmorLayerTintColor(chestItem, layer, idx, color);
@@ -340,7 +340,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         Equippable equippable = headItem.get(DataComponents.EQUIPPABLE);
         if (equippable != null && !equippable.assetId().isEmpty()) {
             int idx = 0;
-            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).layers().get(EquipmentClientInfo.LayerType.HUMANOID)) {
+            for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).getLayers(EquipmentClientInfo.LayerType.HUMANOID)) {
                 net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(headItem);
 
                 int j = extensions.getArmorLayerTintColor(headItem, layer, idx, color);
