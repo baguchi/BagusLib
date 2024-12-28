@@ -2,6 +2,8 @@ package bagu_chan.bagus_lib.mixin.client;
 
 import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.client.dialog.WinDialogType;
+import bagu_chan.bagus_lib.client.dialog.builder.WinDialogBuilder;
+import bagu_chan.bagus_lib.register.ModDialogs;
 import bagu_chan.bagus_lib.util.DialogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -60,10 +62,10 @@ public abstract class WinScreenMixin extends Screen {
                     bagusLib$lineIndex++;
                     if (bagusLib$lineIndex >= 0 && bagusLib$lineIndex < this.talkLines.size()) {
                         MutableComponent chat = this.talkLines.get(bagusLib$lineIndex);
-                        WinDialogType dialogType = new WinDialogType();
+                        WinDialogBuilder<WinDialogType> dialogType = new WinDialogBuilder<>();
                         dialogType.setRenderDialogY(16);
                         dialogType.setDialogueBase(chat.copy());
-                        DialogHandler.INSTANCE.addOrReplaceDialogType("Something", dialogType);
+                        DialogHandler.INSTANCE.addOrReplaceDialogType("Something", ModDialogs.WIN_DIALOG.get(), dialogType);
                         if (chat.getString().length() <= 0) {
                             bagusLib$talkTimer = 10;
                         } else if (bagusLib$lineIndex == this.talkLines.size() - 2) {

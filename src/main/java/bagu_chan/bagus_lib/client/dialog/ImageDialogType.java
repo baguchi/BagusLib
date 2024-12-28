@@ -28,7 +28,7 @@ public class ImageDialogType extends DialogType {
         }
     }
 
-    public CompoundTag writeTag() {
+    protected CompoundTag writeTag() {
         CompoundTag tag = super.writeTag();
         if (resourceLocation != null) {
             tag.putString("ImagePath", resourceLocation.toString());
@@ -38,7 +38,7 @@ public class ImageDialogType extends DialogType {
         return tag;
     }
 
-    public void readTag(CompoundTag tag) {
+    protected void readTag(CompoundTag tag) {
         super.readTag(tag);
         if (tag.contains("ImagePath")) {
             this.resourceLocation = ResourceLocation.tryParse(tag.getString("ImagePath"));
@@ -51,19 +51,9 @@ public class ImageDialogType extends DialogType {
         }
     }
 
-    @Override
-    public ImageDialogType getClone() {
-        ImageDialogType dialog = new ImageDialogType();
-        dialog.readTag(this.writeTag());
-        return dialog;
-    }
-
-    public void setSize(int sizeX, int sizeY) {
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-    }
-
-    public void setResourceLocation(@Nullable ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
+    public ImageDialogType getClone(CompoundTag compoundTag) {
+        ImageDialogType dialogType = new ImageDialogType();
+        dialogType.readTag(compoundTag);
+        return dialogType;
     }
 }
