@@ -33,7 +33,7 @@ public class ItemDialogType extends DialogType {
     protected void readTag(CompoundTag tag) {
         super.readTag(tag);
         if (tag.contains("Item")) {
-            BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(tag.getString("Item"))).ifPresent(itemReference -> {
+            BuiltInRegistries.ITEM.getHolder(ResourceLocation.tryParse(tag.getString("Item"))).ifPresent(itemReference -> {
                 this.itemStack = itemReference.value().getDefaultInstance();
             });
 
