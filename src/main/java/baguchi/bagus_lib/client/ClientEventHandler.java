@@ -71,28 +71,15 @@ public class ClientEventHandler {
     }
 
     /*@SubscribeEvent
-    public static void patTestEvent(BagusModelEvent.FirstPersonArmAnimate bagusModelEvent) {
-        IRootModel rootModel = bagusModelEvent.getRootModel();
-        BaguAnimationController animationController = AnimationUtil.getAnimationController(bagusModelEvent.getEntity());
-        if (bagusModelEvent.isSupportedAnimateModel() && animationController != null) {
-            if(bagusModelEvent.getModel() instanceof PlayerModel<?> playerModel) {
-                rootModel.getBagusRoot().getAllParts().forEach(ModelPart::resetPose);
-                if(animationController.getAnimationState(PAT).isStarted()) {
-                    ModelPart modelPart;
-                    if (bagusModelEvent.getArm() == InteractionHand.MAIN_HAND) {
-                        rootModel.animateBagu(animationController.getAnimationState(PAT), TestPlayerAnimations.pat_right, bagusModelEvent.getAgeInTick());
-                        modelPart = playerModel.rightArm;
-                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotateAxis(45, 1, 0, 0));
-                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotationZYX(modelPart.zRot, modelPart.yRot, modelPart.xRot));
-                    } else {
-                        rootModel.animateBagu(animationController.getAnimationState(PAT), TestPlayerAnimations.pat_left, bagusModelEvent.getAgeInTick());
-                        modelPart = playerModel.leftArm;
-                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotateAxis(45, 1, 0, 0));
-                        bagusModelEvent.getPoseStack().mulPose(new Quaternionf().rotationZYX(modelPart.zRot, modelPart.yRot, modelPart.xRot));
-                    }
-                    playerModel.leftSleeve.copyFrom(playerModel.leftArm);
-                    playerModel.rightSleeve.copyFrom(playerModel.rightArm);
-                }
+    public static void soundTestEvent(ClientTickEvent.Post bagusModelEvent) {
+        if(Minecraft.getInstance().player != null){
+            LocalPlayer player = Minecraft.getInstance().player;
+            if(player.tickCount == 100){
+                DialogBuilder builder = new DialogBuilder();
+                Optional<ResourceKey<SoundEvent>> soundEvent = BuiltInRegistries.SOUND_EVENT.getResourceKey(SoundEvents.WOLF_AMBIENT);
+                builder.setSoundEvent(BuiltInRegistries.SOUND_EVENT.get(soundEvent.get()).get());
+                builder.setDialogueBase(Component.literal("test"));
+                DialogHandler.INSTANCE.addOrReplaceDialogType("bagu", ModDialogs.DIALOGS.get().getClone(builder.writeTag()));
             }
         }
     }

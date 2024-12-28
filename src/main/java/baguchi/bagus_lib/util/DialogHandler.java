@@ -6,19 +6,14 @@ import baguchi.bagus_lib.message.DialogMessage;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 //direct port from Minecraft 24w14potato
 public class DialogHandler {
@@ -105,7 +100,7 @@ public class DialogHandler {
             this.charsPerTick = charsPerTick;
             this.targetString = string;
             this.drawFunction = drawFunction;
-            this.ignoreWhiteSpace = false;
+            this.ignoreWhiteSpace = true;
         }
 
         public boolean draw(double d, int i, int j) {
@@ -142,18 +137,4 @@ public class DialogHandler {
             void apply(String var1, int var2, int var3);
         }
     }
-
-    public DrawString beginString(GuiGraphics guiGraphics, double d, double e, Font font, String string2, int i, int j2) {
-        List<FormattedText> list = font.getSplitter().splitLines(string2, j2, Style.EMPTY);
-        String string22 = list.stream().map(FormattedText::getString).collect(Collectors.joining("\n"));
-        return new DrawString(d, e, string22, (string, j, k) -> {
-            String[] strings = string.split("\\r?\\n");
-            int l = k;
-            for (String string3 : strings) {
-                guiGraphics.drawString(font, string3, j, l, i);
-                l += font.lineHeight + 4;
-            }
-        });
-    }
-
 }

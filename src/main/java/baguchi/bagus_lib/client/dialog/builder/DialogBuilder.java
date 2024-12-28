@@ -27,6 +27,7 @@ public class DialogBuilder<T extends DialogType> {
     protected int posY = 1;
     protected int renderDialogY = 16;
     protected long dialogRenderTime = -1;
+    protected double dialogPerTick = 2;
 
     public CompoundTag writeTag() {
         CompoundTag tag = new CompoundTag();
@@ -39,6 +40,8 @@ public class DialogBuilder<T extends DialogType> {
         tag.putInt("posY", this.posY);
         tag.putInt("dialogY", this.renderDialogY);
         tag.putLong("dialogRenderTime", this.dialogRenderTime);
+        tag.putDouble("dialogPerTick", this.dialogPerTick);
+
         if (this.soundEvent != null) {
             tag.putString("SoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.soundEvent.value()).toString());
         }
@@ -66,6 +69,9 @@ public class DialogBuilder<T extends DialogType> {
         }
         if (tag.contains("dialogRenderTime")) {
             this.dialogRenderTime = tag.getInt("dialogRenderTime");
+        }
+        if (tag.contains("dialogPerTick")) {
+            this.dialogPerTick = tag.getInt("dialogPerTick");
         }
         if (tag.contains("SoundEvent")) {
             Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
@@ -97,11 +103,12 @@ public class DialogBuilder<T extends DialogType> {
         this.renderDialogY = renderDialogY;
     }
 
-    public long getDialogRenderTime() {
-        return dialogRenderTime;
-    }
 
     public void setDialogRenderTime(long dialogRenderTime) {
         this.dialogRenderTime = dialogRenderTime;
+    }
+
+    public void setDialogPerTick(long dialogPerTick) {
+        this.dialogPerTick = dialogPerTick;
     }
 }

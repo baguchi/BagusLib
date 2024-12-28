@@ -37,6 +37,8 @@ public class DialogType {
     protected int posY = 1;
     protected int renderDialogY = 16;
     protected long dialogRenderTime = -1;
+    protected double dialogPerTick = 2;
+
 
     @OnlyIn(Dist.CLIENT)
     public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
@@ -49,7 +51,7 @@ public class DialogType {
         float g = tickCount + f;
         if (this.dialogue == null && this.dialogueBase != null) {
             MutableComponent component = dialogueBase;
-            this.dialogue = beginString(guiGraphics, g, 2.0, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
+            this.dialogue = beginString(guiGraphics, g, this.dialogPerTick, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
         }
 
 
@@ -84,6 +86,7 @@ public class DialogType {
         tag.putInt("posY", this.posY);
         tag.putInt("dialogY", this.renderDialogY);
         tag.putLong("dialogRenderTime", this.dialogRenderTime);
+        tag.putDouble("dialogPerTick", this.dialogPerTick);
         if (this.soundEvent != null) {
             tag.putString("SoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.soundEvent.value()).toString());
         }
@@ -111,6 +114,9 @@ public class DialogType {
         }
         if (tag.contains("dialogRenderTime")) {
             this.dialogRenderTime = tag.getInt("dialogRenderTime");
+        }
+        if (tag.contains("dialogPerTick")) {
+            this.dialogPerTick = tag.getInt("dialogPerTick");
         }
         if (tag.contains("SoundEvent")) {
             Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
