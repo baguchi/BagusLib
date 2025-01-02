@@ -83,25 +83,12 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends HumanoidModel<
     @Override
     public void translateToLeg(ModelPart modelPart, PoseStack poseStack) {
         modelPart.translateAndRotate(poseStack);
-        if (this.rightLeg == modelPart) {
-            poseStack.translate(2 / 16F, 0F, 0);
-        }
-        if (this.leftLeg == modelPart) {
-            poseStack.translate(-2 / 16F, 0F, 0);
-        }
-        poseStack.translate(0, -(12F / 16F), 0);
         poseStack.scale(1.05F, 1.05F, 1.05F);
     }
 
     @Override
     public void translateToChestPat(ModelPart modelPart, PoseStack poseStack) {
         modelPart.translateAndRotate(poseStack);
-        if (this.rightArm == modelPart) {
-            poseStack.translate(4 / 16F, -3 / 16F, 0);
-        }
-        if (this.leftArm == modelPart) {
-            poseStack.translate(-4 / 16F, -3 / 16F, 0);
-        }
         poseStack.scale(1.05F, 1.05F, 1.05F);
     }
     @Override

@@ -192,6 +192,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
             for (EquipmentClientInfo.Layer layer : this.equipmentModelSet.get(equippable.assetId().get()).getLayers(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS)) {
                 net.neoforged.neoforge.client.extensions.common.IClientItemExtensions extensions = net.neoforged.neoforge.client.extensions.common.IClientItemExtensions.of(legItem);
 
+
                 int j = extensions.getArmorLayerTintColor(legItem, layer, idx, color);
                 if (j != 0) {
                     ResourceLocation resourcelocation = net.neoforged.neoforge.client.ClientHooks.getArmorTexture(legItem, EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, layer, layer.getTextureLocation(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS));
@@ -277,6 +278,18 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 }
                 idx++;
             }
+        }
+    }
+
+    private void resetModelPart(Optional<ModelPart> part) {
+        if (part.isPresent()) {
+            ModelPart modelPart = part.get();
+            modelPart.x = 0;
+            modelPart.y = 0;
+            modelPart.z = 0;
+            modelPart.xRot = 0;
+            modelPart.yRot = 0;
+            modelPart.zRot = 0;
         }
     }
 
@@ -368,6 +381,13 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
     protected Model getArmorModelHook(ItemStack itemStack, EquipmentClientInfo.LayerType slot, Model model) {
         Model model2 = IClientItemExtensions.of(itemStack.getItem()).getGenericArmorModel(itemStack, slot, model);
+        //reset the model
+        resetModelPart(model2.getAnyDescendantWithName("right_leg"));
+        resetModelPart(model2.getAnyDescendantWithName("left_leg"));
+        resetModelPart(model2.getAnyDescendantWithName("right_arm"));
+        resetModelPart(model2.getAnyDescendantWithName("left_arm"));
+        resetModelPart(model2.getAnyDescendantWithName("head"));
+        resetModelPart(model2.getAnyDescendantWithName("body"));
 
         return model2;
     }
