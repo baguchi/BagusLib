@@ -54,7 +54,7 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
                     //node = this.tryJumpOn(x, y, z, verticalDeltaLimit, nodeFloorLevel, direction, pathType, blockpos$mutableblockpos);
 
                     //second jump start
-                    for (int height = 0; height < this.getMobJumpHeight(); height++) {
+                    for (int height = 0; height < Mth.floor(this.getMobJumpHeight()); height++) {
                         if (node == null) {
                             node = this.tryJumpOn(x, y + height, z, verticalDeltaLimit, nodeFloorLevel, direction, pathType, blockpos$mutableblockpos);
                         }
