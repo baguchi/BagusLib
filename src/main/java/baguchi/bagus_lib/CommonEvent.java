@@ -1,8 +1,6 @@
 package baguchi.bagus_lib;
 
 import baguchi.bagus_lib.event.RegisterBagusAnimationEvents;
-import baguchi.bagus_lib.util.MiscUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,11 +14,6 @@ public class CommonEvent {
 
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
-        if (event.getEntity().level().isClientSide()) {
-            if (Minecraft.getInstance().player == event.getEntity()) {
-                MiscUtils.updateCosmetic(MiscUtils.BAGUS_COSMETIC_ID, BagusConfigs.CLIENT.enableMiniBagu.get());
-            }
-        }
     }
 
     @SubscribeEvent
