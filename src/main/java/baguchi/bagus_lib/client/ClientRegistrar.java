@@ -1,8 +1,6 @@
 package baguchi.bagus_lib.client;
 
 import baguchi.bagus_lib.BagusLib;
-import baguchi.bagus_lib.client.layer.BagusLayer;
-import baguchi.bagus_lib.client.layer.IArmor;
 import baguchi.bagus_lib.client.overlay.DialogOverlay;
 import baguchi.bagus_lib.client.render.MiniBaguArmorModel;
 import baguchi.bagus_lib.client.render.MiniBaguModel;
@@ -10,8 +8,6 @@ import baguchi.bagus_lib.client.render.MiniBaguRenderer;
 import baguchi.bagus_lib.item.BagusArmorItem;
 import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.register.ModEntities;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -37,13 +33,6 @@ public class ClientRegistrar {
 
     @SubscribeEvent
     public static void registerEntityLayer(EntityRenderersEvent.AddLayers event) {
-        Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach(r -> {
-            if (r instanceof LivingEntityRenderer<?, ?, ?> livingEntityRenderer) {
-                if (livingEntityRenderer.getModel() instanceof IArmor armor) {
-                    ((LivingEntityRenderer) r).addLayer(new BagusLayer(((LivingEntityRenderer) r), event.getEntityModels(), Minecraft.getInstance().getModelManager()));
-                }
-            }
-        });
     }
 
     @SubscribeEvent
