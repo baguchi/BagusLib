@@ -39,7 +39,7 @@ public class LootInLootModifier extends LootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         Optional<Holder.Reference<LootTable>> extraTable = context.getResolver().get(Registries.LOOT_TABLE, ResourceKey.create(Registries.LOOT_TABLE, this.lootTable));
         if (extraTable.isPresent()) {
-            extraTable.get().value().getRandomItems(context, generatedLoot::add);
+            extraTable.get().value().getRandomItemsRaw(context, generatedLoot::add);
         }
         return generatedLoot;
     }
