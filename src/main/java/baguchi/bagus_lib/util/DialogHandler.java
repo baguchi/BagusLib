@@ -115,7 +115,7 @@ public class DialogHandler {
                 return false;
             }
             if (this.ignoreWhiteSpace) {
-                for (l = Math.min(this.subString.length() + k, this.targetString.length()); l < this.targetString.length() && Character.isWhitespace(this.targetString.charAt(l - 1)); ++l) {
+                for (l = Math.min(this.subString.length() + k, this.targetString.length()); l >= 0 && l < this.targetString.length() && Character.isWhitespace(this.targetString.charAt(l - 1)); ++l) {
                 }
             } else {
                 l = Math.min(this.subString.length() + k, this.targetString.length());
