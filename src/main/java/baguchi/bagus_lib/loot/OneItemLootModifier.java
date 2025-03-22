@@ -42,7 +42,7 @@ public class OneItemLootModifier extends LootModifier {
             // the added loot will be modifiable by downstream loot modifiers modifying the target table,
             // so if we modify it here then it could get modified twice.
 
-            extraTable.value().getRandomItems(context, LootTable.createStackSplitter(context.getLevel(), stacks::add));
+            extraTable.value().getRandomItemsRaw(context, LootTable.createStackSplitter(context.getLevel(), stacks::add));
         });
         List<ItemStack> itemStacks = stacks.stream().filter(itemStack -> {
             return !itemStack.isEmpty();

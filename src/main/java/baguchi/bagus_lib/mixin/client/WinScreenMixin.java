@@ -23,6 +23,9 @@ import java.util.List;
 
 @Mixin(WinScreen.class)
 public abstract class WinScreenMixin extends Screen {
+    @Unique
+    public DialogHandler bagusLib$INSTANCE;
+
     @Shadow
     private float scroll;
     @Shadow
@@ -46,13 +49,15 @@ public abstract class WinScreenMixin extends Screen {
         bagusLib$lineIndex = -1;
         bagusLib$talkTimer = 200;
         DialogHandler.INSTANCE.removeAllDialogType();
+        bagusLib$INSTANCE = new DialogHandler();
+
         talkLines = new ArrayList<MutableComponent>();
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     protected void render(GuiGraphics p_281907_, int p_282364_, int p_282696_, float p_281316_, CallbackInfo callbackInfo) {
         if (BagusConfigs.CLIENT.coolerEndPoem.get()) {
-            DialogHandler.INSTANCE.renderDialogue(p_281907_, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks(), bagusLib$ticks);
+            bagusLib$INSTANCE.renderDialogue(p_281907_, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks(), bagusLib$ticks);
             int j = this.height + 50;
             float f = this.scroll;
 
@@ -65,7 +70,7 @@ public abstract class WinScreenMixin extends Screen {
                         WinDialogBuilder<WinDialogType> dialogType = new WinDialogBuilder<>();
                         dialogType.setRenderDialogY(16);
                         dialogType.setDialogueBase(chat.copy());
-                        DialogHandler.INSTANCE.addOrReplaceDialogType("Something", ModDialogs.WIN_DIALOG.get(), dialogType);
+                        bagusLib$INSTANCE.addOrReplaceDialogType("Something", ModDialogs.WIN_DIALOG.get(), dialogType);
                         if (chat.getString().length() <= 0) {
                             bagusLib$talkTimer = 10;
                         } else if (bagusLib$lineIndex == this.talkLines.size() - 2) {
