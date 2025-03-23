@@ -4,7 +4,6 @@ import baguchi.bagus_lib.command.DialogCommand;
 import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.message.*;
 import baguchi.bagus_lib.register.*;
-import baguchi.bagus_lib.util.reward.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -48,7 +47,6 @@ public class BagusLib {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        TierHelper.addSuporterContents();
     }
 
     public void setupPackets(RegisterPayloadHandlersEvent event) {

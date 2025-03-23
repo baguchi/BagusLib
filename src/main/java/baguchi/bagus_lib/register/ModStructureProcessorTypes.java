@@ -2,6 +2,7 @@ package baguchi.bagus_lib.register;
 
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.world.processor.BaseProcessor;
+import baguchi.bagus_lib.world.processor.StairsProcessor;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -13,6 +14,7 @@ public class ModStructureProcessorTypes {
     public static final DeferredRegister<StructureProcessorType<?>> PROCESSOR_TYPE = DeferredRegister.create(BuiltInRegistries.STRUCTURE_PROCESSOR, BagusLib.MODID);
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<BaseProcessor>> BASE = register("base", BaseProcessor.CODEC);
+    public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<StairsProcessor>> STAIRS = register("stairs", StairsProcessor.CODEC);
 
     static <P extends StructureProcessor> DeferredHolder<StructureProcessorType<?>, StructureProcessorType<P>> register(String p_74477_, MapCodec<P> p_74478_) {
         return PROCESSOR_TYPE.register(p_74477_, () -> () -> {
