@@ -54,16 +54,22 @@ public class StairsProcessor extends StructureProcessor {
             if (levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(new ChunkPos(blockInfoGlobal.pos()))) {
                 return blockInfoGlobal;
             }
+            Direction direction = blockInfoGlobal.state().getValue(BlockStateProperties.HORIZONTAL_FACING);
 
-            blockInfoGlobal = new StructureTemplate.StructureBlockInfo(blockInfoGlobal.pos(), this.replaceStairBlock.defaultBlockState(), blockInfoGlobal.nbt());
+            blockInfoGlobal = new StructureTemplate.StructureBlockInfo(blockInfoGlobal.pos(), this.replaceStairBlock.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, direction), blockInfoGlobal.nbt());
             BlockPos.MutableBlockPos mutableStair = blockInfoGlobal.pos().mutable().move(Direction.DOWN);
             BlockPos.MutableBlockPos mutable = blockInfoGlobal.pos().mutable().move(Direction.DOWN);
             BlockState currBlockState = levelReader.getBlockState(mutable);
-            Direction direction = blockInfoGlobal.state().getValue(BlockStateProperties.HORIZONTAL_FACING);
 
             while (mutableStair.getY() > levelReader.getMinY()
                     && mutableStair.getY() < levelReader.getMaxY()
                     && (currBlockState.isAir() || !levelReader.getFluidState(mutableStair).isEmpty())) {
+                mutable = mutableStair.mutable();
+                currBlockState = levelReader.getBlockState(mutableStair);
+                levelReader.getChunk(mutableStair).setBlockState(mutableStair, this.replaceStairBlock.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, direction), false);
+
+                mutableStair.move(direction);
+                mutableStair.move(Direction.DOWN);
 
                 while (mutable.getY() > levelReader.getMinY()
                         && mutable.getY() < levelReader.getMaxY()
@@ -73,11 +79,6 @@ public class StairsProcessor extends StructureProcessor {
                     mutable.move(Direction.DOWN);
                     currBlockState = levelReader.getBlockState(mutable);
                 }
-                mutableStair.move(direction);
-                mutableStair.move(Direction.DOWN);
-                mutable = mutableStair.mutable();
-                currBlockState = levelReader.getBlockState(mutableStair);
-                levelReader.getChunk(mutableStair).setBlockState(mutableStair, this.replaceStairBlock.defaultBlockState(), false);
             }
         }
         return blockInfoGlobal;
