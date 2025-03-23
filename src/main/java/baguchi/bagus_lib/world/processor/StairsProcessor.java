@@ -64,12 +64,12 @@ public class StairsProcessor extends StructureProcessor {
             while (mutableStair.getY() > levelReader.getMinY()
                     && mutableStair.getY() < levelReader.getMaxY()
                     && (currBlockState.isAir() || !levelReader.getFluidState(mutableStair).isEmpty())) {
-                mutable = mutableStair.mutable();
-                currBlockState = levelReader.getBlockState(mutableStair);
                 levelReader.getChunk(mutableStair).setBlockState(mutableStair, this.replaceStairBlock.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, direction), false);
 
                 mutableStair.move(direction);
                 mutableStair.move(Direction.DOWN);
+                mutable = mutableStair.mutable();
+                currBlockState = levelReader.getBlockState(mutableStair);
 
                 while (mutable.getY() > levelReader.getMinY()
                         && mutable.getY() < levelReader.getMaxY()
