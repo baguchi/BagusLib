@@ -25,4 +25,8 @@ public class ItemDialogBuilder<T extends ItemDialogType> extends DialogBuilder<T
             });
         }
     }
+
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
+    }
 }

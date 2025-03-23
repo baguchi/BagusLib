@@ -34,4 +34,16 @@ public class ImageDialogBuilder<T extends ImageDialogType> extends DialogBuilder
             this.sizeY = tag.getInt("sizeY");
         }
     }
+
+    public void setResourceLocation(@Nullable ResourceLocation resourceLocation) {
+        this.resourceLocation = resourceLocation;
+    }
+
+    public void setSizeX(int sizeX) {
+        this.sizeX = sizeX;
+    }
+
+    public void setSizeY(int sizeY) {
+        this.sizeY = sizeY;
+    }
 }
