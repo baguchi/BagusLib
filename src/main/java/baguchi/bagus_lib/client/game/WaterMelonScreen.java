@@ -36,9 +36,5 @@ public class WaterMelonScreen extends Screen {
         }
     }
 
-    @Override
-    public void renderBackground(GuiGraphics p_282239_, int p_294762_, int p_295473_, float p_296441_) {
-        super.render(p_282239_, p_294762_, p_295473_, p_296441_);
-    }
 
 }
