@@ -31,8 +31,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void screenRender(ScreenEvent.Init.Post event) {
-        if (event.getScreen() instanceof TitleScreen titleScreen && isAprilFools()) {
-            int l = titleScreen.height / 4 + 48;
+        if (event.getScreen() instanceof TitleScreen titleScreen) {
+            int l = titleScreen.height / 4 + 28;
             event.addListener(Button.builder(Component.translatable("bagus_lib.watermelon"), p_280785_ -> Minecraft.getInstance().setScreen(new WaterMelonScreen(Component.empty())))
                     .bounds(titleScreen.width / 2 - 100, l - 24, 100, 20)
                     .build());

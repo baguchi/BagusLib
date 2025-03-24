@@ -2,12 +2,13 @@ package baguchi.bagus_lib.client.game;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.CoreShaders;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -15,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.apache.commons.compress.utils.Lists;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -154,8 +154,8 @@ public class WaterMelonCraft {
         tossFruit = nextFruit;
     }
 
-    private void renderFruit(FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
-        renderBlockState(fruit.getFruit().getFruitBlock().defaultBlockState(), fruit.getFruit(), offsetX + (x) * scale, offsetY + (y) * scale, scale);
+    private void renderFruit(PoseStack stack, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
+        renderBlockState(stack, fruit.getFruit().getFruitBlock().defaultBlockState(), fruit.getFruit(), offsetX + (x) * scale, offsetY + (y) * scale, scale);
     }
 
     private static Vector2f transform(Vector2f vector2f, float rotation, Vector2f relativeTo) {
@@ -167,33 +167,31 @@ public class WaterMelonCraft {
 
     }
 
-    private void renderBlockState(BlockState state, Fruit fruit, float offsetX, float offsetY, float size) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon(ModelData.EMPTY);
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+    private void renderBlockState(PoseStack stack, BlockState state, Fruit fruit, float offsetX, float offsetY, float size) {
+        stack.pushPose();
+        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).particleIcon();
+        VertexConsumer vertexConsumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.GUI_TEXTURED.apply(TextureAtlas.LOCATION_BLOCKS));
         float f = size * fruit.getSize();
-        bufferbuilder.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1());
-        bufferbuilder.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1());
-        bufferbuilder.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0());
-        bufferbuilder.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0());
-        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+        vertexConsumer.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1());
+        vertexConsumer.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1());
+        vertexConsumer.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0());
+        vertexConsumer.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0());
+        stack.popPose();
     }
 
     public void render(Screen screen, GuiGraphics gui, float partialTick) {
         float scale = Math.min(screen.width / 15F, screen.height / (float) HEIGHT);
         float offsetX = screen.width / 2F - scale * 5F;
         float offsetY = scale * 0.5F;
-        RenderSystem.setShader(CoreShaders.POSITION_TEX_COLOR);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         if (tossFruit != null) {
-            renderFruit(tossFruit, fallingX, 0, scale, offsetX, offsetY);
+            renderFruit(gui.pose(), tossFruit, fallingX, 0, scale, offsetX, offsetY);
         }
         if (nextFruit != null) {
-            renderFruit(nextFruit, 0, 0, scale, screen.width * 0.85F, screen.height * 0.4F);
+            renderFruit(gui.pose(), nextFruit, 0, 0, scale, screen.width * 0.85F, screen.height * 0.4F);
         }
         for (FruitObject fruitObject : this.fruitObjects) {
-            renderFruit(fruitObject, fruitObject.getPos().x, fruitObject.getPos().y, scale, offsetX, offsetY);
+            renderFruit(gui.pose(), fruitObject, fruitObject.getPos().x, fruitObject.getPos().y, scale, offsetX, offsetY);
         }
 
         float hue = 1f;

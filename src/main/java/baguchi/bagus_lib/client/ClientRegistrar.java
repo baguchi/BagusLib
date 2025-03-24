@@ -5,8 +5,6 @@ import baguchi.bagus_lib.client.overlay.DialogOverlay;
 import baguchi.bagus_lib.client.render.MiniBaguArmorModel;
 import baguchi.bagus_lib.client.render.MiniBaguModel;
 import baguchi.bagus_lib.client.render.MiniBaguRenderer;
-import baguchi.bagus_lib.item.BagusArmorItem;
-import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.register.ModEntities;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -37,7 +35,7 @@ public class ClientRegistrar {
 
     @SubscribeEvent
     public static void registerClientExtend(RegisterClientExtensionsEvent event) {
-        event.registerItem(new BagusArmorItem.ArmorRender(), ModItems.BAGU.get());
+        //event.registerItem(new BagusArmorItem.ArmorRender(), ModItems.BAGU.get());
     }
 
     @SubscribeEvent

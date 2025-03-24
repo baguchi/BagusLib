@@ -53,7 +53,6 @@ public class BagusLib {
         PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
         registrar.playBidirectional(CameraMessage.TYPE, CameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(EntityCameraMessage.TYPE, EntityCameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(PlayerDataSyncMessage.TYPE, PlayerDataSyncMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));

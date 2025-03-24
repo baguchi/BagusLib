@@ -25,13 +25,13 @@ public class ImageDialogBuilder<T extends ImageDialogType> extends DialogBuilder
     public void readTag(CompoundTag tag) {
         super.readTag(tag);
         if (tag.contains("ImagePath")) {
-            this.resourceLocation = ResourceLocation.tryParse(tag.getString("ImagePath"));
+            this.resourceLocation = ResourceLocation.tryParse(tag.getString("ImagePath").orElseThrow());
         }
         if (tag.contains("sizeX")) {
-            this.sizeX = tag.getInt("sizeX");
+            this.sizeX = tag.getInt("sizeX").orElseThrow();
         }
         if (tag.contains("sizeY")) {
-            this.sizeY = tag.getInt("sizeY");
+            this.sizeY = tag.getInt("sizeY").orElseThrow();
         }
     }
 

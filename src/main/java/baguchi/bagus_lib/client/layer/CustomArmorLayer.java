@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
-import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -61,7 +59,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         this.renderer = render;
         this.armorTrimAtlas = context.getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET);
         this.equipmentModelSet = context.getEquipmentAssets();
-        this.trimSpriteLookup = Util.memoize(p_386234_ -> context.getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET).getSprite(p_386234_.textureId()));
+        this.trimSpriteLookup = Util.memoize(p_386234_ -> context.getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET).getSprite(p_386234_.spriteId()));
 
     }
 
@@ -395,15 +393,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     @OnlyIn(Dist.CLIENT)
     record TrimSpriteKey(ArmorTrim trim, EquipmentClientInfo.LayerType layerType,
                          ResourceKey<EquipmentAsset> equipmentAssetId) {
-        private static String getColorPaletteSuffix(Holder<TrimMaterial> p_387117_, ResourceKey<EquipmentAsset> p_386860_) {
-            String s = p_387117_.value().overrideArmorAssets().get(p_386860_);
-            return s != null ? s : p_387117_.value().assetName();
-        }
-
-        public ResourceLocation textureId() {
-            ResourceLocation resourcelocation = this.trim.pattern().value().assetId();
-            String s = getColorPaletteSuffix(this.trim.material(), this.equipmentAssetId);
-            return resourcelocation.withPath(p_387008_ -> "trims/entity/" + this.layerType.getSerializedName() + "/" + p_387008_ + "_" + s);
+        public ResourceLocation spriteId() {
+            return this.trim.layerAssetId(this.layerType.trimAssetPrefix(), this.equipmentAssetId);
         }
     }
 }

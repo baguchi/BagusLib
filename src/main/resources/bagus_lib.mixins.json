@@ -6,7 +6,6 @@
   "refmap": "bagus_lib.refmap.json",
   "mixins": [
     "EntityMixin",
-    "LivingEntityMixin",
     "RavagerMixin",
     "WardenMixin"
   ],

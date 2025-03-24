@@ -95,32 +95,32 @@ public class DialogType {
 
     protected void readTag(CompoundTag tag) {
         if (tag.contains("message")) {
-            this.dialogueBase = Component.literal(tag.getString("message"));
+            this.dialogueBase = Component.literal(tag.getString("message").orElseThrow());
         }
         if (tag.contains("scaleX")) {
-            this.scaleX = tag.getFloat("scaleX");
+            this.scaleX = tag.getFloat("scaleX").orElseThrow();
         }
         if (tag.contains("scaleY")) {
-            this.scaleY = tag.getFloat("scaleY");
+            this.scaleY = tag.getFloat("scaleY").orElseThrow();
         }
         if (tag.contains("posX")) {
-            this.posX = tag.getInt("posX");
+            this.posX = tag.getInt("posX").orElseThrow();
         }
         if (tag.contains("posY")) {
-            this.posY = tag.getInt("posY");
+            this.posY = tag.getInt("posY").orElseThrow();
         }
         if (tag.contains("dialogY")) {
-            this.renderDialogY = tag.getInt("dialogY");
+            this.renderDialogY = tag.getInt("dialogY").orElseThrow();
         }
         if (tag.contains("dialogRenderTime")) {
-            this.dialogRenderTime = tag.getInt("dialogRenderTime");
+            this.dialogRenderTime = tag.getInt("dialogRenderTime").orElseThrow();
         }
         if (tag.contains("dialogPerTick")) {
-            this.dialogPerTick = tag.getInt("dialogPerTick");
+            this.dialogPerTick = tag.getInt("dialogPerTick").orElseThrow();
         }
         if (tag.contains("SoundEvent")) {
             Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
-                    .get(ResourceLocation.tryParse(tag.getString("SoundEvent")));
+                    .get(ResourceLocation.tryParse(tag.getString("SoundEvent").orElseThrow()));
             soundEventHolder.ifPresent(soundEventReference -> this.soundEvent = soundEventReference);
         }
     }

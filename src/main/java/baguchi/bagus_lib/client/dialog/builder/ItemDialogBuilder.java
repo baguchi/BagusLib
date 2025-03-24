@@ -20,7 +20,7 @@ public class ItemDialogBuilder<T extends ItemDialogType> extends DialogBuilder<T
     public void readTag(CompoundTag tag) {
         super.readTag(tag);
         if (tag.contains("Item")) {
-            BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(tag.getString("Item"))).ifPresent(itemReference -> {
+            BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(tag.getString("Item").orElseThrow())).ifPresent(itemReference -> {
                 this.itemStack = itemReference.value().getDefaultInstance();
             });
         }
