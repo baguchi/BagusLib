@@ -172,10 +172,10 @@ public class WaterMelonCraft {
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).particleIcon();
         VertexConsumer vertexConsumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.GUI_TEXTURED.apply(TextureAtlas.LOCATION_BLOCKS));
         float f = size * fruit.getSize();
-        vertexConsumer.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1());
-        vertexConsumer.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1());
-        vertexConsumer.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0());
-        vertexConsumer.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0());
+        vertexConsumer.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        vertexConsumer.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        vertexConsumer.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        vertexConsumer.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
         stack.popPose();
     }
 
