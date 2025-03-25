@@ -103,14 +103,6 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    maven {
-        name 'Maven for PR #2039' // https://github.com/neoforged/NeoForge/pull/2039
-        url 'https://prmaven.neoforged.net/NeoForge/pr2039'
-        content {
-            includeModule('net.neoforged', 'neoforge')
-            includeModule('net.neoforged', 'testframework')
-        }
-    }
 }
 
 dependencies {
