@@ -23,13 +23,14 @@ public class CollideUtil {
         Vec3 motion = position.subtract(getPrevPositionVec(collideEntity));
         List<Entity> entitiesWithinAABB = world.getEntitiesOfClass(Entity.class, bounds.inflate(2));
         for (Entity entity : entitiesWithinAABB) {
-            if (entity != collideEntity && !collideEntity.isPassenger()) {
+            if (entity != collideEntity && !collideEntity.isPassenger() && !entity.canBeCollidedWith()) {
                 Vec3 entityPosition = entity.position();
-                Vec3 entityMotion = entity.getDeltaMovement();
+                Vec3 entityMotion2 = entity.getDeltaMovement();
                 Vec3 vec3 = entity.collide(motion);
-                if (bounds.intersects(entity.getBoundingBox().expandTowards(0, -entity.getGravity(), 0))) {
+                if (bounds.expandTowards(0, motion.y * 1.15F - 0.01F, 0).intersects(entity.getBoundingBox())) {
                     entity.setPos(entityPosition.x + vec3.x, entityPosition.y + vec3.y,
                             entityPosition.z + vec3.z);
+                    entity.setOnGround(true);
                 }
             }
         }

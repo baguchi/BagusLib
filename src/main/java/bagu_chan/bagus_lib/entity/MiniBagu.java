@@ -75,4 +75,9 @@ public class MiniBagu extends PathfinderMob {
     public boolean canBeCollidedWith() {
         return true;
     }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 }
