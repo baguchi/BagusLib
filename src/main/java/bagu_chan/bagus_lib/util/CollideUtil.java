@@ -27,7 +27,7 @@ public class CollideUtil {
                 Vec3 entityPosition = entity.position();
                 Vec3 entityMotion2 = entity.getDeltaMovement();
                 Vec3 vec3 = entity.collide(motion);
-                if (bounds.expandTowards(0, motion.y * 1.15F - 0.01F, 0).intersects(entity.getBoundingBox())) {
+                if (bounds.expandTowards(0, 0.01F, 0).expandTowards(0, motion.y * 1.15F, 0).intersects(entity.getBoundingBox().expandTowards(0, -0.01F, 0))) {
                     entity.setPos(entityPosition.x + vec3.x, entityPosition.y + vec3.y,
                             entityPosition.z + vec3.z);
                     entity.setOnGround(true);
