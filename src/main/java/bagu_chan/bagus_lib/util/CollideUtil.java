@@ -23,7 +23,7 @@ public class CollideUtil {
         Vec3 motion = position.subtract(getPrevPositionVec(collideEntity));
         List<Entity> entitiesWithinAABB = world.getEntitiesOfClass(Entity.class, bounds.inflate(2));
         for (Entity entity : entitiesWithinAABB) {
-            if (entity != collideEntity) {
+            if (entity != collideEntity && !collideEntity.isPassenger()) {
                 Vec3 entityPosition = entity.position();
                 Vec3 entityMotion = entity.getDeltaMovement();
                 Vec3 vec3 = entity.collide(motion);
