@@ -1,6 +1,7 @@
 package bagu_chan.bagus_lib.client.render.book;
 
-import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
+
+import bagu_chan.bagus_lib.client.render.book.component.BookComponentDefinition;
 
 import java.util.List;
 
