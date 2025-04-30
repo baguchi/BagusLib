@@ -1,7 +1,6 @@
 package baguchi.bagus_lib.util;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
-import baguchi.bagus_lib.client.dialog.builder.DialogBuilder;
 import baguchi.bagus_lib.message.DialogMessage;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -27,33 +26,29 @@ public class DialogHandler {
         Minecraft minecraft = Minecraft.getInstance();
         float g = tickCount + f;
         PoseStack poseStack = guiGraphics.pose();
+        int y = 14;
         for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
             DialogType dialogType = dialogue.getValue();
 
             poseStack.pushPose();
-            dialogType.render(guiGraphics, poseStack, f, tickCount);
+            dialogType.render(guiGraphics, poseStack, f, tickCount, y);
             poseStack.popPose();
             poseStack.pushPose();
-            dialogType.renderText(guiGraphics, poseStack, f, tickCount);
+            dialogType.renderText(guiGraphics, poseStack, f, tickCount, y);
             poseStack.popPose();
+            y += 20;
         }
 
         if (minecraft.level != null) {
             for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
                 DialogType dialogType = dialogue.getValue();
                 if (dialogType.getDialogRenderTime() > 0) {
-                    if (dialogType.getDialogRenderTime() < minecraft.level.getGameTime()) {
+                    if (dialogType.getLastDialogRenderTime() < minecraft.level.getGameTime()) {
                         dialogTypes.remove(dialogue.getKey());
                     }
                 }
             }
         }
-    }
-
-    @OnlyIn(value = Dist.CLIENT)
-    public void addOrReplaceDialogType(String name, DialogType dialogType, DialogBuilder builder) {
-        dialogTypes.remove(name);
-        dialogTypes.put(name, dialogType.getClone(builder.writeTag()));
     }
 
     @OnlyIn(value = Dist.CLIENT)
@@ -73,8 +68,8 @@ public class DialogHandler {
         dialogTypes.clear();
     }
 
-    public static void addOrReplaceDialogTypeOnServer(ServerPlayer player, String name, DialogType dialogType, DialogBuilder builder) {
-        PacketDistributor.sendToPlayer(player, new DialogMessage(name, dialogType, builder.writeTag()));
+    public static void addOrReplaceDialogTypeOnServer(ServerPlayer player, String name, DialogType dialogType) {
+        PacketDistributor.sendToPlayer(player, new DialogMessage(name, dialogType));
     }
 
 

@@ -1,5 +1,6 @@
 package baguchi.bagus_lib;
 
+import baguchi.bagus_lib.client.dialog.DialogType;
 import baguchi.bagus_lib.command.DialogCommand;
 import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.message.*;
@@ -14,6 +15,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,13 +36,21 @@ public class BagusLib {
         ModStructureProcessorTypes.PROCESSOR_TYPE.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
-        ModDialogs.DIALOG.register(modEventBus);
+        ModDialogs.DIALOG_TYPE.register(modEventBus);
+        DialogRegister.DIALOG.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupPackets);
+        modEventBus.addListener(this::dataSetup);
+
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
         modContainer.registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
+
+    private void dataSetup(final DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(DialogRegister.REGISTRY_KEY, DialogType.DIRECT_CODEC, DialogType.DIRECT_CODEC);
+    }
+
 
     public static ResourceLocation prefix(String name) {
         return ResourceLocation.fromNamespaceAndPath(MODID, name.toLowerCase(Locale.ROOT));
