@@ -1,63 +1,78 @@
 package bagu_chan.bagus_lib.client.dialog;
 
+import bagu_chan.bagus_lib.register.ModDialogs;
 import bagu_chan.bagus_lib.util.DialogHandler;
 import bagu_chan.bagus_lib.util.client.SoundUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DialogType {
-    @Nullable
-    protected DialogHandler.DrawString dialogue;
-    @Nullable
-    protected MutableComponent dialogueBase;
-    @Nullable
-    protected Holder<SoundEvent> soundEvent;
+    public static final MapCodec<DialogType> CODEC = RecordCodecBuilder.mapCodec(
+            p_345644_ -> p_345644_.group(Codec.STRING.fieldOf("dialog").forGetter(DialogType::getDialogueBase),
+                            DialogOption.CODEC.fieldOf("dialog_option").orElse(new DialogOption(1, 1, true, Optional.empty())).forGetter(DialogType::getDialogueOption),
+                            Codec.LONG.fieldOf("dialog_render_time").forGetter(DialogType::getDialogRenderTime),
+                            Codec.DOUBLE.fieldOf("draw_per_tick").forGetter(DialogType::getDialogPerTick))
+                    .apply(p_345644_, DialogType::new)
+    );
 
-    protected float scaleX = 1;
-    protected float scaleY = 1;
-    protected int posX = 1;
-    protected int posY = 1;
-    protected int renderDialogY = 16;
-    protected long dialogRenderTime = -1;
-    protected double dialogPerTick = 2;
+    public static final Codec<DialogType> DIRECT_CODEC = ModDialogs.getRegistry()
+            .byNameCodec()
+            .dispatch(DialogType::codec, Function.identity());
+    @Nullable
+    protected DialogHandler.DrawString drawingString;
+    protected final String dialogueBase;
+    protected final DialogOption dialogueOption;
 
+    protected final long dialogRenderTime;
+    protected long lastDialogRenderTime;
+    protected final double dialogPerTick;
 
-    @OnlyIn(Dist.CLIENT)
-    public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
+    public DialogType(String dialogueBase, DialogOption dialogueOption, long dialogRenderTime, double dialogPerTick) {
+        this.dialogueBase = dialogueBase;
+        this.dialogueOption = dialogueOption;
+        this.dialogRenderTime = dialogRenderTime;
+        this.dialogPerTick = dialogPerTick;
+    }
+
+    public MapCodec<? extends DialogType> codec() {
+        return CODEC;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount) {
+    public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
 
         Font font = Minecraft.getInstance().font;
         float g = tickCount + f;
-        if (this.dialogue == null && this.dialogueBase != null) {
-            MutableComponent component = dialogueBase;
-            this.dialogue = beginString(guiGraphics, g, this.dialogPerTick, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
+        if (this.drawingString == null && this.dialogueBase != null) {
+            MutableComponent component = this.dialogueOption.translate() ? Component.translatable(dialogueBase) : Component.literal(dialogueBase);
+            this.drawingString = beginString(guiGraphics, g, this.dialogPerTick, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
         }
 
 
-        if (this.dialogue != null && this.dialogue.draw(g, 72, renderDialogY)) {
-            if (this.soundEvent != null) {
-                SoundUtils.playClientSound(this.soundEvent);
+        if (this.drawingString != null && this.drawingString.draw(g, 72, y)) {
+            if (this.dialogueOption.soundEvent().isPresent()) {
+                SoundUtils.playClientSound(this.dialogueOption.soundEvent().get());
             }
         }
     }
@@ -75,63 +90,29 @@ public class DialogType {
         });
     }
 
-    protected CompoundTag writeTag() {
-        CompoundTag tag = new CompoundTag();
-        if (this.dialogueBase != null) {
-            tag.putString("message", this.dialogueBase.getString());
-        }
-        tag.putFloat("scaleX", this.scaleX);
-        tag.putFloat("scaleY", this.scaleY);
-        tag.putInt("posX", this.posX);
-        tag.putInt("posY", this.posY);
-        tag.putInt("dialogY", this.renderDialogY);
-        tag.putLong("dialogRenderTime", this.dialogRenderTime);
-        tag.putDouble("dialogPerTick", this.dialogPerTick);
-        if (this.soundEvent != null) {
-            tag.putString("SoundEvent", BuiltInRegistries.SOUND_EVENT.getKey(this.soundEvent.value()).toString());
-        }
-        return tag;
+    @Nullable
+    public String getDialogueBase() {
+        return dialogueBase;
     }
 
-    protected void readTag(CompoundTag tag) {
-        if (tag.contains("message")) {
-            this.dialogueBase = Component.literal(tag.getString("message"));
-        }
-        if (tag.contains("scaleX")) {
-            this.scaleX = tag.getFloat("scaleX");
-        }
-        if (tag.contains("scaleY")) {
-            this.scaleY = tag.getFloat("scaleY");
-        }
-        if (tag.contains("posX")) {
-            this.posX = tag.getInt("posX");
-        }
-        if (tag.contains("posY")) {
-            this.posY = tag.getInt("posY");
-        }
-        if (tag.contains("dialogY")) {
-            this.renderDialogY = tag.getInt("dialogY");
-        }
-        if (tag.contains("dialogRenderTime")) {
-            this.dialogRenderTime = tag.getInt("dialogRenderTime");
-        }
-        if (tag.contains("dialogPerTick")) {
-            this.dialogPerTick = tag.getInt("dialogPerTick");
-        }
-        if (tag.contains("SoundEvent")) {
-            Optional<Holder.Reference<SoundEvent>> soundEventHolder = BuiltInRegistries.SOUND_EVENT
-                    .getHolder(ResourceLocation.tryParse(tag.getString("SoundEvent")));
-            soundEventHolder.ifPresent(soundEventReference -> this.soundEvent = soundEventReference);
-        }
-    }
-
-    public DialogType getClone(CompoundTag compoundTag) {
-        DialogType dialogType = new DialogType();
-        dialogType.readTag(compoundTag);
-        return dialogType;
+    public DialogOption getDialogueOption() {
+        return dialogueOption;
     }
 
     public long getDialogRenderTime() {
         return dialogRenderTime;
+    }
+
+
+    public double getDialogPerTick() {
+        return dialogPerTick;
+    }
+
+    public void setLastDialogRenderTime(long lastDialogRenderTime) {
+        this.lastDialogRenderTime = lastDialogRenderTime;
+    }
+
+    public long getLastDialogRenderTime() {
+        return lastDialogRenderTime;
     }
 }
