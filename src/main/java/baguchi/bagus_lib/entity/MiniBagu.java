@@ -1,7 +1,5 @@
 package baguchi.bagus_lib.entity;
 
-import baguchi.bagus_lib.CommonEvent;
-import baguchi.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -43,7 +41,7 @@ public class MiniBagu extends PathfinderMob {
 
     @Override
     public boolean doHurtTarget(ServerLevel p_376642_, Entity p_21372_) {
-        AnimationUtil.sendAnimation(this, CommonEvent.TEST);
+        //AnimationUtil.sendAnimation(this, CommonEvent.TEST);
         return super.doHurtTarget(p_376642_, p_21372_);
     }
 
