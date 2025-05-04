@@ -45,10 +45,10 @@ public class BaguAnimationController<T extends Entity> {
     }
 
     public boolean hasPlayingAnimation() {
-        Optional<Boolean> playtest = this.animationStateMap.entrySet().stream().map(resourceLocationAnimationStateEntry -> {
-            return resourceLocationAnimationStateEntry.getValue().isStarted();
+        Optional<AnimationState> playtest = this.animationStateMap.values().stream().filter(animationStateEntry -> {
+            return animationStateEntry.isStarted();
         }).findAny();
-        return playtest.isPresent() && playtest.get();
+        return playtest.isPresent();
     }
 
     public AnimationState getAnimationState(ResourceLocation index) {
