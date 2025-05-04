@@ -1,5 +1,6 @@
 package baguchi.bagus_lib.animation;
 
+import baguchi.bagus_lib.BagusConfigs;
 import baguchi.bagus_lib.BagusLib;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
@@ -55,6 +56,9 @@ public class BaguAnimationController<T extends Entity> {
     }
 
     public boolean hasPlayingAnimation() {
+        if (!BagusConfigs.COMMON.playableFirstPerson.get()) {
+            return false;
+        }
         Optional<Map.Entry<ResourceLocation, AnimationState>> playtest = this.animationStateMap.entrySet().stream().filter(animationStateEntry -> {
             return animationStateEntry.getValue().isStarted() && this.animationStateFirstPersonList.contains(animationStateEntry.getKey());
         }).findAny();
