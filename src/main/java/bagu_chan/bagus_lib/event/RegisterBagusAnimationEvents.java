@@ -5,13 +5,14 @@ import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.Event;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RegisterBagusAnimationEvents extends Event {
     private final Map<ResourceLocation, AnimationState> animationStateMap = new HashMap<>();
     private Map<ResourceLocation, AnimationState> animationStateUnModifiableMap = Collections.unmodifiableMap(animationStateMap);
+    private final List<ResourceLocation> animationStateFirstPersonPlayableList = new ArrayList<>();
+    private List<ResourceLocation> animationStateFirstPersonPlayableUnModifiableList = Collections.unmodifiableList(animationStateFirstPersonPlayableList);
+
     private final Entity entity;
 
     public RegisterBagusAnimationEvents(Entity entity) {
@@ -23,8 +24,19 @@ public class RegisterBagusAnimationEvents extends Event {
         this.animationStateUnModifiableMap = Collections.unmodifiableMap(animationStateMap);
     }
 
+    public void addFirstPersonPlayableAnimationState(ResourceLocation name) {
+        this.animationStateMap.put(name, new AnimationState());
+        this.animationStateUnModifiableMap = Collections.unmodifiableMap(animationStateMap);
+        this.animationStateFirstPersonPlayableList.add(name);
+        this.animationStateFirstPersonPlayableUnModifiableList = Collections.unmodifiableList(animationStateFirstPersonPlayableList);
+    }
+
     public Map<ResourceLocation, AnimationState> getAnimationStateMap() {
         return animationStateUnModifiableMap;
+    }
+
+    public List<ResourceLocation> getAnimationStateFirstPersonPlayableList() {
+        return animationStateFirstPersonPlayableUnModifiableList;
     }
 
     public Entity getEntity() {
@@ -32,3 +44,4 @@ public class RegisterBagusAnimationEvents extends Event {
     }
 
 }
+

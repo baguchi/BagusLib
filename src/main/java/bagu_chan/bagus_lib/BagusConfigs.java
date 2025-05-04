@@ -21,6 +21,8 @@ public class BagusConfigs {
     public static class Common {
         public final ModConfigSpec.BooleanValue enableCameraShakeForVanillaMobs;
         public final ModConfigSpec.BooleanValue aprilFool;
+        public final ModConfigSpec.BooleanValue playableFirstPerson;
+
         public Common(ModConfigSpec.Builder builder) {
             enableCameraShakeForVanillaMobs = builder
                     .comment("Enable the camera shake for vanilla mobs. [true / false]")
