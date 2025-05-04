@@ -32,6 +32,10 @@ public class BagusConfigs {
                     .comment("Enable April Feature. [true / false]")
                     .translation(BagusLib.MODID + ".config.aprilFeature")
                     .define("Enable AprilFool Joke", true);
+            playableFirstPerson = builder
+                    .comment("Enable First Person Animation(When you using model change mod. should be turn off). [true / false]")
+                    .translation(BagusLib.MODID + ".config.playableFirstPerson")
+                    .define("Enable First Person Animation", true);
 
         }
     }

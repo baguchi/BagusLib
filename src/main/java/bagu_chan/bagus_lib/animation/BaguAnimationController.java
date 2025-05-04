@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.animation;
 
+import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.BagusLib;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
