@@ -21,6 +21,7 @@ public class BagusConfigs {
     public static class Common {
         public final ModConfigSpec.BooleanValue enableCameraShakeForVanillaMobs;
         public final ModConfigSpec.BooleanValue aprilFool;
+        public final ModConfigSpec.BooleanValue playableFirstPerson;
         public Common(ModConfigSpec.Builder builder) {
             enableCameraShakeForVanillaMobs = builder
                     .comment("Enable the camera shake for vanilla mobs. [true / false]")
@@ -30,6 +31,10 @@ public class BagusConfigs {
                     .comment("Enable April Feature. [true / false]")
                     .translation(BagusLib.MODID + ".config.aprilFeature")
                     .define("Enable AprilFool Joke", true);
+            playableFirstPerson = builder
+                    .comment("Enable First Person Animation(When you using model change mod. should be turn off). [true / false]")
+                    .translation(BagusLib.MODID + ".config.playableFirstPerson")
+                    .define("Enable First Person Animation", true);
 
         }
     }

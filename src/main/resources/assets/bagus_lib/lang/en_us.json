@@ -2,6 +2,7 @@
   "bagus_lib.config.shakeCameraForVanilla": "Enable Shake Camera For Vanilla",
   "bagus_lib.config.aprilFeature": "Enable April Feature",
   "bagus_lib.config.betterEndPoem": "Better End Poem",
+  "bagus_lib.config.playableFirstPerson": "Playable First Person",
   "bagus_lib.watermelon": "Water Melon",
   "command.bagus_lib.remove_all_dialog": "Successfully Removed All Dialog",
   "command.bagus_lib.item_dialog": "Successfully add Item Dialog",
