@@ -25,6 +25,10 @@ public class EntityMixin implements IBaguAnimate {
         for (ResourceLocation resourceLocations : events.getAnimationStateMap().keySet()) {
             BAGU_ANIMATION_CONTROLLER.addAnimation(resourceLocations);
         }
+
+        for (ResourceLocation resourceLocations : events.getAnimationStateFirstPersonPlayableList()) {
+            BAGU_ANIMATION_CONTROLLER.addFirstPersonAnimation(resourceLocations);
+        }
     }
 
     @Override
