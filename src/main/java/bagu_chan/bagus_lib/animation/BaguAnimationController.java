@@ -7,6 +7,7 @@ import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Map;
+import java.util.Optional;
 
 //this animation controller make handle animation on Event
 public class BaguAnimationController<T extends Entity> {
@@ -48,5 +49,12 @@ public class BaguAnimationController<T extends Entity> {
             return animationStateMap.get(index);
         }
         return new AnimationState();
+    }
+
+    public boolean hasPlayingAnimation() {
+        Optional<AnimationState> playtest = this.animationStateMap.values().stream().filter(animationStateEntry -> {
+            return animationStateEntry.isStarted();
+        }).findAny();
+        return playtest.isPresent();
     }
 }

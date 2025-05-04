@@ -30,18 +30,4 @@ public class CommonEvent {
             events.addAnimationState(PAT);
         }
     }
-
-    /*@SubscribeEvent
-    public static void onStartUse(LivingEntityUseItemEvent.Start event) {
-        if(!event.getEntity().level().isClientSide) {
-            AnimationUtil.sendAnimation(event.getEntity(), PAT);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onStopUse(LivingEntityUseItemEvent.Stop event) {
-        if (!event.getEntity().level().isClientSide) {
-            AnimationUtil.sendStopAnimation(event.getEntity(), PAT);
-        }
-    }*/
 }
