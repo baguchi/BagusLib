@@ -37,7 +37,6 @@ public class BagusLib {
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
         ModDialogs.DIALOG_TYPE.register(modEventBus);
-        DialogRegister.DIALOG.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupPackets);
         modEventBus.addListener(this::dataSetup);

@@ -1,7 +1,8 @@
 package baguchi.bagus_lib.mixin.client;
 
 import baguchi.bagus_lib.BagusConfigs;
-import baguchi.bagus_lib.client.dialog.DialogOption;
+import baguchi.bagus_lib.client.dialog.DialogEffectOption;
+import baguchi.bagus_lib.client.dialog.NextDialogOption;
 import baguchi.bagus_lib.client.dialog.WinDialogType;
 import baguchi.bagus_lib.util.DialogHandler;
 import net.minecraft.client.Minecraft;
@@ -66,7 +67,7 @@ public abstract class WinScreenMixin extends Screen {
                     bagusLib$lineIndex++;
                     if (bagusLib$lineIndex >= 0 && bagusLib$lineIndex < this.talkLines.size()) {
                         String chat = this.talkLines.get(bagusLib$lineIndex);
-                        WinDialogType dialogType = new WinDialogType(chat, new DialogOption(1, 1, false, Optional.empty()), 300, 3);
+                        WinDialogType dialogType = new WinDialogType(chat, new DialogEffectOption(1, 1, false, Optional.empty()), new NextDialogOption(Optional.empty(), 300), 3);
                         bagusLib$INSTANCE.addOrReplaceDialogType("Something", dialogType);
                         if (chat.length() <= 0) {
                             bagusLib$talkTimer = 10;

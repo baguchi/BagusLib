@@ -18,8 +18,8 @@ import java.util.Optional;
 public class ImageDialogType extends DialogType {
     public static final MapCodec<ImageDialogType> CODEC = RecordCodecBuilder.mapCodec(
             p_345644_ -> p_345644_.group(Codec.STRING.fieldOf("dialog").forGetter(ImageDialogType::getDialogueBase),
-                            DialogOption.CODEC.fieldOf("dialog_option").orElse(new DialogOption(1, 1, true, Optional.empty())).forGetter(ImageDialogType::getDialogueOption),
-                            Codec.LONG.fieldOf("dialog_render_time").forGetter(ImageDialogType::getDialogRenderTime),
+                            DialogEffectOption.CODEC.fieldOf("dialog_option").orElse(new DialogEffectOption(1, 1, true, Optional.empty())).forGetter(ImageDialogType::getDialogueOption),
+                            NextDialogOption.CODEC.fieldOf("next_dialog").orElse(new NextDialogOption(Optional.empty(), -1)).forGetter(DialogType::getNextDialogOption),
                             Codec.DOUBLE.fieldOf("draw_per_tick").forGetter(ImageDialogType::getDialogPerTick),
                             ResourceLocation.CODEC.optionalFieldOf("image").forGetter(ImageDialogType::getImage),
                             Codec.INT.fieldOf("texture_size_x").forGetter(ImageDialogType::getTextureSizeX),
@@ -31,8 +31,8 @@ public class ImageDialogType extends DialogType {
     private final int textureSizeX;
     private final int textureSizeY;
 
-    public ImageDialogType(String dialogueBase, DialogOption dialogueOption, long dialogRenderTime, double dialogPerTick, Optional<ResourceLocation> image, int textureSizeX, int textureSizeY) {
-        super(dialogueBase, dialogueOption, dialogRenderTime, dialogPerTick);
+    public ImageDialogType(String dialogueBase, DialogEffectOption dialogueOption, NextDialogOption nextDialogOption, double dialogPerTick, Optional<ResourceLocation> image, int textureSizeX, int textureSizeY) {
+        super(dialogueBase, dialogueOption, nextDialogOption, dialogPerTick);
         this.image = image;
         this.textureSizeX = textureSizeX;
         this.textureSizeY = textureSizeY;

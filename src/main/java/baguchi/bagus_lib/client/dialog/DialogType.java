@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 public class DialogType {
     public static final MapCodec<DialogType> CODEC = RecordCodecBuilder.mapCodec(
             p_345644_ -> p_345644_.group(Codec.STRING.fieldOf("dialog").forGetter(DialogType::getDialogueBase),
-                            DialogOption.CODEC.fieldOf("dialog_option").orElse(new DialogOption(1, 1, true, Optional.empty())).forGetter(DialogType::getDialogueOption),
-                            Codec.LONG.fieldOf("dialog_render_time").forGetter(DialogType::getDialogRenderTime),
+                            DialogEffectOption.CODEC.fieldOf("dialog_option").orElse(new DialogEffectOption(1, 1, true, Optional.empty())).forGetter(DialogType::getDialogueOption),
+                            NextDialogOption.CODEC.fieldOf("next_dialog").orElse(new NextDialogOption(Optional.empty(), -1)).forGetter(DialogType::getNextDialogOption),
                             Codec.DOUBLE.fieldOf("draw_per_tick").forGetter(DialogType::getDialogPerTick))
                     .apply(p_345644_, DialogType::new)
     );
@@ -38,16 +38,16 @@ public class DialogType {
     @Nullable
     protected DialogHandler.DrawString drawingString;
     protected final String dialogueBase;
-    protected final DialogOption dialogueOption;
+    protected final DialogEffectOption dialogueOption;
 
-    protected final long dialogRenderTime;
+    protected final NextDialogOption nextDialogOption;
     protected long lastDialogRenderTime;
     protected final double dialogPerTick;
 
-    public DialogType(String dialogueBase, DialogOption dialogueOption, long dialogRenderTime, double dialogPerTick) {
+    public DialogType(String dialogueBase, DialogEffectOption dialogueOption, NextDialogOption nextDialogOption, double dialogPerTick) {
         this.dialogueBase = dialogueBase;
         this.dialogueOption = dialogueOption;
-        this.dialogRenderTime = dialogRenderTime;
+        this.nextDialogOption = nextDialogOption;
         this.dialogPerTick = dialogPerTick;
     }
 
@@ -66,6 +66,10 @@ public class DialogType {
         float g = tickCount + f;
         if (this.drawingString == null && this.dialogueBase != null) {
             MutableComponent component = this.dialogueOption.translate() ? Component.translatable(dialogueBase) : Component.literal(dialogueBase);
+
+            if (Minecraft.getInstance().player != null) {
+                component = this.dialogueOption.translate() ? Component.translatable(dialogueBase, Minecraft.getInstance().player.getName()) : Component.literal(dialogueBase);
+            }
             this.drawingString = beginString(guiGraphics, g, this.dialogPerTick, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
         }
 
@@ -95,16 +99,15 @@ public class DialogType {
         return dialogueBase;
     }
 
-    public DialogOption getDialogueOption() {
+    public DialogEffectOption getDialogueOption() {
         return dialogueOption;
     }
 
-    public long getDialogRenderTime() {
-        return dialogRenderTime;
+    public NextDialogOption getNextDialogOption() {
+        return nextDialogOption;
     }
 
-
-    public double getDialogPerTick() {
+    protected double getDialogPerTick() {
         return dialogPerTick;
     }
 

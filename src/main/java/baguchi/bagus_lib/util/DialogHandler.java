@@ -2,6 +2,7 @@ package baguchi.bagus_lib.util;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
 import baguchi.bagus_lib.message.DialogMessage;
+import baguchi.bagus_lib.register.DialogRegister;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Map;
+import java.util.Optional;
 
 //direct port from Minecraft 24w14potato
 public class DialogHandler {
@@ -42,9 +44,17 @@ public class DialogHandler {
         if (minecraft.level != null) {
             for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
                 DialogType dialogType = dialogue.getValue();
-                if (dialogType.getDialogRenderTime() > 0) {
+                if (dialogType.getNextDialogOption().dialogRenderTime() > 0) {
                     if (dialogType.getLastDialogRenderTime() < minecraft.level.getGameTime()) {
-                        dialogTypes.remove(dialogue.getKey());
+                        if (dialogType.getNextDialogOption().nextDialogLocation().isPresent()) {
+                            Optional<DialogType> optional = minecraft.level.registryAccess().lookupOrThrow(DialogRegister.REGISTRY_KEY).getOptional(dialogType.getNextDialogOption().nextDialogLocation().get());
+                            optional.ifPresent(type -> {
+                                type.setLastDialogRenderTime(minecraft.level.getGameTime() + type.getNextDialogOption().dialogRenderTime());
+                                dialogTypes.put(dialogue.getKey(), type);
+                            });
+                        } else {
+                            dialogTypes.remove(dialogue.getKey());
+                        }
                     }
                 }
             }

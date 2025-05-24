@@ -48,6 +48,11 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
+        clientAuth {
+            client()
+            devLogin = true
+        }
+
         server {
             server()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id

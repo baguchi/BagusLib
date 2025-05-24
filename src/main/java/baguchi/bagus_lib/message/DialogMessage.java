@@ -55,7 +55,7 @@ public class DialogMessage<T extends DialogType> implements CustomPacketPayload,
         context.enqueueWork(() -> {
             DialogType dialogType = message.type;
             if (Minecraft.getInstance().level != null) {
-                dialogType.setLastDialogRenderTime(dialogType.getDialogRenderTime() + Minecraft.getInstance().level.getGameTime());
+                dialogType.setLastDialogRenderTime(dialogType.getNextDialogOption().dialogRenderTime() + Minecraft.getInstance().level.getGameTime());
             }
             DialogHandler.INSTANCE.addOrReplaceDialogType(this.name, dialogType);
         });

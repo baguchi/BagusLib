@@ -30,4 +30,5 @@ public class CommonEvent {
     @SubscribeEvent
     public static void onStopUse(LivingEntityUseItemEvent.Stop event) {
     }
+
 }

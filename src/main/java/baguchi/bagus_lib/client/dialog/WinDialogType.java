@@ -16,14 +16,14 @@ public class WinDialogType extends DialogType {
 
     public static final MapCodec<WinDialogType> CODEC = RecordCodecBuilder.mapCodec(
             p_345644_ -> p_345644_.group(Codec.STRING.fieldOf("dialog").forGetter(WinDialogType::getDialogueBase),
-                            DialogOption.CODEC.fieldOf("dialog_option").orElse(new DialogOption(1, 1, true, Optional.empty())).forGetter(WinDialogType::getDialogueOption),
-                            Codec.LONG.fieldOf("dialog_render_time").forGetter(WinDialogType::getDialogRenderTime),
+                            DialogEffectOption.CODEC.fieldOf("dialog_option").orElse(new DialogEffectOption(1, 1, true, Optional.empty())).forGetter(WinDialogType::getDialogueOption),
+                            NextDialogOption.CODEC.fieldOf("next_dialog").orElse(new NextDialogOption(Optional.empty(), -1)).forGetter(DialogType::getNextDialogOption),
                             Codec.DOUBLE.fieldOf("draw_per_tick").forGetter(WinDialogType::getDialogPerTick))
                     .apply(p_345644_, WinDialogType::new)
     );
 
-    public WinDialogType(String dialogueBase, DialogOption dialogueOption, long dialogRenderTime, double dialogPerTick) {
-        super(dialogueBase, dialogueOption, dialogRenderTime, dialogPerTick);
+    public WinDialogType(String dialogueBase, DialogEffectOption dialogueOption, NextDialogOption nextDialogOption, double dialogPerTick) {
+        super(dialogueBase, dialogueOption, nextDialogOption, dialogPerTick);
     }
 
 

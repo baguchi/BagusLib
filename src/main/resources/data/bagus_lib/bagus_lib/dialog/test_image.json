@@ -5,7 +5,9 @@
     "scaleX": 0.1,
     "scaleY": 0.1
   },
-  "dialog_render_time": 80,
+  "next_dialog": {
+    "render_time": 80
+  },
   "draw_per_tick": 2,
   "texture_size_x": 531,
   "texture_size_y": 531,

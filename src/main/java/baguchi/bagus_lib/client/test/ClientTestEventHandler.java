@@ -17,4 +17,15 @@ public class ClientTestEventHandler {
 
         event.animate(event.getBaguAnimationController().getAnimationState(CommonEvent.PAT), TestAnimations.test, event.getEntityRenderState().ageInTicks);
     }
+
+
+    /*@SubscribeEvent
+    public static void renderTick(ClientTickEvent.Post event) {
+
+        if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.tickCount == 40) {
+            DialogType type = Minecraft.getInstance().level.registryAccess().lookupOrThrow(DialogRegister.REGISTRY_KEY).getValue(ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "test"));
+            type.setLastDialogRenderTime(type.getNextDialogOption().dialogRenderTime() + Minecraft.getInstance().level.getGameTime());
+            DialogHandler.INSTANCE.addOrReplaceDialogType("Something", type);
+        }
+    }*/
 }
