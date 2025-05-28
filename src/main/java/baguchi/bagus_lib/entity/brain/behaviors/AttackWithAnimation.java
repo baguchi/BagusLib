@@ -17,10 +17,10 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     protected final int actionPoint;
     protected final int attackLength;
 
-    private final int cooldownBetweenAttacks;
+    protected final int cooldownBetweenAttacks;
 
-    private int attackTicks;
-    private final float speed;
+    protected int attackTicks;
+    protected final float speed;
 
     public AttackWithAnimation(int actionPoint, int attackLength, int cooldownBetweenAttacks, float speed) {
         super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
