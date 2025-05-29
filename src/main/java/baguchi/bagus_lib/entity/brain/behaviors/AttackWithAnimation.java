@@ -23,7 +23,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
     protected final float speed;
 
     public AttackWithAnimation(int actionPoint, int attackLength, int cooldownBetweenAttacks, float speed) {
-        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED));
+        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryStatus.VALUE_ABSENT));
         this.actionPoint = actionPoint;
         this.attackLength = attackLength;
         this.cooldownBetweenAttacks = cooldownBetweenAttacks;
