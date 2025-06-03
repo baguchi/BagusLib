@@ -55,14 +55,20 @@ public class BagusAnimationUtil {
     }
 
     public static void sendAnimation(Entity entity, ResourceLocation resourceLocation) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsMessage(entity.getId(), resourceLocation));
+        if (!entity.level().isClientSide) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsMessage(entity.getId(), resourceLocation));
+        }
     }
 
     public static void sendStopAnimation(Entity entity, ResourceLocation resourceLocation) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopMessage(entity.getId(), resourceLocation));
+        if (!entity.level().isClientSide) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopMessage(entity.getId(), resourceLocation));
+        }
     }
 
     public static void sendStopAllAnimation(Entity entity) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopAllMessage(entity.getId()));
+        if (!entity.level().isClientSide) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopAllMessage(entity.getId()));
+        }
     }
 }
