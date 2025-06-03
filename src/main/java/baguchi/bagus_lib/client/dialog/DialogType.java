@@ -70,7 +70,7 @@ public class DialogType {
             if (Minecraft.getInstance().player != null) {
                 component = this.dialogueOption.translate() ? Component.translatable(dialogueBase, Minecraft.getInstance().player.getName()) : Component.literal(dialogueBase);
             }
-            this.drawingString = beginString(guiGraphics, g, this.dialogPerTick, font, component.getString(), 0xFFFFFF, guiGraphics.guiWidth() - 72);
+            this.drawingString = beginString(guiGraphics, g, this.dialogPerTick, font, component.getString(), -1, guiGraphics.guiWidth() - 72);
         }
 
 
