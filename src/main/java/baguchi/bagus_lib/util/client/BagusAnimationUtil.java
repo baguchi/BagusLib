@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * of course. you need register id on bagu_chan.bagus_lib.event.RegisterBagusAnimationEvents.class
  * @author bagu_chan
  */
-public class AnimationUtil {
+public class BagusAnimationUtil {
     @OnlyIn(Dist.CLIENT)
     public static void handleAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {

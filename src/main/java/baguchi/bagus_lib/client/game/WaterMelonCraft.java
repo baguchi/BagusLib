@@ -1,28 +1,6 @@
 package baguchi.bagus_lib.client.game;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.compress.utils.Lists;
-import org.joml.Quaternionf;
-import org.joml.Vector2f;
-
-import java.util.List;
-import java.util.Set;
-
+/*
 public class WaterMelonCraft {
     static WaterMelonCraft instance;
 
@@ -154,7 +132,7 @@ public class WaterMelonCraft {
         tossFruit = nextFruit;
     }
 
-    private void renderFruit(PoseStack stack, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
+    private void renderFruit(Matrix3x2fStack stack, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
         renderBlockState(stack, fruit.getFruit().getFruitBlock().defaultBlockState(), fruit.getFruit(), offsetX + (x) * scale, offsetY + (y) * scale, scale);
     }
 
@@ -167,16 +145,16 @@ public class WaterMelonCraft {
 
     }
 
-    private void renderBlockState(PoseStack stack, BlockState state, Fruit fruit, float offsetX, float offsetY, float size) {
-        stack.pushPose();
+    private void renderBlockState(Matrix3x2fStack stack, BlockState state, Fruit fruit, float offsetX, float offsetY, float size) {
+        stack.pushMatrix();
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).particleIcon();
-        VertexConsumer vertexConsumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.GUI_TEXTURED.apply(TextureAtlas.LOCATION_BLOCKS));
+        VertexConsumer vertexConsumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderPipelines.GUI_TEXTURED::.apply(TextureAtlas.LOCATION_BLOCKS));
         float f = size * fruit.getSize();
         vertexConsumer.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
         vertexConsumer.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
         vertexConsumer.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
         vertexConsumer.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        stack.popPose();
+        stack.popMatrix();
     }
 
     public void render(Screen screen, GuiGraphics gui, float partialTick) {
@@ -196,28 +174,28 @@ public class WaterMelonCraft {
 
         float hue = 1f;
         int color = 0xFFFFFF;
-        gui.pose().pushPose();
-        gui.pose().scale(2, 2, 2);
+        gui.pose().pushMatrix();
+        gui.pose().scale(2, 2, new Matrix3x2f());
         gui.drawCenteredString(Minecraft.getInstance().font, "Score", (int) (screen.width * 0.065F), (int) (screen.height * 0.175F), color);
         gui.drawCenteredString(Minecraft.getInstance().font, "" + score, (int) (screen.width * 0.065F), (int) (screen.height * 0.175F) + 10, color);
-        gui.pose().popPose();
+        gui.pose().popMatrix();
         gui.drawString(Minecraft.getInstance().font, "[LEFT ARROW] move left", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F), color);
         gui.drawString(Minecraft.getInstance().font, "[RIGHT ARROW] move right", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 10, color);
         gui.drawString(Minecraft.getInstance().font, "[DOWN ARROW] drop fruit", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 30, color);
         gui.drawString(Minecraft.getInstance().font, "[W] start over", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 50, color);
         if (gameOver) {
-            gui.pose().pushPose();
-            gui.pose().translate((int) (screen.width * 0.5F), (int) (screen.height * 0.5F), 150);
-            gui.pose().scale(3, 3, 3);
+            gui.pose().pushMatrix();
+            gui.pose().translate((int) (screen.width * 0.5F), (int) (screen.height * 0.5F), new Matrix3x2f());
+            gui.pose().scale(3, 3, new Matrix3x2f());
             gui.drawCenteredString(Minecraft.getInstance().font, "GAME OVER", 0, 0, color);
-            gui.pose().popPose();
+            gui.pose().popMatrix();
         }
         if (finishTime > 0) {
-            gui.pose().pushPose();
-            gui.pose().translate((int) (screen.width * 0.5F), (int) (screen.height * 0.5F), 150);
-            gui.pose().scale(2, 2, 2);
+            gui.pose().pushMatrix();
+            gui.pose().translate((int) (screen.width * 0.5F), (int) (screen.height * 0.5F), new Matrix3x2f());
+            gui.pose().scale(2, 2, new Matrix3x2f());
             gui.drawCenteredString(Minecraft.getInstance().font, "" + this.finishTime / 20, 0, 0, color);
-            gui.pose().popPose();
+            gui.pose().popMatrix();
         }
 
     }
@@ -231,3 +209,4 @@ public class WaterMelonCraft {
         generateNextFruit();
     }
 }
+ */

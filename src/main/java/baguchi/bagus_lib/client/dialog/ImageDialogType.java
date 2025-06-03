@@ -1,12 +1,12 @@
 package baguchi.bagus_lib.client.dialog;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix3x2fStack;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -40,13 +40,13 @@ public class ImageDialogType extends DialogType {
 
 
     @Override
-    public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
+    public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
         if (this.image.isPresent()) {
-            poseStack.pushPose();
-            poseStack.translate(0, y, 0);
-            poseStack.scale(this.dialogueOption.scaleX(), this.dialogueOption.scaleY(), 1.0f);
-            guiGraphics.blitSprite(RenderType::guiTextured, image.get(), 0, 0, this.textureSizeX, this.textureSizeY);
-            poseStack.popPose();
+            poseStack.pushMatrix();
+            poseStack.translate(0, y);
+            poseStack.scale(this.dialogueOption.scaleX(), this.dialogueOption.scaleY());
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, image.get(), 0, 0, this.textureSizeX, this.textureSizeY);
+            poseStack.popMatrix();
         }
     }
 

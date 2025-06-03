@@ -3,7 +3,6 @@ package baguchi.bagus_lib.client.dialog;
 import baguchi.bagus_lib.register.ModDialogs;
 import baguchi.bagus_lib.util.DialogHandler;
 import baguchi.bagus_lib.util.client.SoundUtils;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -16,6 +15,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.joml.Matrix3x2fStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,11 +56,11 @@ public class DialogType {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
+    public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
+    public void renderText(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
 
         Font font = Minecraft.getInstance().font;
         float g = tickCount + f;

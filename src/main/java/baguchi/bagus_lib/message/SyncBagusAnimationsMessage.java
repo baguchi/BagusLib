@@ -1,7 +1,7 @@
 package baguchi.bagus_lib.message;
 
 import baguchi.bagus_lib.BagusLib;
-import baguchi.bagus_lib.util.client.AnimationUtil;
+import baguchi.bagus_lib.util.client.BagusAnimationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -44,7 +44,7 @@ public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayload
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            AnimationUtil.handleAnimationPacket(entity, message.resourceLocation);
+            BagusAnimationUtil.handleAnimationPacket(entity, message.resourceLocation);
         });
     }
 
