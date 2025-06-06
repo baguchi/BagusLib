@@ -57,7 +57,7 @@ public abstract class WinScreenMixin extends Screen {
     @Inject(method = "render", at = @At("HEAD"))
     protected void render(GuiGraphics p_281907_, int p_282364_, int p_282696_, float p_281316_, CallbackInfo callbackInfo) {
         if (BagusConfigs.CLIENT.coolerEndPoem.get()) {
-            bagusLib$INSTANCE.renderDialogue(p_281907_, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), bagusLib$ticks);
+            bagusLib$INSTANCE.renderDialogue(p_281907_, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true), bagusLib$ticks);
             int j = this.height + 50;
             float f = this.scroll;
 

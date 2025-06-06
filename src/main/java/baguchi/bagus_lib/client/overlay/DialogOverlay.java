@@ -12,7 +12,7 @@ public class DialogOverlay implements GuiLayer {
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         if (!(Minecraft.getInstance().screen instanceof WinScreen)) {
-            DialogHandler.INSTANCE.renderDialogue(guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false), Minecraft.getInstance().gui.getGuiTicks());
+            DialogHandler.INSTANCE.renderDialogue(guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(true), Minecraft.getInstance().gui.getGuiTicks());
         }
     }
 }
