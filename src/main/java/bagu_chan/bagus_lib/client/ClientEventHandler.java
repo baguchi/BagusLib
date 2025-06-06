@@ -29,6 +29,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.PlayerModelPart;
@@ -231,7 +232,9 @@ public class ClientEventHandler {
             PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayer);
             EntityModel entityModel = playerrenderer.getModel();
             if (abstractClientPlayer instanceof IBaguAnimate baguAnimate) {
-                BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(abstractClientPlayer, entityModel, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
+                TickRateManager tickratemanager = Minecraft.getInstance().level.tickRateManager();
+
+                BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(abstractClientPlayer, entityModel, Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
                 NeoForge.EVENT_BUS.post(event2);
             }
         }
