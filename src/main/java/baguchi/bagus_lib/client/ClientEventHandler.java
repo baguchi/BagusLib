@@ -27,6 +27,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -214,8 +215,9 @@ public class ClientEventHandler {
             PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayer);
             EntityModel entityModel = playerrenderer.getModel();
             if (abstractClientPlayer instanceof IBaguAnimate baguAnimate) {
-                PlayerRenderState playerRenderState = playerrenderer.createRenderState(abstractClientPlayer, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
-                playerrenderer.extractRenderState(abstractClientPlayer, playerRenderState, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+                TickRateManager tickratemanager = Minecraft.getInstance().level.tickRateManager();
+                PlayerRenderState playerRenderState = playerrenderer.createRenderState(abstractClientPlayer, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
+                playerrenderer.extractRenderState(abstractClientPlayer, playerRenderState, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
                 BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(playerRenderState, entityModel);
                 NeoForge.EVENT_BUS.post(event2);
             }
