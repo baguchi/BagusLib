@@ -8,10 +8,5 @@
   "command.bagus_lib.item_dialog": "アイテムダイアログを生成しました",
   "command.bagus_lib.dialog": "ダイアログを生成しました",
   "command.bagus_lib.image_dialog": "画像付きダイアログを生成しました",
-  "item.bagus_lib.bagu": "ばぐち",
-  "bagus_lib.dialog_1": "...",
-  "bagus_lib.dialog_2": "..... %s.",
-  "bagus_lib.dialog_3": "アナタハ、ヒトリデハナイ.",
-  "bagus_lib.dialog_4": "ナニゴトモ、オソレナイデ・・・",
-  "bagus_lib.dialog_5": "・・・ソロソロ、メヲアケルバンデス"
+  "item.bagus_lib.bagu": "ばぐち"
 }

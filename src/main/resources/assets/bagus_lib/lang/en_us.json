@@ -8,10 +8,5 @@
   "command.bagus_lib.item_dialog": "Successfully add Item Dialog",
   "command.bagus_lib.dialog": "Successfully add Dialog",
   "command.bagus_lib.image_dialog": "Successfully add Image Dialog",
-  "item.bagus_lib.bagu": "Bagu",
-  "bagus_lib.dialog_1": "...",
-  "bagus_lib.dialog_2": "..... %s.",
-  "bagus_lib.dialog_3": "Your not alone.",
-  "bagus_lib.dialog_4": "Don't afraid...",
-  "bagus_lib.dialog_5": "now Open the eye..."
+  "item.bagus_lib.bagu": "Bagu"
 }
