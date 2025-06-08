@@ -1,6 +1,6 @@
 package bagu_chan.bagus_lib.util.data;
 
-import baguchi.bagus_lib.util.client.AnimationUtil;
+import bagu_chan.bagus_lib.util.client.AnimationUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
