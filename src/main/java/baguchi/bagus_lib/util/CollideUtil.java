@@ -10,7 +10,7 @@ import java.util.List;
 public class CollideUtil {
 
     public static Vec3 getPrevPositionVec(Entity collideEntity) {
-        return new Vec3(collideEntity.xo, collideEntity.yo, collideEntity.zo);
+        return new Vec3(collideEntity.xOld, collideEntity.yOld, collideEntity.zOld);
     }
 
     public static void collideEntities(Entity collideEntity) {
