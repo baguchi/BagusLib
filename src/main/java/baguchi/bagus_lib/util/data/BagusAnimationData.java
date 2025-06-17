@@ -1,6 +1,8 @@
 package baguchi.bagus_lib.util.data;
 
+
 import baguchi.bagus_lib.util.client.BagusAnimationUtil;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
@@ -30,7 +32,7 @@ public class BagusAnimationData {
 
     public void start(Entity entity) {
         if (!entity.level().isClientSide()) {
-            BagusAnimationUtil.sendAnimation(entity, this.animation);
+           BagusAnimationUtil.sendAnimation(entity, this.animation);
 
             this.animationTick = 0;
             this.started = true;
@@ -39,7 +41,8 @@ public class BagusAnimationData {
 
     public void stop(Entity entity) {
         if (!entity.level().isClientSide()) {
-            BagusAnimationUtil.sendStopAnimation(entity, this.animation);
+          BagusAnimationUtil.sendStopAnimation(entity, this.animation);
+
 
             this.animationTick = 0;
             this.started = false;
