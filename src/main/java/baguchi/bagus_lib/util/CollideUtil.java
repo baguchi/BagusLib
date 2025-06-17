@@ -10,7 +10,7 @@ import java.util.List;
 public class CollideUtil {
 
     public static Vec3 getPrevPositionVec(Entity collideEntity) {
-        return new Vec3(collideEntity.xo, collideEntity.yo, collideEntity.zo);
+        return new Vec3(collideEntity.xOld, collideEntity.yOld, collideEntity.zOld);
     }
 
     public static void collideEntities(Entity collideEntity) {
@@ -23,7 +23,7 @@ public class CollideUtil {
         Vec3 motion = position.subtract(getPrevPositionVec(collideEntity));
         List<Entity> entitiesWithinAABB = world.getEntitiesOfClass(Entity.class, bounds.inflate(2));
         for (Entity entity : entitiesWithinAABB) {
-            if (entity != collideEntity && !collideEntity.isPassenger() && !entity.canBeCollidedWith()) {
+            if (entity != collideEntity && !collideEntity.isPassenger() && !entity.canBeCollidedWith(collideEntity)) {
                 Vec3 entityPosition = entity.position();
                 Vec3 entityMotion2 = entity.getDeltaMovement();
                 Vec3 vec3 = entity.collide(motion);

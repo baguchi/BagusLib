@@ -1,11 +1,11 @@
 package baguchi.bagus_lib.client.dialog;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3x2fStack;
 
 import java.util.Optional;
 
@@ -26,13 +26,13 @@ public class ItemDialogType extends DialogType {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
+    public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
         if (this.itemStack != null) {
-            poseStack.pushPose();
-            poseStack.translate(0, y, 0);
-            poseStack.scale(this.dialogueOption.scaleX(), this.dialogueOption.scaleY(), 1.0f);
+            poseStack.pushMatrix();
+            poseStack.translate(0, y);
+            poseStack.scale(this.dialogueOption.scaleX(), this.dialogueOption.scaleY());
             guiGraphics.renderItem(itemStack, 0, 0);
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
     }
 

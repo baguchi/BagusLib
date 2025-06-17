@@ -1,13 +1,6 @@
 package baguchi.bagus_lib.client.game;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.sounds.SoundEvents;
-import org.joml.Vector2f;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-
+/*
 public class FruitObject {
     private Vector2f pos = new Vector2f();
     private Vector2f motion = new Vector2f();
@@ -134,4 +127,4 @@ public class FruitObject {
         }
         return 0;
     }
-}
+}*/

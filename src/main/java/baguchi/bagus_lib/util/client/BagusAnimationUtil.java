@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * of course. you need register id on bagu_chan.bagus_lib.event.RegisterBagusAnimationEvents.class
  * @author bagu_chan
  */
-public class AnimationUtil {
+public class BagusAnimationUtil {
     @OnlyIn(Dist.CLIENT)
     public static void handleAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
@@ -55,14 +55,20 @@ public class AnimationUtil {
     }
 
     public static void sendAnimation(Entity entity, ResourceLocation resourceLocation) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsMessage(entity.getId(), resourceLocation));
+        if (!entity.level().isClientSide) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsMessage(entity.getId(), resourceLocation));
+        }
     }
 
     public static void sendStopAnimation(Entity entity, ResourceLocation resourceLocation) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopMessage(entity.getId(), resourceLocation));
+        if (!entity.level().isClientSide) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopMessage(entity.getId(), resourceLocation));
+        }
     }
 
     public static void sendStopAllAnimation(Entity entity) {
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopAllMessage(entity.getId()));
+        if (!entity.level().isClientSide) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopAllMessage(entity.getId()));
+        }
     }
 }

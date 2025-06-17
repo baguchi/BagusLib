@@ -4,7 +4,6 @@ import baguchi.bagus_lib.client.dialog.DialogType;
 import baguchi.bagus_lib.message.DialogMessage;
 import baguchi.bagus_lib.register.DialogRegister;
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.joml.Matrix3x2fStack;
 
 import java.util.Map;
 import java.util.Optional;
@@ -27,17 +27,17 @@ public class DialogHandler {
     public void renderDialogue(GuiGraphics guiGraphics, float f, float tickCount) {
         Minecraft minecraft = Minecraft.getInstance();
         float g = tickCount + f;
-        PoseStack poseStack = guiGraphics.pose();
+        Matrix3x2fStack poseStack = guiGraphics.pose();
         int y = 14;
         for (Map.Entry<String, DialogType> dialogue : dialogTypes.entrySet()) {
             DialogType dialogType = dialogue.getValue();
 
-            poseStack.pushPose();
+            poseStack.pushMatrix();
             dialogType.render(guiGraphics, poseStack, f, tickCount, y);
-            poseStack.popPose();
-            poseStack.pushPose();
+            poseStack.popMatrix();
+            poseStack.pushMatrix();
             dialogType.renderText(guiGraphics, poseStack, f, tickCount, y);
-            poseStack.popPose();
+            poseStack.popMatrix();
             y += 20;
         }
 

@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -73,7 +73,7 @@ public class DisplayBookComponent extends BookComponent {
     @Override
     public void render(BookAccess access, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
         for (ImageDisplay display : imageDisplays) {
-            graphics.blit(RenderType::guiTextured, display.location(), x + display.x(), y + display.y(), 0, 0, display.width(), display.height(), display.width(), display.height());
+            graphics.blit(RenderPipelines.GUI_TEXTURED, display.location(), x + display.x(), y + display.y(), 0, 0, display.width(), display.height(), display.width(), display.height());
         }
         for (EntityDisplay display : entityDisplays) {
             if (!entities.containsKey(display) && Minecraft.getInstance().level != null) {
@@ -88,7 +88,7 @@ public class DisplayBookComponent extends BookComponent {
                 }
             }
             if (entities.containsKey(display)) {
-                InventoryScreen.renderEntityInInventory(graphics, x + display.x(), y + display.y(), display.scale(), new Vector3f(), display.rotation, null, entities.get(display));
+                InventoryScreen.renderEntityInInventory(graphics, x + display.x(), y + display.y(), x + display.xMax, y + display.yMax, display.scale(), new Vector3f(), display.rotation, null, entities.get(display));
             }
         }
         for (ItemDisplay display : itemDisplays) {
@@ -101,11 +101,11 @@ public class DisplayBookComponent extends BookComponent {
             }
         }
         for (TextDisplay display : textDisplays) {
-            graphics.pose().pushPose();
-            graphics.pose().translate(x + display.x(), y + display.y(), 0);
-            graphics.pose().scale(display.scale(), display.scale(), display.scale());
+            graphics.pose().pushMatrix();
+            graphics.pose().translate(x + display.x(), y + display.y());
+            graphics.pose().scale(display.scale(), display.scale());
             graphics.drawString(font, display.text(), -font.width(display.text()) / 2, -font.lineHeight, -16777216, false);
-            graphics.pose().popPose();
+            graphics.pose().popMatrix();
         }
     }
 
@@ -125,8 +125,8 @@ public class DisplayBookComponent extends BookComponent {
         return this;
     }
 
-    public DisplayBookComponent entityDisplay(EntityType<? extends LivingEntity> type, int x, int y, float xRot, float yRot, float scale, Quaternionf rotation) {
-        entityDisplays.add(new EntityDisplay(type, x, y, xRot, yRot, scale, rotation));
+    public DisplayBookComponent entityDisplay(EntityType<? extends LivingEntity> type, int x, int y, int xMax, int yMax, float xRot, float yRot, float scale, Quaternionf rotation) {
+        entityDisplays.add(new EntityDisplay(type, x, y, xMax, yMax, xRot, yRot, scale, rotation));
         return this;
     }
 
@@ -149,7 +149,8 @@ public class DisplayBookComponent extends BookComponent {
 
     }
 
-    private record EntityDisplay(EntityType<? extends LivingEntity> type, int x, int y, float xRot, float yRot,
+    private record EntityDisplay(EntityType<? extends LivingEntity> type, int x, int y, int xMax, int yMax, float xRot,
+                                 float yRot,
                                  float scale, Quaternionf rotation) {
 
     }

@@ -20,15 +20,18 @@ public class CommonEvent {
     public static void entityAnimationRegister(RegisterBagusAnimationEvents events) {
         if (events.getEntity() instanceof Player) {
             events.addAnimationState(PAT);
+            events.addFirstPersonPlayableAnimationState(PAT);
         }
     }
 
     @SubscribeEvent
     public static void onStartUse(LivingEntityUseItemEvent.Start event) {
+        //BagusAnimationUtil.sendAnimation(event.getEntity(), PAT);
     }
 
     @SubscribeEvent
     public static void onStopUse(LivingEntityUseItemEvent.Stop event) {
+        //BagusAnimationUtil.sendStopAnimation(event.getEntity(), PAT);
     }
 
 }

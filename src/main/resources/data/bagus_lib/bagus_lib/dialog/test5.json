@@ -1,8 +1,0 @@
-{
-  "type": "bagus_lib:dialog",
-  "dialog": "bagus_lib.dialog_5",
-  "next_dialog": {
-    "render_time": 120
-  },
-  "draw_per_tick": 3
-}

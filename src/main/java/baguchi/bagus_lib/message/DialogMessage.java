@@ -33,7 +33,7 @@ public class DialogMessage<T extends DialogType> implements CustomPacketPayload,
     public DialogMessage(String name, ResourceLocation resourceLocation, FriendlyByteBuf type) {
         this.name = name;
         dataLocation = resourceLocation;
-        this.type = type.readJsonWithCodec(ModDialogs.getRegistry().get(dataLocation).get().value().codec());
+        this.type = type.readLenientJsonWithCodec(ModDialogs.getRegistry().get(dataLocation).get().value().codec());
     }
 
     public DialogMessage(FriendlyByteBuf buf) {

@@ -4,10 +4,10 @@ import baguchi.bagus_lib.util.DialogHandler;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.gui.screens.WinScreen;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 
-public class DialogOverlay implements LayeredDraw.Layer {
+public class DialogOverlay implements GuiLayer {
 
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
