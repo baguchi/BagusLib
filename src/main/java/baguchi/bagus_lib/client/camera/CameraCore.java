@@ -17,7 +17,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT)
 public class CameraCore {
     public static List<CameraHolder> cameraHolderList = Lists.newArrayList();
 

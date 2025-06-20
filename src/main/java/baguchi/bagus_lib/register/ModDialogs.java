@@ -18,7 +18,7 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 
 import static net.minecraft.resources.ResourceKey.createRegistryKey;
 
-@EventBusSubscriber(modid = BagusLib.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = BagusLib.MODID)
 public class ModDialogs {
     public static final ResourceKey<Registry<MapCodec<? extends DialogType>>> DIALOG_REGISTRY = createRegistryKey(ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "dialog_type"));
 
