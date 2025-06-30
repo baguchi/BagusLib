@@ -11,6 +11,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -38,6 +39,7 @@ public class BagusLib {
         ModSensors.SENSOR_TYPES.register(modEventBus);
         ModDialogs.DIALOG_TYPE.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::setupClientPackets);
         modEventBus.addListener(this::setupPackets);
         modEventBus.addListener(this::dataSetup);
 
@@ -60,14 +62,25 @@ public class BagusLib {
 
     public void setupPackets(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
-        registrar.playBidirectional(CameraMessage.TYPE, CameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(EntityCameraMessage.TYPE, EntityCameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(SyncBagusAnimationsMessage.TYPE, SyncBagusAnimationsMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(SyncBagusAnimationsStopMessage.TYPE, SyncBagusAnimationsStopMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(SyncBagusAnimationsStopAllMessage.TYPE, SyncBagusAnimationsStopAllMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(CameraMessage.TYPE, CameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(EntityCameraMessage.TYPE, EntityCameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToServer(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(SyncBagusAnimationsMessage.TYPE, SyncBagusAnimationsMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(SyncBagusAnimationsStopMessage.TYPE, SyncBagusAnimationsStopMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(SyncBagusAnimationsStopAllMessage.TYPE, SyncBagusAnimationsStopAllMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+    }
+
+    public void setupClientPackets(RegisterClientPayloadHandlersEvent event) {
+        /*event.register(CameraMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+        event.register(EntityCameraMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+        event.register(DialogMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+        event.register(RemoveAllDialogMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+        event.register(SyncBagusAnimationsMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+        event.register(SyncBagusAnimationsStopMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+        event.register(SyncBagusAnimationsStopAllMessage.TYPE, (handler, payload) -> handler.handle(handler, payload));
+    */
     }
 
     private void registerCommands(RegisterCommandsEvent evt) {

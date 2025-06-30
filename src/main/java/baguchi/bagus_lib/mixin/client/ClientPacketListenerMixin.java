@@ -5,7 +5,7 @@ import baguchi.bagus_lib.message.SyncEntityPacketToServer;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,7 @@ public abstract class ClientPacketListenerMixin {
     private void syncEntity(
             ClientboundAddEntityPacket p_104958_, CallbackInfo ci, Entity entity) {
         if (entity instanceof IBaguPacket && entity.level().isClientSide()) {
-            PacketDistributor.sendToServer(new SyncEntityPacketToServer(entity.getUUID()));
+            ClientPacketDistributor.sendToServer(new SyncEntityPacketToServer(entity.getUUID()));
         }
     }
 }
