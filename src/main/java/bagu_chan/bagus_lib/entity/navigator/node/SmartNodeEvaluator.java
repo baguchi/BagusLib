@@ -1,13 +1,14 @@
 package bagu_chan.bagus_lib.entity.navigator.node;
 
+
 import bagu_chan.bagus_lib.entity.ISmartJump;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -27,14 +28,14 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
      * this method include jump check with support any height. when 1 block height is failed check 2 block height
      */
     @Nullable
-    protected Node findAcceptedNode(int x, int y, int z, int verticalDeltaLimit, double nodeFloorLevel, Direction direction, BlockPathTypes pathType) {
+    protected Node findAcceptedNode(int x, int y, int z, int verticalDeltaLimit, double nodeFloorLevel, Direction direction, PathType pathType) {
         Node node = null;
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         double d0 = this.getFloorLevel(blockpos$mutableblockpos.set(x, y, z));
         if (d0 - nodeFloorLevel > this.getMobJumpHeight()) {
             return null;
         } else {
-            BlockPathTypes pathtype = this.getCachedBlockType(this.mob, x, y, z);
+            PathType pathtype = this.getCachedPathType(x, y, z);
             float f = this.mob.getPathfindingMalus(pathtype);
             if (f >= 0.0F) {
                 node = this.getNodeAndUpdateCostToMax(x, y, z, pathtype, f);
@@ -44,13 +45,13 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
                 node = null;
             }
 
-            if (pathtype != BlockPathTypes.WALKABLE && (!this.isAmphibious() || pathtype != BlockPathTypes.WATER)) {
+            if (pathtype != PathType.WALKABLE && (!this.isAmphibious() || pathtype != PathType.WATER)) {
                 if ((node == null || node.costMalus < 0.0F)
                         && verticalDeltaLimit > 0
-                        && (pathtype != BlockPathTypes.FENCE || this.canWalkOverFences())
-                        && pathtype != BlockPathTypes.UNPASSABLE_RAIL
-                        && pathtype != BlockPathTypes.TRAPDOOR
-                        && pathtype != BlockPathTypes.POWDER_SNOW) {
+                        && (pathtype != PathType.FENCE || this.canWalkOverFences())
+                        && pathtype != PathType.UNPASSABLE_RAIL
+                        && pathtype != PathType.TRAPDOOR
+                        && pathtype != PathType.POWDER_SNOW) {
                     //node = this.tryJumpOn(x, y, z, verticalDeltaLimit, nodeFloorLevel, direction, pathType, blockpos$mutableblockpos);
 
                     //second jump start
@@ -59,9 +60,9 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
                             node = this.tryJumpOn(x, y + height, z, verticalDeltaLimit, nodeFloorLevel, direction, pathType, blockpos$mutableblockpos);
                         }
                     }
-                } else if (!this.isAmphibious() && pathtype == BlockPathTypes.WATER && !this.canFloat()) {
+                } else if (!this.isAmphibious() && pathtype == PathType.WATER && !this.canFloat()) {
                     node = this.tryFindFirstNonWaterBelow(x, y, z, node);
-                } else if (pathtype == BlockPathTypes.OPEN) {
+                } else if (pathtype == PathType.OPEN) {
                     node = this.tryFindFirstGroundNodeBelow(x, y, z);
                 } else if (doesBlockHavePartialCollision(pathtype) && node == null) {
                     node = this.getClosedNode(x, y, z, pathtype);
@@ -74,7 +75,7 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
         }
     }
 
-    private Node getNodeAndUpdateCostToMax(int x, int y, int z, BlockPathTypes pathType, float malus) {
+    private Node getNodeAndUpdateCostToMax(int x, int y, int z, PathType pathType, float malus) {
         Node node = this.getNode(x, y, z);
         node.type = pathType;
         node.costMalus = Math.max(node.costMalus, malus);
@@ -83,12 +84,12 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
 
     private Node getBlockedNode(int x, int y, int z) {
         Node node = this.getNode(x, y, z);
-        node.type = BlockPathTypes.BLOCKED;
+        node.type = PathType.BLOCKED;
         node.costMalus = -1.0F;
         return node;
     }
 
-    private Node getClosedNode(int x, int y, int z, BlockPathTypes pathType) {
+    private Node getClosedNode(int x, int y, int z, PathType pathType) {
         Node node = this.getNode(x, y, z);
         node.closed = true;
         node.type = pathType;
@@ -104,7 +105,7 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
             int verticalDeltaLimit,
             double nodeFloorLevel,
             Direction direction,
-            BlockPathTypes pathType,
+            PathType pathType,
             BlockPos.MutableBlockPos pos
     ) {
         Node node = this.findAcceptedNode(x, y + 1, z, verticalDeltaLimit - 1, nodeFloorLevel, direction, pathType);
@@ -112,7 +113,7 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
             return null;
         } else if (this.mob.getBbWidth() >= 1.0F) {
             return node;
-        } else if (node.type != BlockPathTypes.OPEN && node.type != BlockPathTypes.WALKABLE) {
+        } else if (node.type != PathType.OPEN && node.type != PathType.WALKABLE) {
             return node;
         } else {
             double d0 = (double) (x - direction.getStepX()) + 0.5;
@@ -135,8 +136,8 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
         y--;
 
         while (y > this.mob.level().getMinBuildHeight()) {
-            BlockPathTypes pathtype = this.getCachedBlockType(this.mob, x, y, z);
-            if (pathtype != BlockPathTypes.WATER) {
+            PathType pathtype = this.getCachedPathType(x, y, z);
+            if (pathtype != PathType.WATER) {
                 return node;
             }
 
@@ -153,9 +154,9 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
                 return this.getBlockedNode(x, i, z);
             }
 
-            BlockPathTypes pathtype = this.getCachedBlockType(this.mob, x, i, z);
+            PathType pathtype = this.getCachedPathType(x, i, z);
             float f = this.mob.getPathfindingMalus(pathtype);
-            if (pathtype != BlockPathTypes.OPEN) {
+            if (pathtype != PathType.OPEN) {
                 if (f >= 0.0F) {
                     return this.getNodeAndUpdateCostToMax(x, i, z, pathtype, f);
                 }
@@ -168,7 +169,7 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
     }
 
     private boolean hasCollisions(AABB boundingBox) {
-        return this.collisionCache.computeIfAbsent(boundingBox, p_330163_ -> !this.level.noCollision(this.mob, boundingBox));
+        return this.collisionCache.computeIfAbsent(boundingBox, p_330163_ -> !this.currentContext.level().noCollision(this.mob, boundingBox));
     }
 
     private double getMobJumpHeight() {
@@ -180,8 +181,8 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
         return Math.max(1.125, (double) this.mob.maxUpStep());
     }
 
-    private static boolean doesBlockHavePartialCollision(BlockPathTypes pathType) {
-        return pathType == BlockPathTypes.FENCE || pathType == BlockPathTypes.DOOR_WOOD_CLOSED || pathType == BlockPathTypes.DOOR_IRON_CLOSED;
+    private static boolean doesBlockHavePartialCollision(PathType pathType) {
+        return pathType == PathType.FENCE || pathType == PathType.DOOR_WOOD_CLOSED || pathType == PathType.DOOR_IRON_CLOSED;
     }
 
     private boolean canReachWithoutCollision(Node p_77625_) {
