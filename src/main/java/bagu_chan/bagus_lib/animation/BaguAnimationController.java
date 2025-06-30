@@ -1,5 +1,6 @@
 package bagu_chan.bagus_lib.animation;
 
+import bagu_chan.bagus_lib.BagusConfigs;
 import bagu_chan.bagus_lib.BagusLib;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
@@ -7,11 +8,13 @@ import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Map;
+import java.util.Optional;
 
 //this animation controller make handle animation on Event
 public class BaguAnimationController<T extends Entity> {
     private final T entity;
     private final Map<ResourceLocation, AnimationState> animationStateMap = Maps.newHashMap();
+    private Map<ResourceLocation, AnimationState> animationStateFirstPersonList = Maps.newHashMap();
 
     public BaguAnimationController(T entity) {
         this.entity = entity;
@@ -48,5 +51,15 @@ public class BaguAnimationController<T extends Entity> {
             return animationStateMap.get(index);
         }
         return new AnimationState();
+    }
+
+    public boolean hasPlayingAnimation() {
+        if (!BagusConfigs.CLIENT.playableFirstPerson.get()) {
+            return false;
+        }
+        Optional<Map.Entry<ResourceLocation, AnimationState>> playtest = this.animationStateMap.entrySet().stream().filter(animationStateEntry -> {
+            return animationStateEntry.getValue().isStarted() && this.animationStateFirstPersonList.containsKey(animationStateEntry.getKey());
+        }).findAny();
+        return playtest.isPresent();
     }
 }

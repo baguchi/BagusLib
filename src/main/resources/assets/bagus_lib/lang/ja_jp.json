@@ -1,3 +1,4 @@
 {
-  "baguslib.config.shakeCameraForVanilla": "カメラの揺れをバニラでも有効にする"
+  "baguslib.config.shakeCameraForVanilla": "カメラの揺れをバニラでも有効にする",
+  "bagus_lib.config.playableFirstPerson": "第一視点でのアニメーションを有効化する"
 }

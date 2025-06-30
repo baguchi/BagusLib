@@ -32,7 +32,7 @@ public class BagusConfigs {
     public static class Client {
         public final ForgeConfigSpec.BooleanValue enableMiniBagu;
         public final ForgeConfigSpec.BooleanValue coolerEndPoem;
-
+        public final ForgeConfigSpec.BooleanValue playableFirstPerson;
         public Client(ForgeConfigSpec.Builder builder) {
             enableMiniBagu = builder
                     .comment("Enable the Mini Bagu cosmetic. [true / false]")
@@ -40,6 +40,11 @@ public class BagusConfigs {
             coolerEndPoem = builder
                     .comment("Enable Cooler EndPoem Feature...(Take a look the After beat the End) [true / false]")
                     .define("Enable Cooler EndPoem", true);
+            playableFirstPerson = builder
+                    .comment("Enable First Person Animation(When you using model change mod. should be turn off). [true / false]")
+                    .translation(BagusLib.MODID + ".config.playableFirstPerson")
+                    .define("Enable First Person Animation", true);
+
         }
     }
 }
