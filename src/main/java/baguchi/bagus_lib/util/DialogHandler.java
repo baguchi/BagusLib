@@ -8,8 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix3x2fStack;
 
@@ -23,7 +21,7 @@ public class DialogHandler {
 
     public final Map<String, DialogType> dialogTypes = Maps.newHashMap();
 
-    @OnlyIn(value = Dist.CLIENT)
+    
     public void renderDialogue(GuiGraphics guiGraphics, float f, float tickCount) {
         Minecraft minecraft = Minecraft.getInstance();
         float g = tickCount + f;
@@ -61,19 +59,19 @@ public class DialogHandler {
         }
     }
 
-    @OnlyIn(value = Dist.CLIENT)
+
     @Deprecated
     public void addOrReplaceDialogType(String name, DialogType dialogType) {
         dialogTypes.remove(name);
         dialogTypes.put(name, dialogType);
     }
 
-    @OnlyIn(value = Dist.CLIENT)
+
     public void removeDialogType(String name) {
         dialogTypes.remove(name);
     }
 
-    @OnlyIn(value = Dist.CLIENT)
+
     public void removeAllDialogType() {
         dialogTypes.clear();
     }
@@ -83,7 +81,6 @@ public class DialogHandler {
     }
 
 
-    @OnlyIn(value = Dist.CLIENT)
     public static class DrawString {
         private final double charsPerTick;
         private final String targetString;
@@ -137,7 +134,7 @@ public class DialogHandler {
             return this.lastTick;
         }
 
-        @OnlyIn(value = Dist.CLIENT)
+
         public interface DrawFunction {
             void apply(String var1, int var2, int var3);
         }
