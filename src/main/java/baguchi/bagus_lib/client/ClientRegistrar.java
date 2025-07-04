@@ -8,14 +8,13 @@ import baguchi.bagus_lib.client.render.MiniBaguRenderer;
 import baguchi.bagus_lib.register.ModEntities;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
-@OnlyIn(Dist.CLIENT)
+
 @EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT)
 public class ClientRegistrar {
     @SubscribeEvent

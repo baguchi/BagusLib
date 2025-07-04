@@ -7,8 +7,6 @@ import baguchi.bagus_lib.message.SyncBagusAnimationsStopAllMessage;
 import baguchi.bagus_lib.message.SyncBagusAnimationsStopMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * @author bagu_chan
  */
 public class BagusAnimationUtil {
-    @OnlyIn(Dist.CLIENT)
+
     public static void handleAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
@@ -28,7 +26,7 @@ public class BagusAnimationUtil {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static void handleStopAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
@@ -37,7 +35,7 @@ public class BagusAnimationUtil {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static void handleStopAllAnimationPacket(Entity entity) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {

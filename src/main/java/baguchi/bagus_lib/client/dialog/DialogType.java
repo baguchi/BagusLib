@@ -13,8 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix3x2fStack;
 
 import javax.annotation.Nullable;
@@ -55,11 +53,11 @@ public class DialogType {
         return CODEC;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public void renderText(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
 
         Font font = Minecraft.getInstance().font;

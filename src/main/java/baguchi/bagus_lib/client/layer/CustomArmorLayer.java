@@ -31,8 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.function.Function;
@@ -391,7 +389,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         return model2;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     record TrimSpriteKey(ArmorTrim trim, EquipmentClientInfo.LayerType layerType,
                          ResourceKey<EquipmentAsset> equipmentAssetId) {
         public ResourceLocation spriteId() {
