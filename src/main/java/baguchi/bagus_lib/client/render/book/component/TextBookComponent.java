@@ -65,7 +65,7 @@ public class TextBookComponent extends BookComponent {
         int linesPerPage = height / font.lineHeight;
         for (int i = access.getRelativePage() * linesPerPage; i < Math.min((access.getRelativePage() + 1) * linesPerPage, cachedComponents.size()); i++) {
             int textY = (i - access.getRelativePage() * linesPerPage) * font.lineHeight;
-            graphics.drawString(font, cachedComponents.get(i), x, y + textY, -1, false);
+            graphics.drawString(font, cachedComponents.get(i), x, y + textY, -16777216, false);
         }
     }
 
