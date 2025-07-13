@@ -4,7 +4,6 @@ import bagu_chan.bagus_lib.client.dialog.DialogType;
 import bagu_chan.bagus_lib.command.DialogCommand;
 import bagu_chan.bagus_lib.message.*;
 import bagu_chan.bagus_lib.register.*;
-import bagu_chan.bagus_lib.util.reward.TierHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -55,14 +54,12 @@ public class BagusLib {
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        TierHelper.addSuporterContents();
     }
 
     public void setupPackets(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
         registrar.playBidirectional(CameraMessage.TYPE, CameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(EntityCameraMessage.TYPE, EntityCameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playBidirectional(PlayerDataSyncMessage.TYPE, PlayerDataSyncMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playBidirectional(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
