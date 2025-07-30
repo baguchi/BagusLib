@@ -8,5 +8,6 @@
   "command.bagus_lib.item_dialog": "アイテムダイアログを生成しました",
   "command.bagus_lib.dialog": "ダイアログを生成しました",
   "command.bagus_lib.image_dialog": "画像付きダイアログを生成しました",
-  "item.bagus_lib.bagu": "ばぐち"
+  "item.bagus_lib.book": "本",
+  "item.bagus_lib.spawn_egg_mini_bagu": "ミニばぐのスポーンエッグ"
 }

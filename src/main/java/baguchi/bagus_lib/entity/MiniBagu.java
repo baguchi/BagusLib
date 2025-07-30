@@ -16,10 +16,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 //example Entity
-public class MiniBagu extends PathfinderMob {
+public class MiniBagu extends PathfinderMob implements ISmartJump {
     public MiniBagu(EntityType<? extends PathfinderMob> p_21683_, Level p_21684_) {
         super(p_21683_, p_21684_);
     }
@@ -59,10 +61,35 @@ public class MiniBagu extends PathfinderMob {
         ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         stack.set(DataComponents.TRIM, new ArmorTrim(registrylookup1.getOrThrow(TrimMaterials.EMERALD), registrylookup2.getOrThrow(TrimPatterns.SENTRY)));
         this.setItemSlot(EquipmentSlot.HEAD, stack);
-        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
         this.setDropChance(EquipmentSlot.HEAD, 0.0F);
         return super.finalizeSpawn(p_21434_, p_21435_, p_363352_, p_21437_);
+    }
+
+    @Override
+    protected float getJumpPower() {
+        float f = 0.42F;
+
+        Path path = this.navigation.getPath();
+        if (path != null && !path.isDone()) {
+            Vec3 vec3 = path.getNextEntityPos(this);
+            if (vec3.y > this.getY() + 0.5) {
+                f = 0.5F;
+            }
+            if (vec3.y > this.getY() + 1.5) {
+                f = 0.65F;
+            }
+
+            /*if (vec3.y > this.getY() + 2.5) {
+                f = 1.0F;
+            }*/
+        }
+
+        return super.getJumpPower((float) (f / this.getAttributeValue(Attributes.JUMP_STRENGTH)));
+    }
+
+
+    @Override
+    public float getSuppportJump() {
+        return 2.125F;
     }
 }

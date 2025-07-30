@@ -8,5 +8,6 @@
   "command.bagus_lib.item_dialog": "Successfully add Item Dialog",
   "command.bagus_lib.dialog": "Successfully add Dialog",
   "command.bagus_lib.image_dialog": "Successfully add Image Dialog",
-  "item.bagus_lib.bagu": "Bagu"
+  "item.bagus_lib.book": "Book",
+  "item.bagus_lib.spawn_egg_mini_bagu": "Mini Bagu Spawn Egg"
 }
