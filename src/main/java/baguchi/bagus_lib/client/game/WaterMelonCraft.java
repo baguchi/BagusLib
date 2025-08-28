@@ -80,7 +80,7 @@ public class WaterMelonCraft {
             Set<FruitObject> fruitObjects2 = Set.copyOf(this.fruitObjects);
             this.fruitObjects.forEach(fruitObject -> {
                 boolean flag = false;
-
+                fruitObject.tick();
                 if (fruitObject.getPos().y < 0) {
                     flag = true;
                 }
@@ -97,15 +97,15 @@ public class WaterMelonCraft {
             for (FruitObject fruitObject : fruitObjects1) {
 
                 for (FruitObject fruitObject2 : fruitObjects2) {
-                    if (fruitObject == fruitObject2) {
-                        return;
-                    }
-                    int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
-                    fruitObject.collisionBox(fruitObject2);
-                    if (i > 0) {
-                        flag2 = true;
-                        score += i;
-                        break;
+                    if (fruitObject != fruitObject2) {
+                        int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
+                        if (i > 0) {
+                            flag2 = true;
+                            score += i;
+                            break;
+                        } else {
+                            fruitObject.collisionBox(fruitObject2);
+                        }
                     }
                 }
                 if (flag2) {

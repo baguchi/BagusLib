@@ -57,10 +57,10 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void screenRender(ScreenEvent.Init.Post event) {
-        if (event.getScreen() instanceof TitleScreen titleScreen/* && isAprilFools()*/) {
+        if (event.getScreen() instanceof TitleScreen titleScreen && isAprilFools()) {
             int l = titleScreen.height / 4 + 28;
             event.addListener(Button.builder(Component.translatable("bagus_lib.watermelon"), p_280785_ -> Minecraft.getInstance().setScreen(new WaterMelonScreen(Component.empty())))
-                    .bounds(titleScreen.width / 2 - 100, l - 24, 100, 20)
+                    .bounds(titleScreen.width / 2 + 100, l + 4, 100, 20)
                     .build());
         }
     }
@@ -94,7 +94,7 @@ public class ClientEventHandler {
             calendar.setTime(new Date());
             aprilFools = calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1;
         }
-        return aprilFools && BagusConfigs.COMMON.aprilFool.get();
+        return aprilFools && BagusConfigs.COMMON.aprilFool.get() || BagusConfigs.COMMON.alwayAplilFool.get();
     }
 
     @SubscribeEvent

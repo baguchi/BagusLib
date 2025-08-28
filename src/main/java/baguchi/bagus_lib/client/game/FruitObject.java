@@ -70,13 +70,15 @@ public class FruitObject {
             //back
             fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
             //Reflect
-            fruitObject.motion = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+            Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+            fruitObject.move(reflect.x, reflect.y);
         }
         var moveDirection = unit(new Vector2f(center2Center));
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        this.motion = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+        Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+        this.move(reflect.x, reflect.y);
     }
 
 
@@ -112,10 +114,10 @@ public class FruitObject {
     }
 
     public void tick() {
+        motion.mul(0.96F);
         motion.y += 0.01F;
 
         this.move(this.motion.x, this.motion.y);
-
     }
 
     public int collisionAndBig(FruitObject fruitObject, List<FruitObject> fruitObjects) {
@@ -126,8 +128,9 @@ public class FruitObject {
         if (this.fruit == fruitObject.getFruit()) {
             Fruit fruit1 = Fruit.getNextObject(fruitObject.getFruit());
             if (fruit1 != null) {
+                var newPos = this.pos.add(fruitObject.pos.x, fruitObject.pos.y).mul(0.5F);
                 FruitObject fruitObject1 = new FruitObject(fruit1);
-                fruitObject1.setPos(this.getPos());
+                fruitObject1.warp(newPos);
                 fruitObjects.add(fruitObject1);
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CAT_EAT, 1.0F, 1.0F));
             }
@@ -137,5 +140,10 @@ public class FruitObject {
             return this.fruit.getScore();
         }
         return 0;
+    }
+
+    public FruitObject warp(Vector2f vec2) {
+        this.pos = vec2;
+        return this;
     }
 }

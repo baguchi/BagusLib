@@ -3,6 +3,7 @@
   "bagus_lib.config.aprilFeature": "エイプリルフールジョークを有効にする",
   "bagus_lib.config.betterEndPoem": "よりよいエンドポエム",
   "bagus_lib.config.playableFirstPerson": "第一視点でのアニメーションを有効化する",
+  "bagus_lib.config.aprilFeatureAlway": "エイプリルフールジョークを日にち関係なく有効にする",
   "bagus_lib.watermelon": "スイカゲーム",
   "command.bagus_lib.remove_all_dialog": "すべてのダイアログを削除しました",
   "command.bagus_lib.item_dialog": "アイテムダイアログを生成しました",

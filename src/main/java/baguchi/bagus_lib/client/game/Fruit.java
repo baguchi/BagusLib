@@ -8,12 +8,12 @@ import javax.annotation.Nullable;
 
 public enum Fruit {
     MUSHROOM(1, 1, Blocks.MUSHROOM_STEM),
-    MUSHROOM_RED(2, 6, Blocks.RED_MUSHROOM_BLOCK),
-    MUSHROOM_BROWN(3, 13, Blocks.BROWN_MUSHROOM_BLOCK),
-    WARP_WART(4, 22, Blocks.WARPED_WART_BLOCK),
-    NETHER_WART(5, 46, Blocks.NETHER_WART_BLOCK),
-    PUMPKIN(6, 58, Blocks.PUMPKIN),
-    WATERMELON(7, 66, Blocks.MELON);
+    MUSHROOM_RED(2, 12, Blocks.RED_MUSHROOM_BLOCK),
+    MUSHROOM_BROWN(3, 45, Blocks.BROWN_MUSHROOM_BLOCK),
+    WARP_WART(4, 180, Blocks.WARPED_WART_BLOCK),
+    NETHER_WART(5, 320, Blocks.NETHER_WART_BLOCK),
+    PUMPKIN(6, 540, Blocks.PUMPKIN),
+    WATERMELON(7, 2000, Blocks.MELON);
     private final int size;
     private final int score;
     private final Block fruit;
