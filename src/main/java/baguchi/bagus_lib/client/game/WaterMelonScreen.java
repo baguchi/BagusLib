@@ -1,6 +1,9 @@
 package baguchi.bagus_lib.client.game;
 
-/*
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+
 public class WaterMelonScreen extends Screen {
 
     private WaterMelonCraft aprilFoolsWaterMelonCraft = null;
@@ -34,4 +37,3 @@ public class WaterMelonScreen extends Screen {
     }
 
 }
-*/

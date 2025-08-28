@@ -4,6 +4,7 @@ import baguchi.bagus_lib.BagusConfigs;
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.api.IBaguAnimate;
 import baguchi.bagus_lib.client.event.BagusModelEvent;
+import baguchi.bagus_lib.client.game.WaterMelonScreen;
 import baguchi.bagus_lib.client.render.book.Book;
 import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
 import baguchi.bagus_lib.client.render.book.component.DialogBookComponent;
@@ -14,6 +15,8 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -54,12 +57,12 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void screenRender(ScreenEvent.Init.Post event) {
-        /*if (event.getScreen() instanceof TitleScreen titleScreen && isAprilFools()) {
+        if (event.getScreen() instanceof TitleScreen titleScreen/* && isAprilFools()*/) {
             int l = titleScreen.height / 4 + 28;
             event.addListener(Button.builder(Component.translatable("bagus_lib.watermelon"), p_280785_ -> Minecraft.getInstance().setScreen(new WaterMelonScreen(Component.empty())))
                     .bounds(titleScreen.width / 2 - 100, l - 24, 100, 20)
                     .build());
-        }*/
+        }
     }
 
     public static void handleOpenPageTest(Player player) {
