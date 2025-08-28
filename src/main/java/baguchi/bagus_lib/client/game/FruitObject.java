@@ -66,21 +66,22 @@ public class FruitObject {
             // 両方動く場合、距離は半々
             returnDist = overlap / 2;
 
-            Vector2f moveDirection = unit(center2Center).mul(-1);
+            Vector2f moveDirection = unit(new Vector2f(center2Center)).mul(-1);
             //back
             fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
             //Reflect
-            fruitObject.motion = reflect(fruitObject.motion, center2Center).mul(this.restitution);
+            fruitObject.motion = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
         }
-        var moveDirection = unit(center2Center);
+        var moveDirection = unit(new Vector2f(center2Center));
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        this.motion = reflect(fruitObject.motion, center2Center).mul(this.restitution);
+        this.motion = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
     }
 
+
     public Vector2f reflect(Vector2f vec2, Vector2f vec21) {
-        Vector2f normUnit = vec21;
+        Vector2f normUnit = this.unit(vec21);
         float dot = vec2.dot(normUnit);
         if (dot == 0) {
             return vec2.mul(-1);
@@ -111,9 +112,9 @@ public class FruitObject {
     }
 
     public void tick() {
-        this.move(this.motion.x, this.motion.y);
-        motion.mul(0.96F);
         motion.y += 0.01F;
+
+        this.move(this.motion.x, this.motion.y);
 
     }
 

@@ -3,19 +3,18 @@ package baguchi.bagus_lib.client.game;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Matrix3x2fStack;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
@@ -72,43 +71,50 @@ public class WaterMelonCraft {
                 }
             }
 
-            boolean flag = false;
+            if (keyPressed(InputConstants.KEY_W)) {
+                reset();
+            }
+
             boolean flag2 = false;
             Set<FruitObject> fruitObjects1 = Set.copyOf(this.fruitObjects);
             Set<FruitObject> fruitObjects2 = Set.copyOf(this.fruitObjects);
-            for (FruitObject fruitObject : fruitObjects1) {
+            this.fruitObjects.forEach(fruitObject -> {
+                boolean flag = false;
 
-                for (FruitObject fruitObject2 : fruitObjects2) {
-                    if (fruitObject != fruitObject2) {
-                        int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
-                        fruitObject.collisionBox(fruitObject2);
-                        if (i > 0) {
-                            flag2 = true;
-                            score += i;
-                            break;
-                        }
-                    }
-                }
-                fruitObject.tick();
-                if (flag2) {
-                    break;
-                }
                 if (fruitObject.getPos().y < 0) {
                     flag = true;
                 }
-            }
-            if (flag) {
-                ++finishTime;
-                if (finishTime >= 60) {
-                    gameOver = true;
+                if (flag) {
+                    ++finishTime;
+                    if (finishTime >= 60) {
+                        gameOver = true;
+                    }
+                } else {
+                    finishTime = 0;
                 }
-            } else {
-                finishTime = 0;
+            });
+
+            for (FruitObject fruitObject : fruitObjects1) {
+
+                for (FruitObject fruitObject2 : fruitObjects2) {
+                    if (fruitObject == fruitObject2) {
+                        return;
+                    }
+                    int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
+                    fruitObject.collisionBox(fruitObject2);
+                    if (i > 0) {
+                        flag2 = true;
+                        score += i;
+                        break;
+                    }
+                }
+                if (flag2) {
+                    break;
+                }
+
             }
         }
-        if (keyPressed(InputConstants.KEY_W)) {
-            reset();
-        }
+
     }
 
     public static WaterMelonCraft getInstance() {
@@ -153,8 +159,8 @@ public class WaterMelonCraft {
         tossFruit = nextFruit;
     }
 
-    private void renderFruit(Matrix3x2fStack stack, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
-        renderBlockState(stack, fruit.getFruit().getFruitBlock().defaultBlockState(), fruit.getFruit(), offsetX + (x) * scale, offsetY + (y) * scale, scale);
+    private void renderFruit(GuiGraphics gui, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
+        renderBlockState(gui, fruit, offsetX + (x) * scale, offsetY + (y) * scale, scale);
     }
 
     private static Vector2f transform(Vector2f vector2f, float rotation, Vector2f relativeTo) {
@@ -166,16 +172,18 @@ public class WaterMelonCraft {
 
     }
 
-    private void renderBlockState(Matrix3x2fStack stack, BlockState state, Fruit fruit, float offsetX, float offsetY, float size) {
-        stack.pushMatrix();
-        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).particleIcon();
-        VertexConsumer vertexConsumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.CUTOUT_MIPPED);
-        float f = size * fruit.getSize();
-        vertexConsumer.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        vertexConsumer.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        vertexConsumer.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        vertexConsumer.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0()).setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        stack.popMatrix();
+    private void renderBlockState(GuiGraphics gui, FruitObject fruit, float offsetX, float offsetY, float size) {
+        gui.pose().pushMatrix();
+        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(fruit.getFruit().getFruitBlock().defaultBlockState()).particleIcon();
+        float f = size * fruit.getFruit().getSize();
+        PoseStack stack = new PoseStack();
+        stack.pushPose();
+        int i = ARGB.white(1F);
+        gui.pose().translate(-f / 2F, -f / 2F);
+        //stack.mulPose(fruit.getRotation());
+        gui.pose().translate(offsetX, offsetY);
+        gui.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, 0, 0, (int) (f * 2F), (int) (f * 2F), i);
+        gui.pose().popMatrix();
     }
 
     public void render(Screen screen, GuiGraphics gui, float partialTick) {
@@ -183,17 +191,18 @@ public class WaterMelonCraft {
         float offsetX = screen.width / 2F - scale * 5F;
         float offsetY = scale * 0.5F;
         if (tossFruit != null) {
-            renderFruit(gui.pose(), tossFruit, fallingX, 0, scale, offsetX, offsetY);
+            renderFruit(gui, tossFruit, fallingX, 0, scale, offsetX, offsetY);
         }
         if (nextFruit != null) {
-            renderFruit(gui.pose(), nextFruit, 0, 0, scale, screen.width * 0.85F, screen.height * 0.4F);
+            renderFruit(gui, nextFruit, 0, 0, scale, screen.width * 0.85F, screen.height * 0.4F);
         }
         for (FruitObject fruitObject : this.fruitObjects) {
-            renderFruit(gui.pose(), fruitObject, fruitObject.getPos().x, fruitObject.getPos().y, scale, offsetX, offsetY);
+            renderFruit(gui, fruitObject, fruitObject.getPos().x, fruitObject.getPos().y, scale, offsetX, offsetY);
         }
 
         float hue = 1f;
-        int color = 0xFFFFFF;
+        int i = ARGB.white(1F);
+        int color = i;
         gui.pose().pushMatrix();
         gui.pose().scale(2, 2);
         gui.drawCenteredString(Minecraft.getInstance().font, "Score", (int) (screen.width * 0.065F), (int) (screen.height * 0.175F), color);
