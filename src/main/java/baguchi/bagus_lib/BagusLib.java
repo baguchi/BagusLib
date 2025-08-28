@@ -6,11 +6,14 @@ import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.message.*;
 import baguchi.bagus_lib.register.*;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -28,8 +31,12 @@ public class BagusLib {
     public static final String MODID = "bagus_lib";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public BagusLib(IEventBus modEventBus, ModContainer modContainer) {
+    public BagusLib(IEventBus modEventBus, Dist dist, ModContainer modContainer) {
         // Register the commonSetup method for modloading
+
+        if (dist.isClient()) {
+            modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        }
 
         ModItems.ITEM_REGISTRY.register(modEventBus);
         ModEntities.ENTITIES_REGISTRY.register(modEventBus);
