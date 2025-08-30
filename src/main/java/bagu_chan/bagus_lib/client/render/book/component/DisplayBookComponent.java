@@ -85,7 +85,7 @@ public class DisplayBookComponent extends BookComponent {
                 }
             }
             if (entities.containsKey(display)) {
-                InventoryScreen.renderEntityInInventory(graphics, x + display.x(), y + display.y(), (int) (display.scale() * 17), display.rotation, null, entities.get(display));
+                InventoryScreen.renderEntityInInventory(graphics, x + display.x(), y + display.y(), (int) (display.scale()), display.rotation, null, entities.get(display));
             }
         }
         for (ItemDisplay display : itemDisplays) {
