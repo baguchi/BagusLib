@@ -139,6 +139,12 @@ public class BookScreen extends Screen {
     }
 
     @Override
+    public void render(GuiGraphics p_281549_, int p_281550_, int p_282878_, float p_282465_) {
+        this.renderBackground(p_281549_);
+        super.render(p_281549_, p_281550_, p_282878_, p_282465_);
+    }
+
+    @Override
     public boolean isPauseScreen() {
         return false;
     }
