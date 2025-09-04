@@ -2,6 +2,7 @@ package baguchi.bagus_lib.register;
 
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.entity.MiniBagu;
+import baguchi.bagus_lib.entity.Moss;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -23,6 +24,7 @@ public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES_REGISTRY = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, BagusLib.MODID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<MiniBagu>> MINI_BAGU = ENTITIES_REGISTRY.register("mini_bagu", () -> EntityType.Builder.of(MiniBagu::new, MobCategory.CREATURE).sized(0.6F, 0.6F).build(prefix("mini_bagu")));
+    public static final DeferredHolder<EntityType<?>, EntityType<Moss>> MOSS = ENTITIES_REGISTRY.register("moss", () -> EntityType.Builder.of(Moss::new, MobCategory.CREATURE).sized(0.15F, 0.15F).build(prefix("moss")));
 
     private static ResourceKey<EntityType<?>> prefix(String path) {
         return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, path));
@@ -31,10 +33,12 @@ public class ModEntities {
     @SubscribeEvent
     public static void registerEntity(EntityAttributeCreationEvent event) {
         event.put(MINI_BAGU.get(), MiniBagu.createAttributeMap().build());
+        event.put(MOSS.get(), Moss.createAttributeMap().build());
     }
 
     @SubscribeEvent
     public static void registerSpawnPlacement(RegisterSpawnPlacementsEvent event) {
         event.register(MINI_BAGU.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(MOSS.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }

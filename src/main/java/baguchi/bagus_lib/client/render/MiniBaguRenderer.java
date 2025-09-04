@@ -13,7 +13,7 @@ public class MiniBaguRenderer extends MobRenderer<MiniBagu, MiniBaguRenderState,
     public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "textures/entity/mini_bagu.png");
 
     public MiniBaguRenderer(EntityRendererProvider.Context p_174304_) {
-        super(p_174304_, new MiniBaguModel<>(p_174304_.bakeLayer(ModModelLayers.MINI_BAGU)), 0.5F);
+        super(p_174304_, new MiniBaguModel<>(p_174304_.bakeLayer(ModModelLayers.MINI_BAGU)), 0.3F);
         this.addLayer(new CustomArmorLayer<>(this, p_174304_));
     }
 
