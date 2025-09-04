@@ -22,7 +22,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES_REGISTRY = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, BagusLib.MODID);
 
-    public static final DeferredHolder<EntityType<?>, EntityType<MiniBagu>> MINI_BAGU = ENTITIES_REGISTRY.register("mini_bagu", () -> EntityType.Builder.of(MiniBagu::new, MobCategory.CREATURE).sized(0.6F, 1.8F).build(prefix("mini_bagu")));
+    public static final DeferredHolder<EntityType<?>, EntityType<MiniBagu>> MINI_BAGU = ENTITIES_REGISTRY.register("mini_bagu", () -> EntityType.Builder.of(MiniBagu::new, MobCategory.CREATURE).sized(0.6F, 0.6F).build(prefix("mini_bagu")));
 
     private static ResourceKey<EntityType<?>> prefix(String path) {
         return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, path));
