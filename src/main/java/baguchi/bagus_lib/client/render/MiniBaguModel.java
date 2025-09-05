@@ -46,7 +46,7 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
     public void setupAnim(T entity) {
         super.setupAnim(entity);
         this.head.yRot = Mth.cos(entity.walkAnimationPos * 0.6662F) * 0.4F * entity.walkAnimationSpeed;
-        //.attackAnimation.apply(entity., entity.ageInTicks);
+        this.tail.yRot = Mth.cos(entity.ageInTicks * 0.35F + entity.walkAnimationPos * 0.35F) * 0.4F;
     }
 
     @Override
