@@ -1,5 +1,6 @@
 package baguchi.bagus_lib.entity;
 
+import baguchi.bagus_lib.entity.path.node.SmartNodeEvaluator;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -10,6 +11,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,6 +20,7 @@ import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +43,19 @@ public class MiniBagu extends PathfinderMob implements ISmartJump {
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level p_21480_) {
+        return new GroundPathNavigation(this, p_21480_) {
+            protected PathFinder createPathFinder(int p_219479_) {
+                this.nodeEvaluator = new SmartNodeEvaluator();
+                this.nodeEvaluator.setCanPassDoors(true);
+                this.nodeEvaluator.setCanOpenDoors(false);
+                this.nodeEvaluator.setCanFloat(true);
+                return new PathFinder(this.nodeEvaluator, p_219479_);
+            }
+        };
     }
 
     @Override
