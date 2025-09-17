@@ -10,12 +10,13 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T> implements IArmor {
+public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T> implements IArmor, HeadedModel {
     private final ModelPart root;
     private final ModelPart head;
     private final ModelPart tail;
@@ -77,5 +78,15 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
     @Override
     public Iterable<ModelPart> headPartArmors() {
         return ImmutableList.of(this.head);
+    }
+
+    @Override
+    public ModelPart getHead() {
+        return this.head;
+    }
+
+    @Override
+    public void translateToHead(PoseStack p_443201_) {
+        HeadedModel.super.translateToHead(p_443201_);
     }
 }
