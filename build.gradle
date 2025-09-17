@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.96'
+    id 'net.neoforged.moddev' version '2.0.107'
 }
 tasks.named('wrapper', Wrapper).configure {
     // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
@@ -108,6 +108,14 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven {
+        name = "Maven for PR #2639" // https://github.com/neoforged/NeoForge/pull/2639
+        url = uri("https://prmaven.neoforged.net/NeoForge/pr2639")
+        content {
+            includeModule("net.neoforged", "neoforge")
+            includeModule("net.neoforged", "testframework")
+        }
+    }
 }
 
 dependencies {

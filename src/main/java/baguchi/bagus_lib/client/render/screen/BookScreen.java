@@ -6,6 +6,7 @@ import baguchi.bagus_lib.client.render.book.BookAccess;
 import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 
@@ -47,7 +48,9 @@ public class BookScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double x, double y, int i) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean p_434187_) {
+        double x = event.x();
+        double y = event.y();
         if (bookOpened()) {
             BookComponentDefinition left = getCurrentComponent(true);
             BookComponentDefinition right = getCurrentComponent(false);
@@ -70,7 +73,7 @@ public class BookScreen extends Screen {
         } else if (x >= getBaseX() && x <= getBaseX() + book.width() / 2f && y >= getBaseY() && y <= getBaseY() + book.height()) {
             setPage(pageSize - 1);
         }
-        return super.mouseClicked(x, y, i);
+        return super.mouseClicked(event, p_434187_);
     }
 
     @Override

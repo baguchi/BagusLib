@@ -21,10 +21,10 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -111,122 +111,124 @@ public class ClientEventHandler {
     public static void animationArmEvent(RenderHandEvent event) {
         AbstractClientPlayer abstractClientPlayer = Minecraft.getInstance().player;
 
-        PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayer);
+        AvatarRenderer playerrenderer = (AvatarRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayer);
         EntityModel entityModel = playerrenderer.getModel();
         if (abstractClientPlayer instanceof IBaguAnimate baguAnimate) {
             boolean playFlag = baguAnimate.getBaguController().hasPlayingAnimation();
 
             if (playFlag) {
+                TickRateManager tickratemanager = Minecraft.getInstance().level.tickRateManager();
 
-                renderArmWithItem(abstractClientPlayer, event.getHand(), event.getSwingProgress(), event.getItemStack(), event.getEquipProgress(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), entityModel);
+                AvatarRenderState playerRenderState = playerrenderer.createRenderState();
+                playerrenderer.extractRenderState(abstractClientPlayer, playerRenderState, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
+
+                renderArmWithItem(abstractClientPlayer, event.getHand(), event.getSwingProgress(), event.getItemStack(), event.getEquipProgress(), event.getPoseStack(), event.getSubmitNodeCollector(), playerRenderState, event.getPackedLight(), entityModel);
                 event.setCanceled(true);
             }
         }
     }
 
-    private static void renderArmWithItem(AbstractClientPlayer p_109372_, InteractionHand p_109375_, float p_109376_, ItemStack p_109377_, float p_109378_, PoseStack p_109379_, MultiBufferSource p_109380_, int p_109381_, EntityModel entityModel) {
-        if (!p_109372_.isScoping()) {
-            boolean flag = p_109375_ == InteractionHand.MAIN_HAND;
-            HumanoidArm humanoidarm = flag ? p_109372_.getMainArm() : p_109372_.getMainArm().getOpposite();
+    private static void renderArmWithItem(AbstractClientPlayer abstractClientPlayer, InteractionHand interactionHand, float swingProgress, ItemStack stack, float equipProgress, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, AvatarRenderState avatarRenderState, int light, EntityModel entityModel) {
+        if (!abstractClientPlayer.isScoping()) {
+            boolean flag = interactionHand == InteractionHand.MAIN_HAND;
+            HumanoidArm humanoidarm = flag ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
             boolean flag2 = humanoidarm == HumanoidArm.RIGHT;
-            p_109379_.pushPose();
-            if (!p_109372_.isInvisible()) {
-                p_109379_.pushPose();
-                renderPlayerArm(p_109379_, p_109380_, p_109381_, p_109378_, p_109376_, humanoidarm, entityModel);
+            poseStack.pushPose();
+            if (!abstractClientPlayer.isInvisible()) {
+                poseStack.pushPose();
+                renderPlayerArm(poseStack, submitNodeCollector, avatarRenderState, light, equipProgress, swingProgress, humanoidarm, entityModel);
                 boolean flag3 = humanoidarm == HumanoidArm.LEFT;
 
                 if (entityModel instanceof PlayerModel playerModel) {
 
-                    playerModel.translateToHand(humanoidarm, p_109379_);
-                    p_109379_.mulPose(Axis.XP.rotationDegrees(-90.0F));
-                    p_109379_.mulPose(Axis.YP.rotationDegrees(180.0F));
-                    p_109379_.translate((float) (flag3 ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+                    playerModel.translateToHand(avatarRenderState, humanoidarm, poseStack);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+                    poseStack.translate((float) (flag3 ? -1 : 1) / 16.0F, 0.125F, -0.625F);
 
                 }
-                renderItem(p_109372_, p_109377_, flag3 ? ItemDisplayContext.THIRD_PERSON_LEFT_HAND : ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, p_109379_, p_109380_, p_109381_);
-                p_109379_.popPose();
+                renderItem(abstractClientPlayer, stack, flag3 ? ItemDisplayContext.THIRD_PERSON_LEFT_HAND : ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, poseStack, submitNodeCollector, light);
+                poseStack.popPose();
             }
-            p_109379_.popPose();
+            poseStack.popPose();
         }
 
     }
 
-    private static void renderItem(LivingEntity p_270072_, ItemStack p_270793_, ItemDisplayContext p_270837_, PoseStack p_270974_, MultiBufferSource p_270686_, int p_270103_) {
-        if (!p_270793_.isEmpty()) {
-            Minecraft.getInstance().getItemRenderer().renderStatic(p_270072_, p_270793_, p_270837_, p_270974_, p_270686_, p_270072_.level(), p_270103_, OverlayTexture.NO_OVERLAY, p_270072_.getId() + p_270837_.ordinal());
+    private static void renderItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light) {
+        if (!stack.isEmpty()) {
+            Minecraft.getInstance().getEntityRenderDispatcher().getItemInHandRenderer().renderItem(livingEntity, stack, itemDisplayContext, poseStack, submitNodeCollector, light);
         }
 
     }
 
-    private static void renderPlayerArm(PoseStack p_109347_, MultiBufferSource p_109348_, int p_109349_, float p_109350_, float p_109351_, HumanoidArm p_109352_, EntityModel entityModel) {
-        boolean flag = p_109352_ != HumanoidArm.LEFT;
+    private static void renderPlayerArm(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, AvatarRenderState avatarRenderState, int light, float equipProgress, float swingProgress, HumanoidArm humanoidArm, EntityModel entityModel) {
+        boolean flag = humanoidArm != HumanoidArm.LEFT;
         float f = flag ? 1.0F : -1.0F;
-        float f1 = Mth.sqrt(p_109351_);
+        float f1 = Mth.sqrt(swingProgress);
         float f2 = -0.3F * Mth.sin(f1 * (float) Math.PI);
         float f3 = 0.4F * Mth.sin(f1 * ((float) Math.PI * 2F));
-        float f4 = -0.4F * Mth.sin(p_109351_ * (float) Math.PI);
-        p_109347_.translate(f * (f2 + 0.64000005F), f3 + -0.6F + p_109350_ * -0.6F, f4 + -0.71999997F);
-        p_109347_.mulPose(Axis.YP.rotationDegrees(f * 45.0F));
-        float f5 = Mth.sin(p_109351_ * p_109351_ * (float) Math.PI);
+        float f4 = -0.4F * Mth.sin(swingProgress * (float) Math.PI);
+        poseStack.translate(f * (f2 + 0.64000005F), f3 + -0.6F + equipProgress * -0.6F, f4 + -0.71999997F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(f * 45.0F));
+        float f5 = Mth.sin(swingProgress * swingProgress * (float) Math.PI);
         float f6 = Mth.sin(f1 * (float) Math.PI);
-        p_109347_.mulPose(Axis.YP.rotationDegrees(f * f6 * 70.0F));
-        p_109347_.mulPose(Axis.ZP.rotationDegrees(f * f5 * -20.0F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(f * f6 * 70.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(f * f5 * -20.0F));
         AbstractClientPlayer abstractclientplayer = Minecraft.getInstance().player;
-        p_109347_.translate(f * -1.0F, 3.6F, 3.5F);
-        p_109347_.mulPose(Axis.ZP.rotationDegrees(f * 120.0F));
-        p_109347_.mulPose(Axis.XP.rotationDegrees(200.0F));
-        p_109347_.mulPose(Axis.YP.rotationDegrees(f * -135.0F));
-        p_109347_.translate(f * 5.6F, 0.0F, 0.0F);
-        PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractclientplayer);
-        ResourceLocation resourcelocation = abstractclientplayer.getSkin().texture();
+        poseStack.translate(f * -1.0F, 3.6F, 3.5F);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(f * 120.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(200.0F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(f * -135.0F));
+        poseStack.translate(f * 5.6F, 0.0F, 0.0F);
+        ResourceLocation resourcelocation = abstractclientplayer.getSkin().body().texturePath();
         if (flag) {
-            renderRightHand(p_109347_, p_109348_, p_109349_, resourcelocation, abstractclientplayer.isModelPartShown(PlayerModelPart.RIGHT_SLEEVE), abstractclientplayer, entityModel);
+            renderRightHand(poseStack, submitNodeCollector, light, resourcelocation, abstractclientplayer.isModelPartShown(PlayerModelPart.RIGHT_SLEEVE), abstractclientplayer, avatarRenderState, entityModel);
         } else {
-            renderLeftHand(p_109347_, p_109348_, p_109349_, resourcelocation, abstractclientplayer.isModelPartShown(PlayerModelPart.LEFT_SLEEVE), abstractclientplayer, entityModel);
+            renderLeftHand(poseStack, submitNodeCollector, light, resourcelocation, abstractclientplayer.isModelPartShown(PlayerModelPart.LEFT_SLEEVE), abstractclientplayer, avatarRenderState, entityModel);
         }
 
     }
 
-    public static void renderRightHand(PoseStack p_117771_, MultiBufferSource p_117772_, int p_117773_, ResourceLocation p_363694_, boolean p_366898_, AbstractClientPlayer player, EntityModel entityModel) {
-        if (!ClientHooks.renderSpecificFirstPersonArm(p_117771_, p_117772_, p_117773_, player, HumanoidArm.RIGHT)) {
+    public static void renderRightHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light, ResourceLocation resourceLocation, boolean partShown, AbstractClientPlayer player, AvatarRenderState avatarRenderState, EntityModel entityModel) {
+        if (!ClientHooks.renderSpecificFirstPersonArm(poseStack, submitNodeCollector, light, player, HumanoidArm.RIGHT)) {
             if (entityModel instanceof PlayerModel playerModel) {
-                renderHand(p_117771_, p_117772_, p_117773_, p_363694_, playerModel.rightArm, p_366898_, playerModel);
+                renderHand(poseStack, submitNodeCollector, light, resourceLocation, playerModel.rightArm, partShown, avatarRenderState, playerModel);
             }
         }
 
     }
 
-    public static void renderLeftHand(PoseStack p_117814_, MultiBufferSource p_117815_, int p_117816_, ResourceLocation p_361745_, boolean p_366730_, AbstractClientPlayer player, EntityModel entityModel) {
-        if (!ClientHooks.renderSpecificFirstPersonArm(p_117814_, p_117815_, p_117816_, player, HumanoidArm.LEFT)) {
+    public static void renderLeftHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light, ResourceLocation resourceLocation, boolean partShown, AbstractClientPlayer player, AvatarRenderState avatarRenderState, EntityModel entityModel) {
+        if (!ClientHooks.renderSpecificFirstPersonArm(poseStack, submitNodeCollector, light, player, HumanoidArm.LEFT)) {
             if (entityModel instanceof PlayerModel playerModel) {
-                renderHand(p_117814_, p_117815_, p_117816_, p_361745_, playerModel.leftArm, p_366730_, playerModel);
+                renderHand(poseStack, submitNodeCollector, light, resourceLocation, playerModel.leftArm, partShown, avatarRenderState, playerModel);
             }
         }
 
     }
 
-    private static void renderHand(PoseStack p_117776_, MultiBufferSource p_117777_, int p_117778_, ResourceLocation p_360319_, ModelPart p_117780_, boolean p_366655_, PlayerModel playermodel) {
-        p_117780_.resetPose();
-        p_117780_.visible = true;
-        playermodel.leftSleeve.visible = p_366655_;
-        playermodel.rightSleeve.visible = p_366655_;
+    private static void renderHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int p_117778_, ResourceLocation resourceLocation, ModelPart modelPart, boolean modelShown, AvatarRenderState avatarRenderState, PlayerModel playermodel) {
+        modelPart.resetPose();
+        modelPart.visible = true;
+        playermodel.leftSleeve.visible = modelShown;
+        playermodel.rightSleeve.visible = modelShown;
         //playermodel.leftArm.zRot = -0.1F;
         //playermodel.rightArm.zRot = 0.1F;
         AbstractClientPlayer abstractClientPlayer = Minecraft.getInstance().player;
 
         if (abstractClientPlayer != null) {
-            PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayer);
+            AvatarRenderer playerrenderer = (AvatarRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(abstractClientPlayer);
             EntityModel entityModel = playerrenderer.getModel();
             if (abstractClientPlayer instanceof IBaguAnimate baguAnimate) {
-                TickRateManager tickratemanager = Minecraft.getInstance().level.tickRateManager();
-                PlayerRenderState playerRenderState = playerrenderer.createRenderState(abstractClientPlayer, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
-                playerrenderer.extractRenderState(abstractClientPlayer, playerRenderState, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
-                BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(playerRenderState, entityModel);
+                BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(avatarRenderState, entityModel);
                 NeoForge.EVENT_BUS.post(event2);
             }
+            submitNodeCollector.submitModel(entityModel, avatarRenderState, poseStack, RenderType.entityTranslucent(resourceLocation), avatarRenderState.lightCoords,
+                    OverlayTexture.NO_OVERLAY,
+                    avatarRenderState.outlineColor,
+                    null);
         }
-
-        p_117780_.render(p_117776_, p_117777_.getBuffer(RenderType.entityTranslucent(p_360319_)), p_117778_, OverlayTexture.NO_OVERLAY);
     }
 
     /*@SubscribeEvent

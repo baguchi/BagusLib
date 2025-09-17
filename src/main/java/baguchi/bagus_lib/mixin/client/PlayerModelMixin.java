@@ -6,11 +6,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(PlayerModel.class)
-public abstract class PlayerModelMixin extends HumanoidModel<PlayerRenderState> implements IArmor {
+public abstract class PlayerModelMixin extends HumanoidModel<AvatarRenderState> implements IArmor {
 
     public PlayerModelMixin(ModelPart p_170679_) {
         super(p_170679_);
