@@ -20,8 +20,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
 
-import java.util.function.Function;
-
 
 /*
  * https://github.com/AlexModGuy/AlexsMobs/blob/1.19.4/src/main/java/com/github/alexthe666/alexsmobs/client/render/layer/LayerKangarooArmor.java
@@ -66,8 +64,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
     private void renderBoots(ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
-        PlayerModel rightLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.FEET), "right_arm");
-        PlayerModel leftLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.FEET), "left_arm");
+        PlayerModel rightLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.FEET), "right_leg");
+        PlayerModel leftLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.FEET), "left_leg");
 
         getParentModel().rightLegPartArmors().forEach(part -> {
             poseStack.pushPose();
@@ -88,8 +86,8 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
     private void renderLeggings(ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
         PlayerModel bodyPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.LEGS), "body");
-        PlayerModel rightLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.LEGS), "right_arm");
-        PlayerModel leftLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.LEGS), "left_arm");
+        PlayerModel rightLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.LEGS), "right_leg");
+        PlayerModel leftLegPart = getArmorModelHook(this.getArmorModel(EquipmentSlot.LEGS), "left_leg");
 
         getParentModel().bodyPartArmors().forEach(part -> {
             poseStack.pushPose();
@@ -167,17 +165,10 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
 
     protected PlayerModel getArmorModelHook(PlayerModel model, String usingPart) {
-        Function<String, ModelPart> function = model.root().createPartLookup();
-
-        //reset the model
-        resetModelPart(function.apply("right_leg"));
-        resetModelPart(function.apply("left_leg"));
-        resetModelPart(function.apply("right_arm"));
-        resetModelPart(function.apply("left_arm"));
-        resetModelPart(function.apply("head"));
-        resetModelPart(function.apply("body"));
-
-        function.apply(usingPart).visible = true;
+        model.root().getAllParts().forEach(this::resetModelPart);
+        model.root().getAllParts().stream().filter(modelPart -> modelPart == model.root().getChild(usingPart)).findFirst().ifPresent(modelPart -> {
+            modelPart.visible = true;
+        });
         return model;
     }
 
