@@ -166,9 +166,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
     protected PlayerModel getArmorModelHook(PlayerModel model, String usingPart) {
         model.root().getAllParts().forEach(this::resetModelPart);
-        model.root().getAllParts().stream().filter(modelPart -> modelPart == model.root().getChild(usingPart)).findFirst().ifPresent(modelPart -> {
-            modelPart.visible = true;
-        });
+        model.root().createPartLookup().apply(usingPart).visible = true;
         return model;
     }
 
