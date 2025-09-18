@@ -44,7 +44,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     }
 
     @Inject(at = @At(value = "TAIL"), method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V")
-
     public void extractRenderState(T p_362733_, S p_360515_, float p_361157_, CallbackInfo ci) {
         if (p_360515_ instanceof IBagusExtraRenderState bagusExtraRenderState) {
             bagusExtraRenderState.setBagusLib$headItem(p_362733_.getItemBySlot(EquipmentSlot.HEAD));
