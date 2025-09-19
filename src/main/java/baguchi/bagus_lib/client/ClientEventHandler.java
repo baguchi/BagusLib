@@ -224,9 +224,8 @@ public class ClientEventHandler {
                 BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(avatarRenderState, entityModel);
                 NeoForge.EVENT_BUS.post(event2);
             }
-            submitNodeCollector.submitModel(entityModel, avatarRenderState, poseStack, RenderType.entityTranslucent(resourceLocation), avatarRenderState.lightCoords,
+            submitNodeCollector.submitModelPart(modelPart, poseStack, RenderType.entityTranslucent(resourceLocation), avatarRenderState.lightCoords,
                     OverlayTexture.NO_OVERLAY,
-                    avatarRenderState.outlineColor,
                     null);
         }
     }
