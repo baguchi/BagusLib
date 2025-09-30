@@ -2,7 +2,6 @@ package baguchi.bagus_lib.client;
 
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.client.overlay.DialogOverlay;
-import baguchi.bagus_lib.client.render.MiniBaguArmorModel;
 import baguchi.bagus_lib.client.render.MiniBaguModel;
 import baguchi.bagus_lib.client.render.MiniBaguRenderer;
 import baguchi.bagus_lib.register.ModEntities;
@@ -25,7 +24,6 @@ public class ClientRegistrar {
     @SubscribeEvent
     public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.MINI_BAGU, MiniBaguModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.MINI_BAGU_ARMOR, MiniBaguArmorModel::createBodyLayer);
     }
 
     @SubscribeEvent

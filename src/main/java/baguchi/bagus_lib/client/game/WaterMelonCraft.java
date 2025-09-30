@@ -53,7 +53,7 @@ public class WaterMelonCraft {
                 generateNextFruit();
             } else {
                 float f = 0.15F;
-                if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_DOWN)) {
+                if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_DOWN)) {
                     f = 1F;
                 }
                 if (keyPressed(InputConstants.KEY_LEFT)) {
@@ -144,7 +144,7 @@ public class WaterMelonCraft {
     }
 
     private boolean keyPressed(int keyId) {
-        if (keyCooldown == 0 && InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), keyId)) {
+        if (keyCooldown == 0 && InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), keyId)) {
             keyCooldown = 4;
             return true;
         }

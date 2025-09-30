@@ -14,7 +14,7 @@ public class ModItems {
     public static final DeferredRegister.Items ITEM_REGISTRY = DeferredRegister.createItems(BagusLib.MODID);
 
     public static final DeferredItem<BookItem> BOOK = ITEM_REGISTRY.registerItem("book", BookItem::new);
-    public static final DeferredItem<SpawnEggItem> SPAWN_EGG_MINI_BAGU = ITEM_REGISTRY.registerItem("spawn_egg_mini_bagu", (properties -> new SpawnEggItem(ModEntities.MINI_BAGU.get(), properties)));
+    public static final DeferredItem<SpawnEggItem> SPAWN_EGG_MINI_BAGU = ITEM_REGISTRY.registerItem("spawn_egg_mini_bagu", (properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.MINI_BAGU.get()))));
 
     private static ResourceKey<Item> prefix(String path) {
         return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, path));
