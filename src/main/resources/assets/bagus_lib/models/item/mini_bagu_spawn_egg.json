@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "bagus_lib:item/spawn_egg_mini_bagu"
+    "layer0": "bagus_lib:item/mini_bagu_spawn_egg"
   }
 }
