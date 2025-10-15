@@ -10,6 +10,6 @@
   "command.bagus_lib.dialog": "Successfully added Dialog",
   "command.bagus_lib.image_dialog": "Successfully added Image Dialog",
   "item.bagus_lib.book": "Book",
-  "item.bagus_lib.spawn_egg_mini_bagu": "Mini Bagu Spawn Egg",
+  "item.bagus_lib.mini_bagu_spawn_egg": "Mini Bagu Spawn Egg",
   "entity.bagus_lib.mini_bagu": "Mini Bagu"
 }
