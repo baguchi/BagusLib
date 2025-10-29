@@ -4,6 +4,7 @@
   "bagus_lib.config.betterEndPoem": "Better End Poem",
   "bagus_lib.config.playableFirstPerson": "Playable First Person",
   "bagus_lib.config.aprilFeatureAlway": "Enable April Fools Feature Alway!",
+  "bagus_lib.config.multipartAcceptCrit": "Enable Critical Hit On MultiPart Entity(Such as EnderDragon)",
   "bagus_lib.watermelon": "Watermelon",
   "command.bagus_lib.remove_all_dialog": "Successfully removed all Dialog",
   "command.bagus_lib.item_dialog": "Successfully added Item Dialog",
