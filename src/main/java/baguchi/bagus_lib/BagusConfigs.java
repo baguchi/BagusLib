@@ -23,7 +23,6 @@ public class BagusConfigs {
         public final ModConfigSpec.BooleanValue aprilFool;
         public final ModConfigSpec.BooleanValue alwayAplilFool;
         public final ModConfigSpec.BooleanValue playableFirstPerson;
-        public final ModConfigSpec.BooleanValue multipartAcceptCrit;
         public Common(ModConfigSpec.Builder builder) {
             enableCameraShakeForVanillaMobs = builder
                     .comment("Enable the camera shake for vanilla mobs. [true / false]")
@@ -41,10 +40,6 @@ public class BagusConfigs {
                     .comment("Enable First Person Animation(When you using model change mod. should be turn off). [true / false]")
                     .translation(BagusLib.MODID + ".config.playableFirstPerson")
                     .define("Enable First Person Animation", true);
-            multipartAcceptCrit = builder
-                    .comment("Enable Critical Hit On MultiPart Entity(When Toggled. you can Critical Hit on MultiPart Entity such as EnderDragon). [true / false]")
-                    .translation(BagusLib.MODID + ".config.multipartAcceptCrit")
-                    .define("Enable Critical Hit On MultiPart Entity(Such as EnderDragon)", true);
 
         }
     }
