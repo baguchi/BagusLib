@@ -23,14 +23,4 @@ public class CommonEvent {
         }
     }
 
-    @SubscribeEvent
-    public static void onStartUse(LivingEntityUseItemEvent.Start event) {
-        //BagusAnimationUtil.sendAnimation(event.getEntity(), PAT);
-    }
-
-    @SubscribeEvent
-    public static void onStopUse(LivingEntityUseItemEvent.Stop event) {
-        //BagusAnimationUtil.sendStopAnimation(event.getEntity(), PAT);
-    }
-
 }

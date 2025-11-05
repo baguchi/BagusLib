@@ -3,12 +3,10 @@ package baguchi.bagus_lib.client.render;// Made with Blockbench 4.7.4
 // Paste this class into your mod and generate all required imports
 
 
-import baguchi.bagus_lib.client.animation.TestAnimations;
 import baguchi.bagus_lib.client.layer.IArmor;
 import baguchi.bagus_lib.client.render.state.MiniBaguRenderState;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -20,13 +18,11 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
     private final ModelPart root;
     private final ModelPart head;
     private final ModelPart tail;
-    private final KeyframeAnimation attackAnimation;
     public MiniBaguModel(ModelPart root) {
         super(root);
         this.root = root.getChild("root");
         this.head = this.root.getChild("head");
         this.tail = this.head.getChild("tail");
-        this.attackAnimation = TestAnimations.ATTACK.bake(root);
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -38,7 +34,11 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
         PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F))
                 .texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition tail = head.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(24, 0).addBox(-2.0F, -3.0F, 0.0F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 4.0F));
+        PartDefinition tail = head.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(24, 0).addBox(-2.0F, -1.0F, 0.0F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 4.0F));
+
+        PartDefinition earR = head.addOrReplaceChild("earR", CubeListBuilder.create().texOffs(0, 16).addBox(-5.0F, -1.0F, -2.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, -6.4F, 0.0F, 0.0F, 0.0F, -1.0472F));
+
+        PartDefinition earL = head.addOrReplaceChild("earL", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(0.0F, -1.0F, -2.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, -6.4F, 0.0F, 0.0F, 0.0F, 1.0472F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
