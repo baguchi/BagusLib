@@ -1,6 +1,7 @@
 package baguchi.bagus_lib.client.event;
 
 import net.minecraft.client.animation.KeyframeAnimation;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.Event;
@@ -13,9 +14,11 @@ public class RegisterBagusKeyframeEvents extends Event {
     private final Map<ResourceLocation, KeyframeAnimation> keyframeMap = new HashMap<>();
     private Map<ResourceLocation, KeyframeAnimation> keyframeUnModifiableMap = Collections.unmodifiableMap(keyframeMap);
 
+    private final Model<?> model;
     private final ModelPart modelPart;
 
-    public RegisterBagusKeyframeEvents(ModelPart modelPart) {
+    public RegisterBagusKeyframeEvents(Model<?> model, ModelPart modelPart) {
+        this.model = model;
         this.modelPart = modelPart;
     }
 
@@ -30,5 +33,9 @@ public class RegisterBagusKeyframeEvents extends Event {
 
     public ModelPart getModelPart() {
         return modelPart;
+    }
+
+    public Model<?> getModel() {
+        return model;
     }
 }
