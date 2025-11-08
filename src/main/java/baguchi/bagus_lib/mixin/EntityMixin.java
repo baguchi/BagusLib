@@ -2,7 +2,7 @@ package baguchi.bagus_lib.mixin;
 
 import baguchi.bagus_lib.animation.BaguAnimationController;
 import baguchi.bagus_lib.api.IBaguAnimate;
-import baguchi.bagus_lib.event.RegisterBagusAnimationEvents;
+import baguchi.bagus_lib.event.RegisterBagusAnimationStateEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +21,7 @@ public class EntityMixin implements IBaguAnimate {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void init(EntityType p_19870_, Level p_19871_, CallbackInfo ci) {
-        RegisterBagusAnimationEvents events = NeoForge.EVENT_BUS.post(new RegisterBagusAnimationEvents(((Entity) (Object) this)));
+        RegisterBagusAnimationStateEvents events = NeoForge.EVENT_BUS.post(new RegisterBagusAnimationStateEvents(((Entity) (Object) this)));
         for (ResourceLocation resourceLocations : events.getAnimationStateMap().keySet()) {
             BAGU_ANIMATION_CONTROLLER.addAnimation(resourceLocations);
         }

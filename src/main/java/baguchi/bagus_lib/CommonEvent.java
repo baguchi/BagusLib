@@ -1,6 +1,6 @@
 package baguchi.bagus_lib;
 
-import baguchi.bagus_lib.event.RegisterBagusAnimationEvents;
+import baguchi.bagus_lib.event.RegisterBagusAnimationStateEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,7 +16,7 @@ public class CommonEvent {
     }
 
     @SubscribeEvent
-    public static void entityAnimationRegister(RegisterBagusAnimationEvents events) {
+    public static void entityAnimationRegister(RegisterBagusAnimationStateEvents events) {
         if (events.getEntity() instanceof Player) {
             events.addAnimationState(PAT);
             events.addFirstPersonPlayableAnimationState(PAT);

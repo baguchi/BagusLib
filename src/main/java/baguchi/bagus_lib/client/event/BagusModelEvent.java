@@ -1,7 +1,9 @@
 package baguchi.bagus_lib.client.event;
 
 import baguchi.bagus_lib.animation.BaguAnimationController;
+import baguchi.bagus_lib.animation.client.BaguKeyFrameController;
 import baguchi.bagus_lib.api.IBagusExtraRenderState;
+import baguchi.bagus_lib.api.client.IBaguKeyframe;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -23,9 +25,20 @@ public abstract class BagusModelEvent extends Event {
         return entityIn;
     }
 
+    /*
+     *This animation controller using to handle AnimationState class
+     */
     @Nullable
     public BaguAnimationController getBaguAnimationController() {
         return entityIn instanceof IBagusExtraRenderState bagusExtraRenderState ? bagusExtraRenderState.bagusLib$getBaguAnimationController() : null;
+    }
+
+    /*
+     *This keyframe controller using to handle KeyframeAnimation class
+     */
+    @Nullable
+    public BaguKeyFrameController getBaguKeyframeController() {
+        return this.model instanceof IBaguKeyframe iBaguKeyframe ? iBaguKeyframe.getBaguKeyframeController() : null;
     }
 
     public EntityModel getModel() {

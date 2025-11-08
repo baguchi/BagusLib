@@ -14,7 +14,7 @@
     "client.LivingEntityRendererMixin",
     "client.LivingEntityRenderStateMixin",
     "client.ModelFeatureRendererMixin",
-    "client.PlayerModelMixin",
+    "client.ModelMixin",
     "client.WinScreenMixin"
   ],
   "injectors": {

@@ -7,7 +7,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.*;
 
-public class RegisterBagusAnimationEvents extends Event {
+public class RegisterBagusAnimationStateEvents extends Event {
     private final Map<ResourceLocation, AnimationState> animationStateMap = new HashMap<>();
     private Map<ResourceLocation, AnimationState> animationStateUnModifiableMap = Collections.unmodifiableMap(animationStateMap);
     private final List<ResourceLocation> animationStateFirstPersonPlayableList = new ArrayList<>();
@@ -15,7 +15,7 @@ public class RegisterBagusAnimationEvents extends Event {
 
     private final Entity entity;
 
-    public RegisterBagusAnimationEvents(Entity entity) {
+    public RegisterBagusAnimationStateEvents(Entity entity) {
         this.entity = entity;
     }
 
