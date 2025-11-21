@@ -38,11 +38,11 @@ public class CameraHolder {
 
     private void preTick(ViewportEvent.ComputeCameraAngles event) {
 
-        float dist = (float) Mth.clamp((float) this.distance / this.getPos().pos().distanceToSqr(event.getCamera().getPosition()), 0F, 1F);
+        float dist = (float) Mth.clamp((float) this.distance / this.getPos().pos().distanceToSqr(event.getCamera().position()), 0F, 1F);
         float leftTick = ((float) this.getDuration() / (float) this.time);
 
-        if (this.getPos().pos().distanceToSqr(event.getCamera().getPosition()) < this.distance * this.distance && event.getCamera().getEntity().level().dimension() == this.getPos().dimension()) {
-            double ticks = event.getCamera().getEntity().tickCount + event.getPartialTick();
+        if (this.getPos().pos().distanceToSqr(event.getCamera().position()) < this.distance * this.distance && event.getCamera().entity().level().dimension() == this.getPos().dimension()) {
+            double ticks = event.getCamera().entity().tickCount + event.getPartialTick();
             float amount = leftTick * dist;
 
             event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)) * this.distance * 0.1F * this.amount);

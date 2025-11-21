@@ -1,6 +1,6 @@
 package baguchi.bagus_lib.client.render.book.component;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /*
 MIT License
@@ -28,9 +28,9 @@ SOFTWARE.
 @link https://github.com/LeoMinecraftModding/eternal-starlight/blob/1.21.1-arch/common/src/main/java/cn/leolezury/eternalstarlight/common/client/book/component/BookComponentDefinition.java
 
 * */
-public record BookComponentDefinition(BookComponent component, ResourceLocation id, int xOffsetL, int yOffsetL,
+public record BookComponentDefinition(BookComponent component, Identifier id, int xOffsetL, int yOffsetL,
                                       int xOffsetR, int yOffsetR, boolean enabled) {
-    public BookComponentDefinition(BookComponent component, ResourceLocation id, int xOffsetL, int yOffsetL, int xOffsetR, int yOffsetR) {
+    public BookComponentDefinition(BookComponent component, Identifier id, int xOffsetL, int yOffsetL, int xOffsetR, int yOffsetR) {
         this(component, id, xOffsetL, yOffsetL, xOffsetR, yOffsetR, true);
     }
 }

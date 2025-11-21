@@ -3,7 +3,7 @@ package baguchi.bagus_lib.animation;
 import baguchi.bagus_lib.BagusConfigs;
 import baguchi.bagus_lib.BagusLib;
 import com.google.common.collect.Maps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 
@@ -15,8 +15,8 @@ import java.util.Optional;
 //this animation controller make handle animation on Event
 public class BaguAnimationController<T extends Entity> {
     private final T entity;
-    private final Map<ResourceLocation, AnimationState> animationStateMap = Maps.newHashMap();
-    private final List<ResourceLocation> animationStateFirstPersonList = new ArrayList<>();
+    private final Map<Identifier, AnimationState> animationStateMap = Maps.newHashMap();
+    private final List<Identifier> animationStateFirstPersonList = new ArrayList<>();
 
     public BaguAnimationController(T entity) {
         this.entity = entity;
@@ -24,18 +24,18 @@ public class BaguAnimationController<T extends Entity> {
 
     //DON'T USE DIRECTLY
     @Deprecated
-    public void addAnimation(ResourceLocation resourceLocation) {
+    public void addAnimation(Identifier resourceLocation) {
         this.animationStateMap.put(resourceLocation, new AnimationState());
     }
 
     @Deprecated
-    public void addFirstPersonAnimation(ResourceLocation resourceLocation) {
+    public void addFirstPersonAnimation(Identifier resourceLocation) {
         if (!this.animationStateFirstPersonList.contains(resourceLocation)) {
             this.animationStateFirstPersonList.add(resourceLocation);
         }
     }
 
-    public void startAnimation(ResourceLocation resourceLocation) {
+    public void startAnimation(Identifier resourceLocation) {
         if (this.animationStateMap.get(resourceLocation) != null) {
             this.animationStateMap.get(resourceLocation).start(entity.tickCount);
         } else {
@@ -43,7 +43,7 @@ public class BaguAnimationController<T extends Entity> {
         }
     }
 
-    public void stopAnimation(ResourceLocation resourceLocation) {
+    public void stopAnimation(Identifier resourceLocation) {
         if (this.animationStateMap.get(resourceLocation) != null) {
             this.animationStateMap.get(resourceLocation).stop();
         } else {
@@ -59,13 +59,13 @@ public class BaguAnimationController<T extends Entity> {
         if (!BagusConfigs.COMMON.playableFirstPerson.get()) {
             return false;
         }
-        Optional<Map.Entry<ResourceLocation, AnimationState>> playtest = this.animationStateMap.entrySet().stream().filter(animationStateEntry -> {
+        Optional<Map.Entry<Identifier, AnimationState>> playtest = this.animationStateMap.entrySet().stream().filter(animationStateEntry -> {
             return animationStateEntry.getValue().isStarted() && this.animationStateFirstPersonList.contains(animationStateEntry.getKey());
         }).findAny();
         return playtest.isPresent();
     }
 
-    public AnimationState getAnimationState(ResourceLocation index) {
+    public AnimationState getAnimationState(Identifier index) {
         if (animationStateMap.containsKey(index)) {
             return animationStateMap.get(index);
         }

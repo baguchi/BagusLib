@@ -2,14 +2,12 @@ package baguchi.bagus_lib.client.layer;
 
 import baguchi.bagus_lib.api.IBagusExtraRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.ArmorModelSet;
@@ -18,15 +16,18 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.AtlasIds;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentAsset;
@@ -50,7 +51,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     private final RenderLayerParent<S, M> renderer;
     private final EquipmentAssetManager equipmentAssets;
     private final MaterialSet materials;
-    private final Function<LayerTextureKey, ResourceLocation> layerTextureLookup;
+    private final Function<LayerTextureKey, Identifier> layerTextureLookup;
     private final Function<TrimSpriteKey, TextureAtlasSprite> trimSpriteLookup;
 
 
@@ -182,7 +183,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         this.renderLayers(p_388694_, p_386937_, p_371498_, p_435837_, p_371902_, p_371937_, p_434165_, light, null, outlineColor, 1, renderPart);
     }
 
-    public <S> void renderLayers(EquipmentClientInfo.LayerType p_387484_, ResourceKey<EquipmentAsset> p_387603_, Model<? super S> p_371731_, S p_435806_, ItemStack p_371670_, PoseStack p_371767_, SubmitNodeCollector p_435795_, int light, @Nullable ResourceLocation p_371639_, int outlineColor, int p_436591_, String renderPart) {
+    public <S> void renderLayers(EquipmentClientInfo.LayerType p_387484_, ResourceKey<EquipmentAsset> p_387603_, Model<? super S> p_371731_, S p_435806_, ItemStack p_371670_, PoseStack p_371767_, SubmitNodeCollector p_435795_, int light, @Nullable Identifier p_371639_, int outlineColor, int p_436591_, String renderPart) {
         ModelPart part = p_371731_.root().createPartLookup().apply(renderPart);
 
         IClientItemExtensions extensions = IClientItemExtensions.of(p_371670_);
@@ -197,11 +198,11 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
             for (EquipmentClientInfo.Layer equipmentclientinfo$layer : list) {
                 int k = extensions.getArmorLayerTintColor(p_371670_, equipmentclientinfo$layer, idx, i);
                 if (k != 0) {
-                    ResourceLocation resourcelocation = equipmentclientinfo$layer.usePlayerTexture() && p_371639_ != null ? p_371639_ : this.layerTextureLookup.apply(new LayerTextureKey(p_387484_, equipmentclientinfo$layer));
+                    Identifier resourcelocation = equipmentclientinfo$layer.usePlayerTexture() && p_371639_ != null ? p_371639_ : this.layerTextureLookup.apply(new LayerTextureKey(p_387484_, equipmentclientinfo$layer));
                     resourcelocation = ClientHooks.getArmorTexture(p_371670_, p_387484_, equipmentclientinfo$layer, resourcelocation);
-                    p_435795_.order(j++).submitModelPart(part, p_371767_, RenderType.armorCutoutNoCull(resourcelocation), light, outlineColor, null, k, null);
+                    p_435795_.order(j++).submitModelPart(part, p_371767_, RenderTypes.armorCutoutNoCull(resourcelocation), light, outlineColor, null, k, null);
                     if (flag) {
-                        p_435795_.order(j++).submitModelPart(part, p_371767_, RenderType.armorEntityGlint(), light, outlineColor, null, k, null);
+                        p_435795_.order(j++).submitModelPart(part, p_371767_, RenderTypes.armorEntityGlint(), light, outlineColor, null, k, null);
                     }
 
                     flag = false;
@@ -235,7 +236,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
     record TrimSpriteKey(ArmorTrim trim, EquipmentClientInfo.LayerType layerType,
                          ResourceKey<EquipmentAsset> equipmentAssetId) {
-        public ResourceLocation spriteId() {
+        public Identifier spriteId() {
             return this.trim.layerAssetId(this.layerType.trimAssetPrefix(), this.equipmentAssetId);
         }
     }

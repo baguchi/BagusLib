@@ -18,16 +18,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.TickRateManager;
@@ -81,8 +81,8 @@ public class ClientEventHandler {
                     BagusLib.prefix("textures/gui/screen/book/book.png"),
                     BagusLib.prefix("textures/gui/screen/book/book_back.png"),
                     BagusLib.prefix("textures/gui/screen/book/book_back.png"),
-                    ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/page_backward.png"),
-                    ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/page_forward.png"));
+                    Identifier.withDefaultNamespace("textures/gui/sprites/widget/page_backward.png"),
+                    Identifier.withDefaultNamespace("textures/gui/sprites/widget/page_forward.png"));
             Minecraft.getInstance().setScreen(new BookScreen(book));
         }
     }
@@ -181,7 +181,7 @@ public class ClientEventHandler {
         poseStack.mulPose(Axis.XP.rotationDegrees(200.0F));
         poseStack.mulPose(Axis.YP.rotationDegrees(f * -135.0F));
         poseStack.translate(f * 5.6F, 0.0F, 0.0F);
-        ResourceLocation resourcelocation = abstractclientplayer.getSkin().body().texturePath();
+        Identifier resourcelocation = abstractclientplayer.getSkin().body().texturePath();
         if (flag) {
             renderRightHand(poseStack, submitNodeCollector, light, resourcelocation, abstractclientplayer.isModelPartShown(PlayerModelPart.RIGHT_SLEEVE), abstractclientplayer, avatarRenderState, entityModel);
         } else {
@@ -190,7 +190,7 @@ public class ClientEventHandler {
 
     }
 
-    public static void renderRightHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light, ResourceLocation resourceLocation, boolean partShown, AbstractClientPlayer player, AvatarRenderState avatarRenderState, EntityModel entityModel) {
+    public static void renderRightHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light, Identifier resourceLocation, boolean partShown, AbstractClientPlayer player, AvatarRenderState avatarRenderState, EntityModel entityModel) {
         if (!ClientHooks.renderSpecificFirstPersonArm(poseStack, submitNodeCollector, light, player, HumanoidArm.RIGHT)) {
             if (entityModel instanceof PlayerModel playerModel) {
                 renderHand(poseStack, submitNodeCollector, light, resourceLocation, playerModel.rightArm, partShown, avatarRenderState, playerModel);
@@ -199,7 +199,7 @@ public class ClientEventHandler {
 
     }
 
-    public static void renderLeftHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light, ResourceLocation resourceLocation, boolean partShown, AbstractClientPlayer player, AvatarRenderState avatarRenderState, EntityModel entityModel) {
+    public static void renderLeftHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int light, Identifier resourceLocation, boolean partShown, AbstractClientPlayer player, AvatarRenderState avatarRenderState, EntityModel entityModel) {
         if (!ClientHooks.renderSpecificFirstPersonArm(poseStack, submitNodeCollector, light, player, HumanoidArm.LEFT)) {
             if (entityModel instanceof PlayerModel playerModel) {
                 renderHand(poseStack, submitNodeCollector, light, resourceLocation, playerModel.leftArm, partShown, avatarRenderState, playerModel);
@@ -208,7 +208,7 @@ public class ClientEventHandler {
 
     }
 
-    private static void renderHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int p_117778_, ResourceLocation resourceLocation, ModelPart modelPart, boolean modelShown, AvatarRenderState avatarRenderState, PlayerModel playermodel) {
+    private static void renderHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int p_117778_, Identifier resourceLocation, ModelPart modelPart, boolean modelShown, AvatarRenderState avatarRenderState, PlayerModel playermodel) {
         modelPart.resetPose();
         modelPart.visible = true;
         playermodel.leftSleeve.visible = modelShown;
@@ -224,7 +224,7 @@ public class ClientEventHandler {
                 BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(avatarRenderState, entityModel);
                 NeoForge.EVENT_BUS.post(event2);
             }
-            submitNodeCollector.submitModelPart(modelPart, poseStack, RenderType.entityTranslucent(resourceLocation), avatarRenderState.lightCoords,
+            submitNodeCollector.submitModelPart(modelPart, poseStack, RenderTypes.entityTranslucent(resourceLocation), avatarRenderState.lightCoords,
                     OverlayTexture.NO_OVERLAY,
                     null);
         }

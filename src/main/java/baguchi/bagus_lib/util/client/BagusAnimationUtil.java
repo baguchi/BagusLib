@@ -5,20 +5,20 @@ import baguchi.bagus_lib.api.IBaguAnimate;
 import baguchi.bagus_lib.message.SyncBagusAnimationsMessage;
 import baguchi.bagus_lib.message.SyncBagusAnimationsStopAllMessage;
 import baguchi.bagus_lib.message.SyncBagusAnimationsStopMessage;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * This util handle animate every different type mob(of course. You can animate them separately.)
- * In ResourceLocation, enter the id of the animation you want to start or stop.
+ * In Identifier, enter the id of the animation you want to start or stop.
  * of course. you need register id on bagu_chan.bagus_lib.event.RegisterBagusAnimationEvents.class
  * @author bagu_chan
  */
 public class BagusAnimationUtil {
 
-    public static void handleAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
+    public static void handleAnimationPacket(Entity entity, Identifier resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
                 baguAnimate.getBaguController().startAnimation(resourceLocation);
@@ -27,7 +27,7 @@ public class BagusAnimationUtil {
     }
 
 
-    public static void handleStopAnimationPacket(Entity entity, ResourceLocation resourceLocation) {
+    public static void handleStopAnimationPacket(Entity entity, Identifier resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
                 baguAnimate.getBaguController().stopAnimation(resourceLocation);
@@ -52,13 +52,13 @@ public class BagusAnimationUtil {
         return null;
     }
 
-    public static void sendAnimation(Entity entity, ResourceLocation resourceLocation) {
+    public static void sendAnimation(Entity entity, Identifier resourceLocation) {
         if (!entity.level().isClientSide()) {
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsMessage(entity.getId(), resourceLocation));
         }
     }
 
-    public static void sendStopAnimation(Entity entity, ResourceLocation resourceLocation) {
+    public static void sendStopAnimation(Entity entity, Identifier resourceLocation) {
         if (!entity.level().isClientSide()) {
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopMessage(entity.getId(), resourceLocation));
         }

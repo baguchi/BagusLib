@@ -32,7 +32,7 @@ public class DialogCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> p_138061_, CommandBuildContext p_214450_) {
         LiteralCommandNode<CommandSourceStack> literalcommandnode = p_138061_.register(
-                Commands.literal("bagus_lib").requires(p_136627_ -> p_136627_.hasPermission(2)).then(Commands.literal("dialog")
+                Commands.literal("bagus_lib").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(Commands.literal("dialog")
                         .then(
                                 Commands.argument("targets", EntityArgument.players()).then(Commands.argument("dialog_type", ResourceKeyArgument.key(DialogRegister.REGISTRY_KEY)).executes(p_248155_ -> {
 
@@ -47,7 +47,7 @@ public class DialogCommand {
                                 )
                         )));
         LiteralCommandNode<CommandSourceStack> literalcommandnode4 = p_138061_.register(
-                Commands.literal("bagus_lib").requires(p_136627_ -> p_136627_.hasPermission(2)).then(Commands.literal("remove_all_dialog")
+                Commands.literal("bagus_lib").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(Commands.literal("remove_all_dialog")
                         .then(
                                 Commands.argument("targets", EntityArgument.players()).executes(p_248155_ -> {
                                     Collection<ServerPlayer> collection = EntityArgument.getPlayers(p_248155_, "targets");
@@ -82,7 +82,7 @@ public class DialogCommand {
             CommandContext<CommandSourceStack> p_248662_, String p_252172_, ResourceKey<Registry<DialogType>> p_249701_, DynamicCommandExceptionType p_249790_
     ) throws CommandSyntaxException {
         ResourceKey<DialogType> resourcekey = getRegistryKey(p_248662_, p_252172_, p_249701_, p_249790_);
-        return getRegistry(p_248662_, p_249701_).get(resourcekey).orElseThrow(() -> p_249790_.create(resourcekey.location()));
+        return getRegistry(p_248662_, p_249701_).get(resourcekey).orElseThrow(() -> p_249790_.create(resourcekey.identifier()));
     }
 
     private static void sendRemoveAllDialogMessage(CommandSourceStack p_250209_, Collection<ServerPlayer> p_252344_) {

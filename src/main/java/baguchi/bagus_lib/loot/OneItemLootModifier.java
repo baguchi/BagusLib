@@ -6,8 +6,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -23,12 +23,12 @@ public class OneItemLootModifier extends LootModifier {
 
     public static final Supplier<MapCodec<OneItemLootModifier>> CODEC = Suppliers.memoize(() ->
             RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
-                    .and(ResourceLocation.CODEC.fieldOf("loot_table").forGetter((m) -> m.lootTable))
+                    .and(Identifier.CODEC.fieldOf("loot_table").forGetter((m) -> m.lootTable))
                     .apply(inst, OneItemLootModifier::new)));
 
-    public final ResourceLocation lootTable;
+    public final Identifier lootTable;
 
-    public OneItemLootModifier(LootItemCondition[] conditionsIn, ResourceLocation lootTable) {
+    public OneItemLootModifier(LootItemCondition[] conditionsIn, Identifier lootTable) {
         super(conditionsIn);
         this.lootTable = lootTable;
     }

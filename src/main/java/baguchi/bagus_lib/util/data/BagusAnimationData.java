@@ -2,18 +2,17 @@ package baguchi.bagus_lib.util.data;
 
 
 import baguchi.bagus_lib.util.client.BagusAnimationUtil;
-
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 
 public class BagusAnimationData {
 
     public int animationTick;
     public boolean started;
-    public final ResourceLocation animation;
+    public final Identifier animation;
     public final int maxAnimationTick;
 
-    public BagusAnimationData(ResourceLocation animation, int maxAnimationTick) {
+    public BagusAnimationData(Identifier animation, int maxAnimationTick) {
         this.animation = animation;
         this.maxAnimationTick = maxAnimationTick;
     }
@@ -49,7 +48,7 @@ public class BagusAnimationData {
         }
     }
 
-    public ResourceLocation getAnimation() {
+    public Identifier getAnimation() {
         return animation;
     }
 

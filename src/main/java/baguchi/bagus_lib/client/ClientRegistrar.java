@@ -5,7 +5,7 @@ import baguchi.bagus_lib.client.overlay.DialogOverlay;
 import baguchi.bagus_lib.client.render.MiniBaguModel;
 import baguchi.bagus_lib.client.render.MiniBaguRenderer;
 import baguchi.bagus_lib.register.ModEntities;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -37,6 +37,6 @@ public class ClientRegistrar {
 
     @SubscribeEvent
     public static void overlayRegister(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "dialog"), new DialogOverlay());
+        event.registerAboveAll(Identifier.fromNamespaceAndPath(BagusLib.MODID, "dialog"), new DialogOverlay());
     }
 }
