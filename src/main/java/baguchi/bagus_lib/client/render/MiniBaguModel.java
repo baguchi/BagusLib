@@ -18,11 +18,15 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
     private final ModelPart root;
     private final ModelPart head;
     private final ModelPart tail;
+    private final ModelPart earR;
+    private final ModelPart earL;
     public MiniBaguModel(ModelPart root) {
         super(root);
         this.root = root.getChild("root");
         this.head = this.root.getChild("head");
         this.tail = this.head.getChild("tail");
+        this.earR = this.head.getChild("earR");
+        this.earL = this.head.getChild("earL");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -48,6 +52,15 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
         super.setupAnim(entity);
         this.head.yRot = Mth.cos(entity.walkAnimationPos * 0.6662F) * 0.4F * entity.walkAnimationSpeed;
         this.tail.yRot = Mth.cos(entity.ageInTicks * 0.35F + entity.walkAnimationPos * 0.35F) * 0.4F;
+
+        float f = entity.walkAnimationPos;
+        float f1 = entity.walkAnimationSpeed;
+        float f2 = ((float) Math.PI / 6F);
+        float f3 = entity.ageInTicks * 0.1F + f * 0.5F;
+        float f4 = 0.08F + f1 * 0.4F;
+        this.earL.zRot += -Mth.cos((double) (f3 * 1.2F)) * f4;
+        this.earR.zRot += Mth.cos((double) f3) * f4;
+
     }
 
     @Override
