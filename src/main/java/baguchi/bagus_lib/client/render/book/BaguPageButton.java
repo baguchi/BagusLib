@@ -22,7 +22,7 @@ public class BaguPageButton extends Button {
     }
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
+    protected void renderContents(GuiGraphics guiGraphics, int i, int i1, float v) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, isForward ? book.rightButton() : book.leftButton(), this.getX(), this.getY(), 0, 0, book.buttonWidth(), book.buttonHeight(), book.buttonWidth(), book.buttonHeight());
     }
 

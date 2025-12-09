@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
 
 import javax.annotation.Nullable;
@@ -21,17 +21,17 @@ public class ImageDialogType extends DialogType {
                             DialogEffectOption.CODEC.fieldOf("dialog_option").orElse(new DialogEffectOption(1, 1, true, Optional.empty())).forGetter(ImageDialogType::getDialogueOption),
                             NextDialogOption.CODEC.fieldOf("next_dialog").orElse(new NextDialogOption(Optional.empty(), -1)).forGetter(DialogType::getNextDialogOption),
                             Codec.DOUBLE.fieldOf("draw_per_tick").forGetter(ImageDialogType::getDialogPerTick),
-                            ResourceLocation.CODEC.optionalFieldOf("image").forGetter(ImageDialogType::getImage),
+                            Identifier.CODEC.optionalFieldOf("image").forGetter(ImageDialogType::getImage),
                             Codec.INT.fieldOf("texture_size_x").forGetter(ImageDialogType::getTextureSizeX),
                             Codec.INT.fieldOf("texture_size_y").forGetter(ImageDialogType::getTextureSizeY))
                     .apply(p_345644_, ImageDialogType::new)
     );
 
-    protected final Optional<ResourceLocation> image;
+    protected final Optional<Identifier> image;
     private final int textureSizeX;
     private final int textureSizeY;
 
-    public ImageDialogType(String dialogueBase, DialogEffectOption dialogueOption, NextDialogOption nextDialogOption, double dialogPerTick, Optional<ResourceLocation> image, int textureSizeX, int textureSizeY) {
+    public ImageDialogType(String dialogueBase, DialogEffectOption dialogueOption, NextDialogOption nextDialogOption, double dialogPerTick, Optional<Identifier> image, int textureSizeX, int textureSizeY) {
         super(dialogueBase, dialogueOption, nextDialogOption, dialogPerTick);
         this.image = image;
         this.textureSizeX = textureSizeX;
@@ -51,7 +51,7 @@ public class ImageDialogType extends DialogType {
     }
 
     @Nullable
-    public Optional<ResourceLocation> getImage() {
+    public Optional<Identifier> getImage() {
         return image;
     }
 

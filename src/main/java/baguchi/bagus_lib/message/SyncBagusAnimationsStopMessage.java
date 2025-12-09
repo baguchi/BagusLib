@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -21,20 +21,20 @@ public class SyncBagusAnimationsStopMessage implements CustomPacketPayload, IPay
 
     private final int entityId;
 
-    private final ResourceLocation resourceLocation;
+    private final Identifier resourceLocation;
 
-    public SyncBagusAnimationsStopMessage(int entityId, ResourceLocation resourceLocation) {
+    public SyncBagusAnimationsStopMessage(int entityId, Identifier resourceLocation) {
         this.entityId = entityId;
         this.resourceLocation = resourceLocation;
     }
 
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.entityId);
-        buf.writeResourceLocation(this.resourceLocation);
+        buf.writeIdentifier(this.resourceLocation);
     }
 
     public SyncBagusAnimationsStopMessage(FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readResourceLocation());
+        this(buf.readInt(), buf.readIdentifier());
     }
 
     public void handle(SyncBagusAnimationsStopMessage message, IPayloadContext context) {

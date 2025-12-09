@@ -7,8 +7,8 @@ import baguchi.bagus_lib.client.dialog.ItemDialogType;
 import baguchi.bagus_lib.client.dialog.WinDialogType;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -20,7 +20,7 @@ import static net.minecraft.resources.ResourceKey.createRegistryKey;
 
 @EventBusSubscriber(modid = BagusLib.MODID)
 public class ModDialogs {
-    public static final ResourceKey<Registry<MapCodec<? extends DialogType>>> DIALOG_REGISTRY = createRegistryKey(ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "dialog_type"));
+    public static final ResourceKey<Registry<MapCodec<? extends DialogType>>> DIALOG_REGISTRY = createRegistryKey(Identifier.fromNamespaceAndPath(BagusLib.MODID, "dialog_type"));
 
     public static final DeferredRegister<MapCodec<? extends DialogType>> DIALOG_TYPE = DeferredRegister.create(DIALOG_REGISTRY, BagusLib.MODID);
     public static final DeferredHolder<MapCodec<? extends DialogType>, MapCodec<? extends DialogType>> DIALOGS = DIALOG_TYPE.register("dialog", () -> DialogType.CODEC);

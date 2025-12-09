@@ -5,7 +5,7 @@ import baguchi.bagus_lib.command.DialogCommand;
 import baguchi.bagus_lib.item.ModItems;
 import baguchi.bagus_lib.message.*;
 import baguchi.bagus_lib.register.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -58,8 +58,8 @@ public class BagusLib {
     }
 
 
-    public static ResourceLocation prefix(String name) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, name.toLowerCase(Locale.ROOT));
+    public static Identifier prefix(String name) {
+        return Identifier.fromNamespaceAndPath(MODID, name.toLowerCase(Locale.ROOT));
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

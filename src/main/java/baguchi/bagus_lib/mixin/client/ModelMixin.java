@@ -6,7 +6,7 @@ import baguchi.bagus_lib.client.event.RegisterBagusKeyframeEvents;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +31,7 @@ public abstract class ModelMixin implements IBaguKeyframe {
     private void init(CallbackInfo callbackInfo) {
         Model<?> model = (Model<?>) (Object) this;
         RegisterBagusKeyframeEvents events = NeoForge.EVENT_BUS.post(new RegisterBagusKeyframeEvents(model, this.root));
-        for (Map.Entry<ResourceLocation, KeyframeAnimation> resourceLocations : events.getAnimationKeyframeMap().entrySet()) {
+        for (Map.Entry<Identifier, KeyframeAnimation> resourceLocations : events.getAnimationKeyframeMap().entrySet()) {
             BAGU_KEYFRAME_CONTROLLER.addAnimation(resourceLocations);
         }
     }

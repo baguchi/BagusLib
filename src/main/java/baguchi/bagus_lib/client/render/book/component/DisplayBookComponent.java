@@ -4,12 +4,14 @@ import baguchi.bagus_lib.client.render.book.BookAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -88,7 +90,10 @@ public class DisplayBookComponent extends BookComponent {
                 }
             }
             if (entities.containsKey(display)) {
-                InventoryScreen.renderEntityInInventory(graphics, x + display.x(), y + display.y(), x + display.xMax, y + display.yMax, display.scale(), new Vector3f(), display.rotation, null, entities.get(display));
+                EntityRenderState entityrenderstate = extractRenderState(entities.get(display));
+
+                Vector3f vector3f = new Vector3f(0.0F, entityrenderstate.boundingBoxHeight / 2.0F, 0.0F);
+                graphics.submitEntityRenderState(entityrenderstate, display.scale(), vector3f, display.rotation, new Quaternionf(), x + display.x(), y + display.y(), x + display.xMax, y + display.yMax);
             }
         }
         for (ItemDisplay display : itemDisplays) {
@@ -107,6 +112,16 @@ public class DisplayBookComponent extends BookComponent {
             graphics.drawString(font, display.text(), -font.width(display.text()) / 2, -font.lineHeight, -16777216, false);
             graphics.pose().popMatrix();
         }
+    }
+
+    private static EntityRenderState extractRenderState(LivingEntity p_461127_) {
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<? super LivingEntity, ?> entityrenderer = entityrenderdispatcher.getRenderer(p_461127_);
+        EntityRenderState entityrenderstate = entityrenderer.createRenderState(p_461127_, 1.0F);
+        entityrenderstate.lightCoords = 15728880;
+        entityrenderstate.shadowPieces.clear();
+        entityrenderstate.outlineColor = 0;
+        return entityrenderstate;
     }
 
     @Override
@@ -140,7 +155,7 @@ public class DisplayBookComponent extends BookComponent {
         return this;
     }
 
-    public DisplayBookComponent imageDisplay(ResourceLocation location, int x, int y, int width, int height) {
+    public DisplayBookComponent imageDisplay(Identifier location, int x, int y, int width, int height) {
         imageDisplays.add(new ImageDisplay(location, x, y, width, height));
         return this;
     }
@@ -163,7 +178,7 @@ public class DisplayBookComponent extends BookComponent {
 
     }
 
-    private record ImageDisplay(ResourceLocation location, int x, int y, int width, int height) {
+    private record ImageDisplay(Identifier location, int x, int y, int width, int height) {
 
     }
 }

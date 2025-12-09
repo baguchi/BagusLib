@@ -1,7 +1,7 @@
 package baguchi.bagus_lib;
 
 import baguchi.bagus_lib.event.RegisterBagusAnimationStateEvents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @EventBusSubscriber(modid = BagusLib.MODID)
 public class CommonEvent {
-    public static final ResourceLocation PAT = ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "pat");
+    public static final Identifier PAT = Identifier.fromNamespaceAndPath(BagusLib.MODID, "pat");
 
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {

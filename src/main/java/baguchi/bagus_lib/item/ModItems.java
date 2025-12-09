@@ -3,8 +3,8 @@ package baguchi.bagus_lib.item;
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.register.ModEntities;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -17,6 +17,6 @@ public class ModItems {
     public static final DeferredItem<SpawnEggItem> MINI_BAGU_SPAWN_EGG = ITEM_REGISTRY.registerItem("mini_bagu_spawn_egg", (properties -> new SpawnEggItem(properties.spawnEgg(ModEntities.MINI_BAGU.get()))));
 
     private static ResourceKey<Item> prefix(String path) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, path));
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(BagusLib.MODID, path));
     }
 }

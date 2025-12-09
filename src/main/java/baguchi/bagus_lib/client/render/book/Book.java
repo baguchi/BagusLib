@@ -1,7 +1,7 @@
 package baguchi.bagus_lib.client.render.book;
 
 import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
@@ -32,8 +32,8 @@ SOFTWARE.
 
 * */
 public record Book(List<BookComponentDefinition> components, int width, int height, int buttonWidth, int buttonHeight,
-                   int buttonXOffset, int buttonYOffset, ResourceLocation background, ResourceLocation cover,
-                   ResourceLocation backCover, ResourceLocation leftButton, ResourceLocation rightButton) {
+                   int buttonXOffset, int buttonYOffset, Identifier background, Identifier cover,
+                   Identifier backCover, Identifier leftButton, Identifier rightButton) {
     public void removeDisabled() {
         components().removeIf(d -> !d.enabled());
     }

@@ -4,8 +4,8 @@ import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.entity.MiniBagu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -25,7 +25,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<MiniBagu>> MINI_BAGU = ENTITIES_REGISTRY.register("mini_bagu", () -> EntityType.Builder.of(MiniBagu::new, MobCategory.CREATURE).sized(0.6F, 0.6F).build(prefix("mini_bagu")));
 
     private static ResourceKey<EntityType<?>> prefix(String path) {
-        return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, path));
+        return ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(BagusLib.MODID, path));
     }
 
     @SubscribeEvent

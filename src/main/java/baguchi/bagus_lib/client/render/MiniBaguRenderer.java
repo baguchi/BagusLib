@@ -8,10 +8,10 @@ import baguchi.bagus_lib.entity.MiniBagu;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class MiniBaguRenderer extends MobRenderer<MiniBagu, MiniBaguRenderState, MiniBaguModel<MiniBaguRenderState>> {
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(BagusLib.MODID, "textures/entity/mini_bagu.png");
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(BagusLib.MODID, "textures/entity/mini_bagu.png");
 
     public MiniBaguRenderer(EntityRendererProvider.Context p_174304_) {
         super(p_174304_, new MiniBaguModel<>(p_174304_.bakeLayer(ModModelLayers.MINI_BAGU)), 0.3F);
@@ -25,7 +25,7 @@ public class MiniBaguRenderer extends MobRenderer<MiniBagu, MiniBaguRenderState,
     }
 
     @Override
-    public ResourceLocation getTextureLocation(MiniBaguRenderState p_368654_) {
+    public Identifier getTextureLocation(MiniBaguRenderState p_368654_) {
         return TEXTURE;
     }
 }
