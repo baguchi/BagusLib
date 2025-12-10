@@ -121,6 +121,11 @@ public class FruitObject {
 
     public int collisionAndBig(FruitObject fruitObject, List<FruitObject> fruitObjects) {
         float dist = this.pos.distance(fruitObject.pos.x, fruitObject.pos.y);
+
+        Vector2f center2Center = new Vector2f(
+                this.pos.x - fruitObject.pos.x,
+                this.pos.y - fruitObject.pos.y
+        );
         if (dist > this.fruit.getSize() + fruitObject.fruit.getSize()) {
             return 0;
         }
@@ -128,7 +133,7 @@ public class FruitObject {
             Fruit fruit1 = Fruit.getNextObject(fruitObject.getFruit());
             if (fruit1 != null) {
                 FruitObject fruitObject1 = new FruitObject(fruit1);
-                fruitObject1.setPos(this.getPos());
+                fruitObject1.setPos(this.getPos().add(center2Center.negate()));
                 fruitObjects.add(fruitObject1);
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CAT_EAT, 1.0F, 1.0F));
             }

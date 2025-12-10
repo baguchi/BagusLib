@@ -116,14 +116,17 @@ public class WaterMelonCraft {
         float scale = object.getFruit().getSize();
 
         if (p_20273_.x - scale < 0) {
+            object.setMotion(new Vector2f(0, object.getMotion().y));
             return new Vector2f(0 + scale, p_20273_.y);
         }
         if (p_20273_.x + scale > WIDTH) {
+            object.setMotion(new Vector2f(0, object.getMotion().y));
             return new Vector2f(WIDTH - scale, p_20273_.y);
         }
 
 
         if (p_20273_.y + scale > HEIGHT) {
+            object.setMotion(new Vector2f(object.getMotion().x, 0));
             return new Vector2f(p_20273_.x, HEIGHT - scale);
         }
         return p_20273_;
