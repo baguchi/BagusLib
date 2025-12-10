@@ -12,8 +12,9 @@ public enum Fruit {
     MUSHROOM_BROWN(3, 13, Blocks.BROWN_MUSHROOM_BLOCK),
     WARP_WART(4, 22, Blocks.WARPED_WART_BLOCK),
     NETHER_WART(5, 46, Blocks.NETHER_WART_BLOCK),
-    PUMPKIN(6, 58, Blocks.PUMPKIN),
-    WATERMELON(7, 66, Blocks.MELON);
+    SHROOMLIGHT(6, 58, Blocks.SHROOMLIGHT),
+    PUMPKIN(7, 72, Blocks.PUMPKIN),
+    WATERMELON(8, 100, Blocks.MELON);
     private int size;
     private int score;
     private Block fruit;

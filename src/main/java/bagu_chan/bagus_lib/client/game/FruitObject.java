@@ -101,7 +101,7 @@ public class FruitObject {
 
         float new_x = this.pos.x + dx;
         float new_y = this.pos.y + dy;
-        this.pos = WaterMelonCraft.getInstance().collide(new Vector2f(new_x, new_y));
+        this.pos = WaterMelonCraft.getInstance().collide(new Vector2f(new_x, new_y), this);
         return this.pos;
     }
 

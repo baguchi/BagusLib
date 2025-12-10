@@ -55,10 +55,10 @@ public class WaterMelonCraft {
                 generateNextFruit();
             } else {
                 if (keyPressed(InputConstants.KEY_LEFT)) {
-                    fallingX = restrictX(screen, fallingX - 0.5F);
+                    fallingX = restrictX(screen, fallingX - 0.25F);
                 }
                 if (keyPressed(InputConstants.KEY_RIGHT)) {
-                    fallingX = restrictX(screen, fallingX + 0.5F);
+                    fallingX = restrictX(screen, fallingX + 0.25F);
                 }
                 if (keyPressed(InputConstants.KEY_DOWN)) {
                     FruitObject fruitObject = new FruitObject(tossFruit.getFruit());
@@ -112,16 +112,19 @@ public class WaterMelonCraft {
         return instance;
     }
 
-    protected Vector2f collide(Vector2f p_20273_) {
-        if (p_20273_.x < 0) {
-            return new Vector2f(0, p_20273_.y);
+    protected Vector2f collide(Vector2f p_20273_, FruitObject object) {
+        float scale = fruitSizeAdjust(object.getFruit());
+
+        if (p_20273_.x - scale < 0) {
+            return new Vector2f(0 + scale, p_20273_.y);
         }
-        if (p_20273_.x > WIDTH) {
-            return new Vector2f(WIDTH, p_20273_.y);
+        if (p_20273_.x + scale > WIDTH) {
+            return new Vector2f(WIDTH - scale, p_20273_.y);
         }
 
-        if (p_20273_.y > HEIGHT) {
-            return new Vector2f(p_20273_.x, HEIGHT);
+
+        if (p_20273_.y + scale > HEIGHT) {
+            return new Vector2f(p_20273_.x, HEIGHT - scale);
         }
         return p_20273_;
     }
@@ -167,12 +170,16 @@ public class WaterMelonCraft {
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon(ModelData.EMPTY);
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        float f = size * fruit.getSize();
+        float f = size * fruitSizeAdjust(fruit);
         bufferbuilder.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1());
         bufferbuilder.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1());
         bufferbuilder.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0());
         bufferbuilder.addVertex(-f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV0());
         BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+    }
+
+    public float fruitSizeAdjust(Fruit fruit) {
+        return 1 + (fruit.getSize() * 0.5F);
     }
 
     public void render(Screen screen, GuiGraphics gui, float partialTick) {
