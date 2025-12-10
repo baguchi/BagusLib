@@ -12,23 +12,20 @@ public class FruitObject {
     private Vector2f pos = new Vector2f();
     private Vector2f motion = new Vector2f();
     private float rotation;
-    private float restitution = 0.5F;
     private boolean isFix = false;
 
-    private Fruit fruit;
+    private final Fruit fruit;
+    private final float restitution;
+
 
     public FruitObject(Fruit fruit) {
         this.fruit = fruit;
+        this.restitution = fruit.getRestitution();
     }
 
     @Nonnull
     public Fruit getFruit() {
         return fruit;
-    }
-
-
-    public void setFruit(@Nonnull Fruit fruit) {
-        this.fruit = fruit;
     }
 
     public void setPos(Vector2f pos) {

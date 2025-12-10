@@ -21,6 +21,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import java.util.List;
+import java.util.Set;
 
 public class WaterMelonCraft {
     static WaterMelonCraft instance;
@@ -54,10 +55,10 @@ public class WaterMelonCraft {
                 generateNextFruit();
             } else {
                 if (keyPressed(InputConstants.KEY_LEFT)) {
-                    fallingX = restrictX(screen, fallingX - 0.25F);
+                    fallingX = restrictX(fallingX - 0.25F);
                 }
                 if (keyPressed(InputConstants.KEY_RIGHT)) {
-                    fallingX = restrictX(screen, fallingX + 0.25F);
+                    fallingX = restrictX(fallingX + 0.25F);
                 }
                 if (keyPressed(InputConstants.KEY_DOWN)) {
                     FruitObject fruitObject = new FruitObject(tossFruit.getFruit());
@@ -77,9 +78,12 @@ public class WaterMelonCraft {
                 }
             }
 
-            for (FruitObject fruitObject : this.fruitObjects) {
+            Set<FruitObject> fruitObjects1 = Set.copyOf(this.fruitObjects);
+            Set<FruitObject> fruitObjects2 = Set.copyOf(this.fruitObjects);
 
-                for (FruitObject fruitObject2 : this.fruitObjects) {
+
+            for (FruitObject fruitObject : fruitObjects1) {
+                for (FruitObject fruitObject2 : fruitObjects2) {
                     if (fruitObject != fruitObject2) {
                         int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
                         if (i > 0) {
@@ -136,7 +140,7 @@ public class WaterMelonCraft {
     }
 
 
-    private float restrictX(Screen screen, float xIn) {
+    private float restrictX(float xIn) {
         float scale = WIDTH;
 
         xIn = Mth.clamp(xIn, 0, scale);
