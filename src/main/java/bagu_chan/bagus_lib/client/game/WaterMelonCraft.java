@@ -21,7 +21,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import java.util.List;
-import java.util.Set;
 
 public class WaterMelonCraft {
     static WaterMelonCraft instance;
@@ -71,27 +70,31 @@ public class WaterMelonCraft {
 
             boolean flag = false;
             boolean flag2 = false;
-            Set<FruitObject> fruitObjects1 = Set.copyOf(this.fruitObjects);
-            Set<FruitObject> fruitObjects2 = Set.copyOf(this.fruitObjects);
-            for (FruitObject fruitObject : fruitObjects1) {
+            for (FruitObject fruitObject : this.fruitObjects) {
+                fruitObject.tick();
+                if (fruitObject.getPos().y < 0) {
+                    flag = true;
+                }
+            }
 
-                for (FruitObject fruitObject2 : fruitObjects2) {
+            for (FruitObject fruitObject : this.fruitObjects) {
+
+                for (FruitObject fruitObject2 : this.fruitObjects) {
                     if (fruitObject != fruitObject2) {
                         int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
-                        fruitObject.collisionBox(fruitObject2);
                         if (i > 0) {
                             flag2 = true;
                             score += i;
                             break;
+                        } else {
+                            fruitObject.collisionBox(fruitObject2);
                         }
+                    } else {
+                        break;
                     }
                 }
-                fruitObject.tick();
                 if (flag2) {
                     break;
-                }
-                if (fruitObject.getPos().y < 0) {
-                    flag = true;
                 }
             }
             if (flag) {

@@ -70,15 +70,15 @@ public class FruitObject {
             //back
             fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
             //Reflect
-            Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
-            fruitObject.move(reflect.x, reflect.y);
+            Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(fruitObject.restitution);
+            fruitObject.setMotion(reflect);
         }
         var moveDirection = unit(new Vector2f(center2Center));
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        Vector2f reflect = reflect(this.motion, new Vector2f(center2Center)).mul(this.restitution);
-        this.move(reflect.x, reflect.y);
+        Vector2f reflect = reflect(this.motion, new Vector2f(center2Center)).mul(fruitObject.restitution);
+        this.setMotion(reflect);
     }
 
     public Vector2f reflect(Vector2f vec2, Vector2f vec21) {
@@ -113,10 +113,9 @@ public class FruitObject {
     }
 
     public void tick() {
-        this.move(this.motion.x, this.motion.y);
-        motion.mul(0.96F);
         motion.y += 0.01F;
-
+        motion.mul(0.96F);
+        this.move(this.motion.x, this.motion.y);
     }
 
     public int collisionAndBig(FruitObject fruitObject, List<FruitObject> fruitObjects) {
