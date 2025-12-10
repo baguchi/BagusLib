@@ -62,7 +62,7 @@ public class FruitObject {
         );
         float returnDist = overlap;
 
-        if (!this.isFix) {
+        if (!fruitObject.isFix) {
             // 両方動く場合、距離は半々
             returnDist = overlap / 2;
 
@@ -70,7 +70,7 @@ public class FruitObject {
             //back
             fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
             //Reflect
-            fruitObject.motion = reflect(fruitObject.motion, center2Center).mul(this.restitution);
+            fruitObject.motion = reflect(fruitObject.motion, center2Center).mul(fruitObject.restitution);
         }
         var moveDirection = unit(center2Center);
         //back
