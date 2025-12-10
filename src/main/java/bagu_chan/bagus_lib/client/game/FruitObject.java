@@ -62,21 +62,23 @@ public class FruitObject {
         );
         float returnDist = overlap;
 
-        if (!fruitObject.isFix) {
+        if (!this.isFix) {
             // 両方動く場合、距離は半々
             returnDist = overlap / 2;
 
-            Vector2f moveDirection = unit(center2Center).mul(-1);
+            Vector2f moveDirection = unit(new Vector2f(center2Center)).mul(-1);
             //back
             fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
             //Reflect
-            fruitObject.motion = reflect(fruitObject.motion, center2Center).mul(fruitObject.restitution);
+            Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+            fruitObject.move(reflect.x, reflect.y);
         }
-        var moveDirection = unit(center2Center);
+        var moveDirection = unit(new Vector2f(center2Center));
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        this.motion = reflect(fruitObject.motion, center2Center).mul(this.restitution);
+        Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+        this.move(reflect.x, reflect.y);
     }
 
     public Vector2f reflect(Vector2f vec2, Vector2f vec21) {
