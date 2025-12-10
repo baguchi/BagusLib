@@ -113,7 +113,7 @@ public class WaterMelonCraft {
     }
 
     protected Vector2f collide(Vector2f p_20273_, FruitObject object) {
-        float scale = fruitSizeAdjust(object.getFruit());
+        float scale = object.getFruit().getSize();
 
         if (p_20273_.x - scale < 0) {
             return new Vector2f(0 + scale, p_20273_.y);
@@ -170,7 +170,7 @@ public class WaterMelonCraft {
         TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(state).getParticleIcon(ModelData.EMPTY);
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        float f = size * fruitSizeAdjust(fruit);
+        float f = size * fruit.getSize();
         bufferbuilder.addVertex(-f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU0(), sprite.getV1());
         bufferbuilder.addVertex(f + offsetX, f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV1());
         bufferbuilder.addVertex(f + offsetX, -f + offsetY, 80.0F).setUv(sprite.getU1(), sprite.getV0());
@@ -178,9 +178,6 @@ public class WaterMelonCraft {
         BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
-    public float fruitSizeAdjust(Fruit fruit) {
-        return 1 + (fruit.getSize() * 0.5F);
-    }
 
     public void render(Screen screen, GuiGraphics gui, float partialTick) {
         float scale = Math.min(screen.width / 15F, screen.height / (float) HEIGHT);

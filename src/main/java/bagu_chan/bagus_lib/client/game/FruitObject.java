@@ -62,9 +62,6 @@ public class FruitObject {
         );
         float returnDist = overlap;
 
-        // 両方動く場合、距離は半々
-        returnDist = overlap / 2;
-
         if (!this.isFix) {
             // 両方動く場合、距離は半々
             returnDist = overlap / 2;

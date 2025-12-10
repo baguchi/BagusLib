@@ -46,6 +46,6 @@ public enum Fruit {
     }
 
     public float getSize() {
-        return 0.2F * size;
+        return 0.15F * size;
     }
 }
