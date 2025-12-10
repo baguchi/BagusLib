@@ -77,7 +77,7 @@ public class FruitObject {
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
+        Vector2f reflect = reflect(this.motion, new Vector2f(center2Center)).mul(this.restitution);
         this.move(reflect.x, reflect.y);
     }
 
