@@ -54,10 +54,6 @@ public class WaterMelonCraft {
                 generateFruit();
                 generateNextFruit();
             } else {
-                float f = 0.15F;
-                if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_DOWN)) {
-                    f = 1F;
-                }
                 if (keyPressed(InputConstants.KEY_LEFT)) {
                     fallingX = restrictX(screen, fallingX - 0.5F);
                 }
@@ -226,7 +222,7 @@ public class WaterMelonCraft {
 
     public void reset() {
         score = 0;
-        fruitObjects.removeAll(fruitObjects);
+        fruitObjects.clear();
         gameOver = false;
         generateNextFruit();
         generateFruit();

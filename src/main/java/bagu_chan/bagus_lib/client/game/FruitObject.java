@@ -12,6 +12,8 @@ public class FruitObject {
     private Vector2f pos = new Vector2f();
     private Vector2f motion = new Vector2f();
     private float rotation;
+    private float restitution = 0.5F;
+    private boolean isFix = false;
 
     private Fruit fruit;
 
@@ -63,17 +65,21 @@ public class FruitObject {
         // 両方動く場合、距離は半々
         returnDist = overlap / 2;
 
-        Vector2f moveDirection = unit(center2Center).mul(-1);
-        //back
-        fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
-        //Reflect
-        fruitObject.motion = reflect(fruitObject.motion, center2Center).mul(0.5F);
+        if (!this.isFix) {
+            // 両方動く場合、距離は半々
+            returnDist = overlap / 2;
 
-        moveDirection = unit(center2Center);
+            Vector2f moveDirection = unit(center2Center).mul(-1);
+            //back
+            fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
+            //Reflect
+            fruitObject.motion = reflect(fruitObject.motion, center2Center).mul(this.restitution);
+        }
+        var moveDirection = unit(center2Center);
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        this.motion = reflect(fruitObject.motion, center2Center);
+        this.motion = reflect(fruitObject.motion, center2Center).mul(this.restitution);
     }
 
     public Vector2f reflect(Vector2f vec2, Vector2f vec21) {
@@ -121,14 +127,14 @@ public class FruitObject {
         }
         if (this.fruit == fruitObject.getFruit()) {
             Fruit fruit1 = Fruit.getNextObject(fruitObject.getFruit());
-            fruitObjects.remove(this);
-            fruitObjects.remove(fruitObject);
             if (fruit1 != null) {
                 FruitObject fruitObject1 = new FruitObject(fruit1);
                 fruitObject1.setPos(this.getPos());
                 fruitObjects.add(fruitObject1);
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CAT_EAT, 1.0F, 1.0F));
             }
+            fruitObjects.remove(this);
+            fruitObjects.remove(fruitObject);
 
             return this.fruit.getScore();
         }
