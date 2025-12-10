@@ -11,10 +11,10 @@ public enum Fruit {
     MUSHROOM_RED(2, 6, 0.425F, Blocks.RED_MUSHROOM_BLOCK),
     MUSHROOM_BROWN(3, 13, 0.375F, Blocks.BROWN_MUSHROOM_BLOCK),
     WARP_WART(4, 22, 0.3F, Blocks.WARPED_WART_BLOCK),
-    NETHER_WART(5, 46, 0.225F, Blocks.NETHER_WART_BLOCK),
-    SHROOMLIGHT(6, 58, 0.12F, Blocks.SHROOMLIGHT),
-    PUMPKIN(7, 72, 0.05F, Blocks.PUMPKIN),
-    WATERMELON(8, 100, 0.014F, Blocks.MELON);
+    NETHER_WART(5, 46, 0.125F, Blocks.NETHER_WART_BLOCK),
+    SHROOMLIGHT(6, 58, 0.075F, Blocks.SHROOMLIGHT),
+    PUMPKIN(7, 72, 0.025F, Blocks.PUMPKIN),
+    WATERMELON(8, 100, 0.012F, Blocks.MELON);
     private int size;
     private int score;
     private float restitution;
