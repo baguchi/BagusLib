@@ -75,27 +75,20 @@ public class WaterMelonCraft {
                 reset();
             }
 
+            boolean flag = false;
             boolean flag2 = false;
-            Set<FruitObject> fruitObjects1 = Set.copyOf(this.fruitObjects);
-            Set<FruitObject> fruitObjects2 = Set.copyOf(this.fruitObjects);
-            this.fruitObjects.forEach(fruitObject -> {
-                boolean flag = false;
+            for (FruitObject fruitObject : this.fruitObjects) {
                 fruitObject.tick();
                 if (fruitObject.getPos().y < 0) {
                     flag = true;
                 }
-                if (flag) {
-                    ++finishTime;
-                    if (finishTime >= 60) {
-                        gameOver = true;
-                    }
-                } else {
-                    finishTime = 0;
-                }
-            });
+            }
+
+            Set<FruitObject> fruitObjects1 = Set.copyOf(this.fruitObjects);
+            Set<FruitObject> fruitObjects2 = Set.copyOf(this.fruitObjects);
+
 
             for (FruitObject fruitObject : fruitObjects1) {
-
                 for (FruitObject fruitObject2 : fruitObjects2) {
                     if (fruitObject != fruitObject2) {
                         int i = fruitObject.collisionAndBig(fruitObject2, this.fruitObjects);
@@ -106,37 +99,54 @@ public class WaterMelonCraft {
                         } else {
                             fruitObject.collisionBox(fruitObject2);
                         }
+                    } else {
+                        break;
                     }
                 }
                 if (flag2) {
                     break;
                 }
-
+            }
+            if (flag) {
+                ++finishTime;
+                if (finishTime >= 60) {
+                    gameOver = true;
+                }
+            } else {
+                finishTime = 0;
             }
         }
-
+        if (keyPressed(InputConstants.KEY_W)) {
+            reset();
+        }
     }
 
     public static WaterMelonCraft getInstance() {
         return instance;
     }
 
-    protected Vector2f collide(Vector2f p_20273_) {
-        if (p_20273_.x < 0) {
-            return new Vector2f(0, p_20273_.y);
+    protected Vector2f collide(Vector2f p_20273_, FruitObject object) {
+        float scale = object.getFruit().getSize();
+
+        if (p_20273_.x - scale < 0) {
+            object.setMotion(new Vector2f(0, object.getMotion().y));
+            return new Vector2f(0 + scale, p_20273_.y);
         }
-        if (p_20273_.x > WIDTH) {
-            return new Vector2f(WIDTH, p_20273_.y);
+        if (p_20273_.x + scale > WIDTH) {
+            object.setMotion(new Vector2f(0, object.getMotion().y));
+            return new Vector2f(WIDTH - scale, p_20273_.y);
         }
 
-        if (p_20273_.y > HEIGHT) {
-            return new Vector2f(p_20273_.x, HEIGHT);
+
+        if (p_20273_.y + scale > HEIGHT) {
+            object.setMotion(new Vector2f(object.getMotion().x, 0));
+            return new Vector2f(p_20273_.x, HEIGHT - scale);
         }
         return p_20273_;
     }
 
 
-    private float restrictX(Screen screen, float xIn) {
+    private float restrictX(float xIn) {
         float scale = WIDTH;
 
         xIn = Mth.clamp(xIn, 0, scale);

@@ -12,23 +12,20 @@ public class FruitObject {
     private Vector2f pos = new Vector2f();
     private Vector2f motion = new Vector2f();
     private float rotation;
-    private float restitution = 0.5F;
-
-    private Fruit fruit;
     private boolean isFix = false;
+
+    private final Fruit fruit;
+    private final float restitution;
+
 
     public FruitObject(Fruit fruit) {
         this.fruit = fruit;
+        this.restitution = fruit.getRestitution();
     }
 
     @Nonnull
     public Fruit getFruit() {
         return fruit;
-    }
-
-
-    public void setFruit(@Nonnull Fruit fruit) {
-        this.fruit = fruit;
     }
 
     public void setPos(Vector2f pos) {
@@ -70,20 +67,19 @@ public class FruitObject {
             //back
             fruitObject.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
             //Reflect
-            Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
-            fruitObject.move(reflect.x, reflect.y);
+            Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(fruitObject.restitution);
+            fruitObject.setMotion(reflect);
         }
         var moveDirection = unit(new Vector2f(center2Center));
         //back
         this.move(moveDirection.x * returnDist, moveDirection.y * returnDist);
         //Reflect
-        Vector2f reflect = reflect(fruitObject.motion, new Vector2f(center2Center)).mul(this.restitution);
-        this.move(reflect.x, reflect.y);
+        Vector2f reflect = reflect(this.motion, new Vector2f(center2Center)).mul(this.restitution);
+        this.setMotion(reflect);
     }
 
-
     public Vector2f reflect(Vector2f vec2, Vector2f vec21) {
-        Vector2f normUnit = this.unit(vec21);
+        Vector2f normUnit = vec21;
         float dot = vec2.dot(normUnit);
         if (dot == 0) {
             return vec2.mul(-1);
@@ -101,7 +97,7 @@ public class FruitObject {
 
         float new_x = this.pos.x + dx;
         float new_y = this.pos.y + dy;
-        this.pos = WaterMelonCraft.getInstance().collide(new Vector2f(new_x, new_y));
+        this.pos = WaterMelonCraft.getInstance().collide(new Vector2f(new_x, new_y), this);
         return this.pos;
     }
 
@@ -114,23 +110,26 @@ public class FruitObject {
     }
 
     public void tick() {
-        motion.mul(0.96F);
         motion.y += 0.01F;
-
+        motion.mul(0.96F);
         this.move(this.motion.x, this.motion.y);
     }
 
     public int collisionAndBig(FruitObject fruitObject, List<FruitObject> fruitObjects) {
         float dist = this.pos.distance(fruitObject.pos.x, fruitObject.pos.y);
+
+        Vector2f center2Center = new Vector2f(
+                this.pos.x - fruitObject.pos.x,
+                this.pos.y - fruitObject.pos.y
+        );
         if (dist > this.fruit.getSize() + fruitObject.fruit.getSize()) {
             return 0;
         }
         if (this.fruit == fruitObject.getFruit()) {
             Fruit fruit1 = Fruit.getNextObject(fruitObject.getFruit());
             if (fruit1 != null) {
-                var newPos = this.pos.add(fruitObject.pos.x, fruitObject.pos.y).mul(0.5F);
                 FruitObject fruitObject1 = new FruitObject(fruit1);
-                fruitObject1.warp(newPos);
+                fruitObject1.setPos(this.getPos().add(center2Center.negate()));
                 fruitObjects.add(fruitObject1);
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CAT_EAT, 1.0F, 1.0F));
             }
@@ -140,10 +139,5 @@ public class FruitObject {
             return this.fruit.getScore();
         }
         return 0;
-    }
-
-    public FruitObject warp(Vector2f vec2) {
-        this.pos = vec2;
-        return this;
     }
 }
