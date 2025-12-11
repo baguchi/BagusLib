@@ -21,7 +21,7 @@ public class WaterMelonScreen extends Screen {
     public void tick() {
         super.tick();
         if (aprilFoolsWaterMelonCraft != null) {
-            aprilFoolsWaterMelonCraft.tick(this);
+            aprilFoolsWaterMelonCraft.tick();
         }
     }
 

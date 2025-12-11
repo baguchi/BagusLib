@@ -45,7 +45,7 @@ public class WaterMelonCraft {
         reset();
     }
 
-    public void tick(Screen screen) {
+    public void tick() {
         if (keyCooldown > 0) {
             keyCooldown--;
         }
