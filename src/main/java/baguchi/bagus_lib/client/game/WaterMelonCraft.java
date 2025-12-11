@@ -43,7 +43,7 @@ public class WaterMelonCraft {
         reset();
     }
 
-    public void tick(Screen screen) {
+    public void tick() {
         if (keyCooldown > 0) {
             keyCooldown--;
         }
@@ -57,10 +57,10 @@ public class WaterMelonCraft {
                     f = 1F;
                 }
                 if (keyPressed(InputConstants.KEY_LEFT)) {
-                    fallingX = restrictX(screen, fallingX - 0.5F);
+                    fallingX = restrictX(fallingX - 0.5F);
                 }
                 if (keyPressed(InputConstants.KEY_RIGHT)) {
-                    fallingX = restrictX(screen, fallingX + 0.5F);
+                    fallingX = restrictX(fallingX + 0.5F);
                 }
                 if (keyPressed(InputConstants.KEY_DOWN)) {
                     FruitObject fruitObject = new FruitObject(tossFruit.getFruit());
