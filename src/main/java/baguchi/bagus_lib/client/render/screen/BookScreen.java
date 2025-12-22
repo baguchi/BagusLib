@@ -129,7 +129,7 @@ public class BookScreen extends Screen {
                         getBaseY() + right.yOffsetR(),
                         mouseX, mouseY);
             }
-            /*if (left == null || right == null || left.component() != right.component()) {
+            if (left == null || right == null || left.component() != right.component()) {
                 if (left != null) {
                     left.component().singleTick(createBookAccess(true), font,
                             getBaseX() + left.xOffsetL(),
@@ -147,7 +147,7 @@ public class BookScreen extends Screen {
                         getBaseX() + left.xOffsetL(),
                         getBaseY() + left.yOffsetL(),
                         mouseX, mouseY);
-            }*/
+            }
         }
         updateVisibility();
     }
