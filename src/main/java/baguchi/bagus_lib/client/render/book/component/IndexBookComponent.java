@@ -7,7 +7,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.util.ArrayList;
@@ -73,14 +72,11 @@ public class IndexBookComponent extends BookComponent {
             int textY = (i - access.getRelativePage() * linesPerPage) * font.lineHeight;
             FormattedCharSequence toDraw = cachedComponents.get(i);
             if (i >= indexStartLine) {
-                int currentIndexItem = getIndexItemFromRelativeLine(i - indexStartLine);
-                int color = ARGB.scaleRGB(0, 1, 1, 1);
-                graphics.fillGradient(x, y + textY, x + width, y + textY + font.lineHeight, color, color);
                 if (isHovered(getIndexItemFromRelativeLine(i - indexStartLine))) {
                     toDraw = hoveredIndexItemComponents.get(i - indexStartLine);
                 }
             }
-            graphics.drawString(font, toDraw, x, y + textY, 0, false);
+            graphics.drawString(font, toDraw, x, y + textY, -13408581, false);
         }
     }
 
