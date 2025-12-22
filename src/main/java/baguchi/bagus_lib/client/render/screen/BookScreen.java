@@ -4,14 +4,19 @@ import baguchi.bagus_lib.client.render.book.BaguPageButton;
 import baguchi.bagus_lib.client.render.book.Book;
 import baguchi.bagus_lib.client.render.book.BookAccess;
 import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class BookScreen extends Screen {
     private final Book book;
@@ -47,11 +52,42 @@ public class BookScreen extends Screen {
         mouseY = (int) e;
     }
 
+
+    protected boolean handleClickEvent(@org.jspecify.annotations.Nullable ClickEvent p_425867_) {
+        if (p_425867_ == null) {
+            return false;
+        } else {
+            LocalPlayer localplayer = (LocalPlayer) Objects.requireNonNull(this.minecraft.player, "Player not available");
+            switch (p_425867_) {
+                case ClickEvent.ChangePage(int i):
+                    this.setPage(i - 1);
+                    break;
+                case ClickEvent.RunCommand(String s):
+                    //this.closeContainerOnServer();
+                    clickCommandAction(localplayer, s, (Screen) null);
+                    break;
+                default:
+                    defaultHandleGameClickEvent(p_425867_, this.minecraft, this);
+            }
+
+            return true;
+        }
+    }
+
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean p_434187_) {
         double x = event.x();
         double y = event.y();
         if (bookOpened()) {
+            if (event.button() == 0) {
+                ActiveTextCollector.ClickableStyleFinder activetextcollector$clickablestylefinder = new ActiveTextCollector.ClickableStyleFinder(this.font, (int) event.x(), (int) event.y());
+                //this.visitText(activetextcollector$clickablestylefinder, true);
+                Style style = activetextcollector$clickablestylefinder.result();
+                if (style != null && this.handleClickEvent(style.getClickEvent())) {
+                    return true;
+                }
+            }
+
             BookComponentDefinition left = getCurrentComponent(true);
             BookComponentDefinition right = getCurrentComponent(false);
             if (left != null) {
@@ -224,6 +260,7 @@ public class BookScreen extends Screen {
     private void setPage(int page) {
         currentPage = page - page % 2;
     }
+
 
     private void updateVisibility() {
         boolean visible = bookOpened();
