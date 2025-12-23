@@ -1,11 +1,12 @@
 package bagu_chan.bagus_lib.client.render.book.component;
 
+import bagu_chan.bagus_lib.client.render.book.BookAccess;
 import it.unimi.dsi.fastutil.ints.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class IndexBookComponent extends BookComponent {
                     toDraw = hoveredIndexItemComponents.get(i - indexStartLine);
                 }
             }
-            graphics.drawString(font, toDraw, x, y + textY, -13408581, false);
+            graphics.drawString(font, toDraw, x, y + textY, 0, false);
         }
     }
 
@@ -114,7 +115,7 @@ public class IndexBookComponent extends BookComponent {
         int line = access.getRelativePage() * linesPerPage + Math.min(relativeY / font.lineHeight, linesPerPage - 1);
         int selected = getIndexItemFromRelativeLine(line - indexStartLine);
         if (line >= indexStartLine && selected != -1 && mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) {
-            Identifier jumpTo = indexItems.get(selected).jumpTo();
+            ResourceLocation jumpTo = indexItems.get(selected).jumpTo();
             for (int i = 0; i < access.getComponents().size(); i++) {
                 BookComponentDefinition definition = access.getComponents().get(i);
                 if (definition.id().equals(jumpTo)) {
@@ -133,8 +134,8 @@ public class IndexBookComponent extends BookComponent {
         return indexItems;
     }
 
-    public record IndexItem(Component text, Component originalText, Identifier jumpTo, boolean enabled) {
-        public IndexItem(Component text, Identifier jumpTo, boolean enabled) {
+    public record IndexItem(Component text, Component originalText, ResourceLocation jumpTo, boolean enabled) {
+        public IndexItem(Component text, ResourceLocation jumpTo, boolean enabled) {
             this(Component.literal("•").append(text), text, jumpTo, enabled);
         }
     }
