@@ -231,7 +231,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         }
     }
 
-    record LayerTextureKey(EquipmentClientInfo.LayerType layerType, EquipmentClientInfo.Layer layer) {
+    public record LayerTextureKey(EquipmentClientInfo.LayerType layerType, EquipmentClientInfo.Layer layer) {
     }
 
     record TrimSpriteKey(ArmorTrim trim, EquipmentClientInfo.LayerType layerType,
