@@ -38,11 +38,12 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
         PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F))
                 .texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition tail = head.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(24, 0).addBox(-2.0F, -1.0F, 0.0F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 4.0F));
+        PartDefinition tail = head.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(24, 0).addBox(-2.0F, -1.0F, 0.0F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(24, 16).addBox(-2.0F, -1.0F, 5.0F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 4.0F));
 
-        PartDefinition earR = head.addOrReplaceChild("earR", CubeListBuilder.create().texOffs(0, 16).addBox(-5.0F, -1.0F, -2.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, -6.4F, 0.0F, 0.0F, 0.0F, -1.0472F));
+        PartDefinition earR = head.addOrReplaceChild("earR", CubeListBuilder.create().texOffs(0, 16).addBox(-5.0F, -1.0F, -2.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, -7.4F, 0.0F, -0.8727F, 0.0F, 1.1781F));
 
-        PartDefinition earL = head.addOrReplaceChild("earL", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(0.0F, -1.0F, -2.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, -6.4F, 0.0F, 0.0F, 0.0F, 1.0472F));
+        PartDefinition earL = head.addOrReplaceChild("earL", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(0.0F, -1.0F, -2.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(3.0F, -7.4F, 0.0F, -0.8727F, 0.0F, -1.1781F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
