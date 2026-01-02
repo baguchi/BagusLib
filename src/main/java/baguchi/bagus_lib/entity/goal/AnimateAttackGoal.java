@@ -36,6 +36,13 @@ public class AnimateAttackGoal extends MeleeAttackGoal {
     }
 
     @Override
+    public boolean canContinueToUse() {
+        LivingEntity livingentity = this.mob.getTarget();
+
+        return super.canContinueToUse() || livingentity != null && livingentity.isAlive() && this.attack;
+    }
+
+    @Override
     protected void checkAndPerformAttack(LivingEntity target) {
         if (this.isTimeToAttack()) {
             if (this.canPerformAttack(target)) {
