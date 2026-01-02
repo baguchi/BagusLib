@@ -32,7 +32,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
 
     protected boolean checkExtraStartConditions(ServerLevel level, E mob) {
         LivingEntity livingentity = this.getAttackTarget(mob);
-        return mob.hasLineOfSight(livingentity);
+        return livingentity != null && mob.hasLineOfSight(livingentity);
     }
 
     protected void start(ServerLevel p_23524_, E p_23525_, long p_23526_) {
@@ -67,7 +67,7 @@ public class AttackWithAnimation<E extends PathfinderMob> extends Behavior<E> {
         } else if (this.attackTicks >= this.attackLength) {
             this.resetAttackCooldown();
             this.attack = false;
-        } else if (this.attackTicks == 0 || !this.attack) {
+        } else if (!this.attack) {
             if (!this.canPerformAttack(entity, target)) {
                 this.resetAttackCooldown();
             } else {
