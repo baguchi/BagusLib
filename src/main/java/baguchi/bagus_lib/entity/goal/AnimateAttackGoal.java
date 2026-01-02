@@ -44,7 +44,7 @@ public class AnimateAttackGoal extends MeleeAttackGoal {
         } else if (this.attackTicks >= this.attackLength) {
             this.resetAttackCooldown();
             this.attack = false;
-        } else if (this.attackTicks == 0 || !this.attack) {
+        } else if (!this.attack) {
             if (!this.canPerformAttack(target)) {
                 this.resetAttackCooldown();
             } else {
