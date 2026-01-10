@@ -15,7 +15,6 @@
     "client.LivingEntityRenderStateMixin",
     "client.ModelFeatureRendererMixin",
     "client.ModelMixin",
-    "client.WinScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
