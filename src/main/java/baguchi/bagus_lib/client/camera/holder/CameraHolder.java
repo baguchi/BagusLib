@@ -1,6 +1,7 @@
 package baguchi.bagus_lib.client.camera.holder;
 
 import baguchi.bagus_lib.util.GlobalVec3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 
@@ -45,9 +46,9 @@ public class CameraHolder {
             double ticks = event.getCamera().entity().tickCount + event.getPartialTick();
             float amount = leftTick * dist;
 
-            event.setPitch(event.getPitch() + amount * Mth.cos((float) (ticks * 3F)) * this.distance * 0.1F * this.amount);
-            event.setYaw(event.getYaw() + amount * Mth.cos((float) (ticks * 2.5F)) * this.distance * 0.1F * this.amount);
-            event.setRoll(event.getRoll() + amount * Mth.cos((float) (ticks * 2F)) * this.distance * 0.1F * this.amount);
+            event.setPitch(event.getPitch() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * 0.1F * Mth.cos((float) (ticks * 3F)));
+            event.setYaw(event.getYaw() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * 0.1F * Mth.cos((float) (ticks * 2.5F)));
+            event.setRoll(event.getRoll() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * 0.1F * Mth.cos((float) (ticks * 2F)));
         }
     }
 
