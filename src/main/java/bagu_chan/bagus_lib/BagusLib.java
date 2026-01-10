@@ -41,7 +41,6 @@ public class BagusLib {
         modEventBus.addListener(this::dataSetup);
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
         modContainer.registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
-        modContainer.registerConfig(ModConfig.Type.CLIENT, BagusConfigs.CLIENT_SPEC);
     }
 
     public static ResourceLocation prefix(String name) {
