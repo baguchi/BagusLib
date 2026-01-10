@@ -46,9 +46,9 @@ public class CameraHolder {
             double ticks = event.getCamera().entity().tickCount + event.getPartialTick();
             float amount = leftTick * dist;
 
-            event.setPitch(event.getPitch() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * Mth.cos((float) (ticks * 3F)));
-            event.setYaw(event.getYaw() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * Mth.cos((float) (ticks * 2.5F)));
-            event.setRoll(event.getRoll() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * Mth.cos((float) (ticks * 2F)));
+            event.setPitch(event.getPitch() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * 0.1F * Mth.cos((float) (ticks * 3F)));
+            event.setYaw(event.getYaw() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * 0.1F * Mth.cos((float) (ticks * 2.5F)));
+            event.setRoll(event.getRoll() + Minecraft.getInstance().player.getRandom().nextFloat() * amount * 0.1F * Mth.cos((float) (ticks * 2F)));
         }
     }
 
