@@ -1,6 +1,7 @@
 package baguchi.bagus_lib.entity;
 
 import baguchi.bagus_lib.entity.path.node.SmartNodeEvaluator;
+import baguchi.bagus_lib.util.CollideUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -65,11 +66,37 @@ public class MiniBagu extends PathfinderMob implements ISmartJump {
     }
 
     @Override
-    public void aiStep() {
-        super.aiStep();
-
-        //CollideUtil.collideEntities(this);
+    public void tick() {
+        super.tick();
+        CollideUtil.collideEntities(this);
     }
+
+    /*
+     * Collide Util Start
+     */
+    @Override
+    public boolean canBeCollidedWith(@org.jspecify.annotations.Nullable Entity other) {
+        return this.isAlive();
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public boolean canCollideWith(Entity entity) {
+        return canAnotherCollide(this, entity);
+    }
+
+    public static boolean canAnotherCollide(Entity vehicle, Entity entity) {
+        return (entity.canBeCollidedWith(vehicle)) && !vehicle.isPassengerOfSameVehicle(entity);
+    }
+    /*
+     * Collide Util Finished
+     */
+
+
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, EntitySpawnReason p_363352_, @Nullable SpawnGroupData p_21437_) {
         HolderLookup.RegistryLookup<TrimMaterial> registrylookup1 = this.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL);
