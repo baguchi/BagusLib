@@ -15,7 +15,7 @@ public class ItemDialogType extends DialogType {
                             DialogEffectOption.CODEC.fieldOf("dialog_option").orElse(new DialogEffectOption(1, 1, true, Optional.empty())).forGetter(ItemDialogType::getDialogueOption),
                             NextDialogOption.CODEC.fieldOf("next_dialog").orElse(new NextDialogOption(Optional.empty(), -1)).forGetter(DialogType::getNextDialogOption),
                             Codec.DOUBLE.fieldOf("draw_per_tick").forGetter(ItemDialogType::getDialogPerTick),
-                            ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(ItemDialogType::getItemStack))
+                            ItemStack.CODEC.fieldOf("item").forGetter(ItemDialogType::getItemStack))
                     .apply(p_345644_, ItemDialogType::new)
     );
     protected final ItemStack itemStack;
