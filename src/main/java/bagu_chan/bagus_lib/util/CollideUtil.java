@@ -24,7 +24,7 @@ public class CollideUtil {
         AABB boundCheck = bounds.inflate(0.18F);
         List<Entity> entitiesWithinAABB = world.getEntitiesOfClass(Entity.class, boundCheck);
         for (Entity entity : entitiesWithinAABB) {
-            if (entity != collideEntity && !collideEntity.isPassenger() && !entity.canBeCollidedWith(collideEntity)) {
+            if (entity != collideEntity && !collideEntity.isPassenger() && !entity.canBeCollidedWith()) {
                 Vec3 entityPosition = entity.position();
                 Vec3 entityMotion = position.subtract(getPrevPositionVec(entity));
                 Vec3 vec3 = entity.collide(motion);
