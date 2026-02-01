@@ -116,15 +116,15 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
         } else if (node.type != PathType.OPEN && node.type != PathType.WALKABLE) {
             return node;
         } else {
-            double d0 = (double) (x - direction.getStepX()) + 0.5;
-            double d1 = (double) (z - direction.getStepZ()) + 0.5;
-            double d2 = (double) this.mob.getBbWidth() / 2.0;
+            double d0 = (x - direction.getStepX()) + 0.5;
+            double d1 = (z - direction.getStepZ()) + 0.5;
+            double d2 = this.mob.getBbWidth() / 2.0;
             AABB aabb = new AABB(
                     d0 - d2,
-                    this.getFloorLevel(pos.set(d0, (double) (y + 1), d1)) + 0.001,
+                    this.getFloorLevel(pos.set(d0, (y + 1), d1)) + 0.001,
                     d1 - d2,
                     d0 + d2,
-                    (double) this.mob.getBbHeight() + this.getFloorLevel(pos.set((double) node.x, (double) node.y, (double) node.z)) - 0.002,
+                    this.mob.getBbHeight() + this.getFloorLevel(pos.set(node.x, node.y, node.z)) - 0.002,
                     d1 + d2
             );
             return this.hasCollisions(aabb) ? null : node;
@@ -175,10 +175,10 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
     private double getMobJumpHeight() {
         //smart jump
         if (this.mob instanceof ISmartJump smartJump) {
-            return Math.max(smartJump.getSuppportJump(), (double) this.mob.maxUpStep());
+            return Math.max(smartJump.getSuppportJump(), this.mob.maxUpStep());
         }
 
-        return Math.max(1.125, (double) this.mob.maxUpStep());
+        return Math.max(1.125, this.mob.maxUpStep());
     }
 
     private static boolean doesBlockHavePartialCollision(PathType pathType) {
@@ -187,9 +187,9 @@ public class SmartNodeEvaluator extends WalkNodeEvaluator {
 
     private boolean canReachWithoutCollision(Node p_77625_) {
         AABB aabb = this.mob.getBoundingBox();
-        Vec3 vec3 = new Vec3((double) p_77625_.x - this.mob.getX() + aabb.getXsize() / (double) 2.0F, (double) p_77625_.y - this.mob.getY() + aabb.getYsize() / (double) 2.0F, (double) p_77625_.z - this.mob.getZ() + aabb.getZsize() / (double) 2.0F);
+        Vec3 vec3 = new Vec3(p_77625_.x - this.mob.getX() + aabb.getXsize() / 2.0F, p_77625_.y - this.mob.getY() + aabb.getYsize() / 2.0F, p_77625_.z - this.mob.getZ() + aabb.getZsize() / 2.0F);
         int i = Mth.ceil(vec3.length() / aabb.getSize());
-        vec3 = vec3.scale((double) (1.0F / (float) i));
+        vec3 = vec3.scale(1.0F / (float) i);
 
         for (int j = 1; j <= i; ++j) {
             aabb = aabb.move(vec3);
