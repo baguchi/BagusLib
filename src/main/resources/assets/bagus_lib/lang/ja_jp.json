@@ -3,6 +3,6 @@
   "bagus_lib.config.aprilFeature": "エイプリルフールジョークを有効にする",
   "bagus_lib.config.betterEndPoem": "よりよいエンドポエム",
   "bagus_lib.config.playableFirstPerson": "第一視点でのアニメーションを有効化する",
-
+  "entity.bagus_lib.mini_bagu": "ミニばぐ",
   "bagus_lib.watermelon": "スイカゲーム"
 }
