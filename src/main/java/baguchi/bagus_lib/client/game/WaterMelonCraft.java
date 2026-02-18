@@ -184,7 +184,7 @@ public class WaterMelonCraft {
 
     private void renderBlockState(GuiGraphics gui, FruitObject fruit, float offsetX, float offsetY, float size) {
         gui.pose().pushMatrix();
-        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(fruit.getFruit().getFruitBlock().defaultBlockState()).particleIcon();
+        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(fruit.getFruit().getFruitBlock().defaultBlockState()).particleMaterial().sprite();
         float f = size * fruit.getFruit().getSize();
         PoseStack stack = new PoseStack();
         stack.pushPose();

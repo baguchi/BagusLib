@@ -3,20 +3,21 @@ package baguchi.bagus_lib.client.layer;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
-public interface IArmor {
+public interface CustomArmorRender<S extends LivingEntityRenderState> {
     /*
      * This method translate for correct armor render. basically Armor
      * @author bagu_chan
      */
 
-    void translateToHead(ModelPart part, PoseStack poseStack);
+    void translateToHead(S renderState, ModelPart part, PoseStack poseStack);
 
-    void translateToChest(ModelPart part, PoseStack poseStack);
+    void translateToChest(S renderState, ModelPart part, PoseStack poseStack);
 
-    void translateToLeg(ModelPart part, PoseStack poseStack);
+    void translateToLeg(S renderState, ModelPart part, PoseStack poseStack);
 
-    void translateToChestPat(ModelPart part, PoseStack poseStack);
+    void translateToChestPat(S renderState, ModelPart part, PoseStack poseStack);
 
     /*
      * if empty part. dosen't render

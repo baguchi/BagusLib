@@ -21,7 +21,6 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
-import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
@@ -46,11 +45,10 @@ import java.util.function.Function;
  * https://github.com/AlexModGuy/AlexsMobs/blob/1.19.4/src/main/java/com/github/alexthe666/alexsmobs/client/render/layer/LayerKangarooArmor.java
  * Thanks Alex!
  */
-public class CustomArmorLayer<S extends LivingEntityRenderState, M extends EntityModel<S> & IArmor, A extends EntityModel<S>> extends RenderLayer<S, M> {
+public class CustomArmorLayer<S extends LivingEntityRenderState, M extends EntityModel<S> & CustomArmorRender<S>, A extends EntityModel<S>> extends RenderLayer<S, M> {
     private final ArmorModelSet<PlayerModel> armorModelSet;
     private final RenderLayerParent<S, M> renderer;
     private final EquipmentAssetManager equipmentAssets;
-    private final MaterialSet materials;
     private final Function<LayerTextureKey, Identifier> layerTextureLookup;
     private final Function<TrimSpriteKey, TextureAtlasSprite> trimSpriteLookup;
 
@@ -64,7 +62,6 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         );
         this.renderer = render;
         this.equipmentAssets = context.getEquipmentAssets();
-        this.materials = context.getMaterials();
         this.layerTextureLookup = Util.memoize((p_386235_) -> p_386235_.layer.getTextureLocation(p_386235_.layerType));
         this.trimSpriteLookup = Util.memoize((p_399319_) -> Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS).getSprite(p_399319_.spriteId()));
 
@@ -73,30 +70,30 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLightIn, S entity, float p_435802_, float p_434554_) {
         if (entity instanceof IBagusExtraRenderState bagusExtraRenderState) {
-            this.renderHelmet(bagusExtraRenderState.getBagusLib$headItem(), poseStack, submitNodeCollector, packedLightIn);
-            this.renderChestplate(bagusExtraRenderState.getBagusLib$chestItem(), poseStack, submitNodeCollector, packedLightIn);
-            this.renderLeggings(bagusExtraRenderState.getBagusLib$legItem(), poseStack, submitNodeCollector, packedLightIn);
-            this.renderBoots(bagusExtraRenderState.getBagusLib$feetItem(), poseStack, submitNodeCollector, packedLightIn);
+            this.renderHelmet(entity, bagusExtraRenderState.getBagusLib$headItem(), poseStack, submitNodeCollector, packedLightIn);
+            this.renderChestplate(entity, bagusExtraRenderState.getBagusLib$chestItem(), poseStack, submitNodeCollector, packedLightIn);
+            this.renderLeggings(entity, bagusExtraRenderState.getBagusLib$legItem(), poseStack, submitNodeCollector, packedLightIn);
+            this.renderBoots(entity, bagusExtraRenderState.getBagusLib$feetItem(), poseStack, submitNodeCollector, packedLightIn);
         }
     }
 
-    private void renderHelmet(ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
+    private void renderHelmet(S entity, ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
         PlayerModel model = this.getArmorModel(EquipmentSlot.HEAD);
         modifiredArmorModelHook(model);
         getParentModel().headPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToHead(part, poseStack);
+            getParentModel().translateToHead(entity, part, poseStack);
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.HEAD, packedLightIn, model, "head");
             poseStack.popPose();
         });
     }
 
-    private void renderBoots(ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
+    private void renderBoots(S entity, ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
         PlayerModel model = this.getArmorModel(EquipmentSlot.FEET);
         modifiredArmorModelHook(model);
         getParentModel().rightLegPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToLeg(part, poseStack);
+            getParentModel().translateToLeg(entity, part, poseStack);
 
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.FEET, packedLightIn, model, "right_leg");
             poseStack.popPose();
@@ -104,7 +101,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
         getParentModel().leftLegPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToLeg(part, poseStack);
+            getParentModel().translateToLeg(entity, part, poseStack);
 
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.FEET, packedLightIn, model, "left_leg");
             poseStack.popPose();
@@ -112,12 +109,12 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
 
-    private void renderLeggings(ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
+    private void renderLeggings(S entity, ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
         PlayerModel model = this.getArmorModel(EquipmentSlot.LEGS);
         modifiredArmorModelHook(model);
         getParentModel().bodyPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToChest(part, poseStack);
+            getParentModel().translateToChest(entity, part, poseStack);
 
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.LEGS, packedLightIn, model, "body");
             poseStack.popPose();
@@ -125,7 +122,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
         getParentModel().rightLegPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToLeg(part, poseStack);
+            getParentModel().translateToLeg(entity, part, poseStack);
 
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.LEGS, packedLightIn, model, "right_leg");
             poseStack.popPose();
@@ -133,21 +130,21 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
         getParentModel().leftLegPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToLeg(part, poseStack);
+            getParentModel().translateToLeg(entity, part, poseStack);
 
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.LEGS, packedLightIn, model, "left_leg");
             poseStack.popPose();
         });
     }
 
-    private void renderChestplate(ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
+    private void renderChestplate(S entity, ItemStack stack, PoseStack poseStack, SubmitNodeCollector bufferIn, int packedLightIn) {
         PlayerModel model = this.getArmorModel(EquipmentSlot.CHEST);
 
         modifiredArmorModelHook(model);
 
         getParentModel().bodyPartArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToChest(part, poseStack);
+            getParentModel().translateToChest(entity, part, poseStack);
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.CHEST, packedLightIn, model, "body");
             poseStack.popPose();
         });
@@ -155,14 +152,14 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
 
         getParentModel().rightHandArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToChestPat(part, poseStack);
+            getParentModel().translateToChestPat(entity, part, poseStack);
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.CHEST, packedLightIn, model, "right_arm");
             poseStack.popPose();
         });
 
         getParentModel().leftHandArmors().forEach(part -> {
             poseStack.pushPose();
-            getParentModel().translateToChestPat(part, poseStack);
+            getParentModel().translateToChestPat(entity, part, poseStack);
             renderArmorPiece(poseStack, bufferIn, stack, EquipmentSlot.CHEST, packedLightIn, model, "left_arm");
             poseStack.popPose();
         });

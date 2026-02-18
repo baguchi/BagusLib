@@ -131,7 +131,7 @@ public class FruitObject {
                 FruitObject fruitObject1 = new FruitObject(fruit1);
                 fruitObject1.setPos(this.getPos().add(center2Center.negate()));
                 fruitObjects.add(fruitObject1);
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.CAT_EAT, 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GOLDEN_DANDELION_USE, 1.0F, 1.0F));
             }
             fruitObjects.remove(this);
             fruitObjects.remove(fruitObject);
