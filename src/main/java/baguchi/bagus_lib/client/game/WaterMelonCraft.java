@@ -79,7 +79,7 @@ public class WaterMelonCraft {
             boolean flag2 = false;
             for (FruitObject fruitObject : this.fruitObjects) {
                 fruitObject.tick();
-                if (fruitObject.getPos().y < 0) {
+                if (fruitObject.getPosition().y < 0) {
                     flag = true;
                 }
             }
@@ -207,7 +207,8 @@ public class WaterMelonCraft {
             renderFruit(gui, nextFruit, 0, 0, scale, screen.width * 0.85F, screen.height * 0.4F);
         }
         for (FruitObject fruitObject : this.fruitObjects) {
-            renderFruit(gui, fruitObject, fruitObject.getPos().x, fruitObject.getPos().y, scale, offsetX, offsetY);
+            Vector2f pos = fruitObject.getPosition(partialTick);
+            renderFruit(gui, fruitObject, pos.x, pos.y, scale, offsetX, offsetY);
         }
 
         float hue = 1f;

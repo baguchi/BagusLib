@@ -3,6 +3,7 @@ package baguchi.bagus_lib.client.game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import org.joml.Vector2f;
 
 import javax.annotation.Nonnull;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class FruitObject {
     private Vector2f pos = new Vector2f();
+    private Vector2f oldPos = new Vector2f();
     private Vector2f motion = new Vector2f();
     private float rotation;
     private boolean isFix = false;
@@ -30,6 +32,7 @@ public class FruitObject {
 
     public void setPos(Vector2f pos) {
         this.pos = pos;
+        this.oldPos = pos;
     }
 
     public void setMotion(Vector2f motion) {
@@ -40,10 +43,15 @@ public class FruitObject {
         return motion;
     }
 
-    public Vector2f getPos() {
+    public Vector2f getPosition() {
         return pos;
     }
 
+    public final Vector2f getPosition(float partialTickTime) {
+        float endX = Mth.lerp(partialTickTime, this.oldPos.x, this.pos.x);
+        float endY = Mth.lerp(partialTickTime, this.oldPos.y, this.pos.y);
+        return new Vector2f(endX, endY);
+    }
     public void collisionBox(FruitObject fruitObject) {
         float dist = this.pos.distance(fruitObject.pos.x, fruitObject.pos.y);
         if (dist > this.fruit.getSize() + fruitObject.fruit.getSize()) {
@@ -110,6 +118,7 @@ public class FruitObject {
     }
 
     public void tick() {
+        this.oldPos = this.pos;
         motion.y += 0.01F;
         motion.mul(0.96F);
         this.move(this.motion.x, this.motion.y);
@@ -129,9 +138,9 @@ public class FruitObject {
             Fruit fruit1 = Fruit.getNextObject(fruitObject.getFruit());
             if (fruit1 != null) {
                 FruitObject fruitObject1 = new FruitObject(fruit1);
-                fruitObject1.setPos(this.getPos().add(center2Center.negate()));
+                fruitObject1.setPos(this.getPosition().add(center2Center.negate()));
                 fruitObjects.add(fruitObject1);
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GOLDEN_DANDELION_USE, 1.0F, 1.0F));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GOLDEN_DANDELION_USE, 1F, 0.65F));
             }
             fruitObjects.remove(this);
             fruitObjects.remove(fruitObject);
