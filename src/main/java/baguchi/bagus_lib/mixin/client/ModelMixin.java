@@ -32,7 +32,7 @@ public abstract class ModelMixin implements IBaguKeyframe {
         Model<?> model = (Model<?>) (Object) this;
         RegisterBagusKeyframeEvents events = NeoForge.EVENT_BUS.post(new RegisterBagusKeyframeEvents(model, this.root));
         for (Map.Entry<Identifier, KeyframeAnimation> resourceLocations : events.getAnimationKeyframeMap().entrySet()) {
-            BAGU_KEYFRAME_CONTROLLER.addAnimation(resourceLocations);
+            BAGU_KEYFRAME_CONTROLLER.addAnimationKeyframe(resourceLocations);
         }
     }
 

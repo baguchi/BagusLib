@@ -16,7 +16,7 @@ public class BaguKeyFrameController {
 
     //DON'T USE DIRECTLY
     @Deprecated
-    public void addAnimation(Map.Entry<Identifier, KeyframeAnimation> entry) {
+    public void addAnimationKeyframe(Map.Entry<Identifier, KeyframeAnimation> entry) {
         this.keyframeMap.put(entry.getKey(), entry.getValue());
     }
 
