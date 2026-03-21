@@ -2,7 +2,7 @@ package baguchi.bagus_lib.client.render.book.component;
 
 import baguchi.bagus_lib.client.render.book.BookAccess;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -42,11 +42,11 @@ public class TextBookComponent extends BookComponent {
     }
 
     @Override
-    public void render(BookAccess access, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
+    public void render(BookAccess access, GuiGraphicsExtractor graphics, Font font, int x, int y, int mouseX, int mouseY) {
         int linesPerPage = height / font.lineHeight;
         for (int i = access.getRelativePage() * linesPerPage; i < Math.min((access.getRelativePage() + 1) * linesPerPage, cachedComponents.size()); i++) {
             int textY = (i - access.getRelativePage() * linesPerPage) * font.lineHeight;
-            graphics.drawString(font, cachedComponents.get(i), x, y + textY, -16777216, false);
+            graphics.text(font, cachedComponents.get(i), x, y + textY, -16777216, false);
         }
     }
 

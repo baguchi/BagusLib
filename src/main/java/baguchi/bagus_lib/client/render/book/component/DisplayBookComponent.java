@@ -3,7 +3,7 @@ package baguchi.bagus_lib.client.render.book.component;
 import baguchi.bagus_lib.client.render.book.BookAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -54,7 +54,7 @@ public class DisplayBookComponent extends BookComponent {
     }
 
     @Override
-    public void render(BookAccess access, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
+    public void render(BookAccess access, GuiGraphicsExtractor graphics, Font font, int x, int y, int mouseX, int mouseY) {
         for (ImageDisplay display : imageDisplays) {
             graphics.blit(RenderPipelines.GUI_TEXTURED, display.location(), x + display.x(), y + display.y(), 0, 0, display.width(), display.height(), display.width(), display.height());
         }
@@ -74,23 +74,23 @@ public class DisplayBookComponent extends BookComponent {
                 EntityRenderState entityrenderstate = extractRenderState(entities.get(display));
 
                 Vector3f vector3f = new Vector3f(0.0F, entityrenderstate.boundingBoxHeight / 2.0F, 0.0F);
-                graphics.submitEntityRenderState(entityrenderstate, display.scale(), vector3f, display.rotation, new Quaternionf(), x + display.x(), y + display.y(), x + display.xMax, y + display.yMax);
+                graphics.entity(entityrenderstate, display.scale(), vector3f, display.rotation, new Quaternionf(), x + display.x(), y + display.y(), x + display.xMax, y + display.yMax);
             }
         }
         for (ItemDisplay display : itemDisplays) {
-            graphics.renderItem(display.stack(), x + display.x(), y + display.y());
+            graphics.item(display.stack(), x + display.x(), y + display.y());
         }
         for (ItemTagDisplay display : itemTagDisplays) {
             List<Item> items = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(display.tag()).spliterator(), false).map(Holder::value).toList();
             if (!items.isEmpty()) {
-                graphics.renderItem(items.get((tickCount / 20) % items.size()).getDefaultInstance(), x + display.x(), y + display.y());
+                graphics.item(items.get((tickCount / 20) % items.size()).getDefaultInstance(), x + display.x(), y + display.y());
             }
         }
         for (TextDisplay display : textDisplays) {
             graphics.pose().pushMatrix();
             graphics.pose().translate(x + display.x(), y + display.y());
             graphics.pose().scale(display.scale(), display.scale());
-            graphics.drawString(font, display.text(), -font.width(display.text()) / 2, -font.lineHeight, -16777216, false);
+            graphics.text(font, display.text(), -font.width(display.text()) / 2, -font.lineHeight, -16777216, false);
             graphics.pose().popMatrix();
         }
     }

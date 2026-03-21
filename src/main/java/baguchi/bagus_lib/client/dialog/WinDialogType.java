@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -27,7 +27,7 @@ public class WinDialogType extends DialogType {
     }
 
 
-    public void renderText(GuiGraphics guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
+    public void renderText(GuiGraphicsExtractor guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
 
         Font font = Minecraft.getInstance().font;
         float g = tickCount + f;

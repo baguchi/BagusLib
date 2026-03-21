@@ -2,7 +2,7 @@ package baguchi.bagus_lib.client.render.book.component;
 
 import baguchi.bagus_lib.client.render.book.BookAccess;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /*
 
@@ -22,7 +22,7 @@ public abstract class BookComponent {
 
     public abstract int getPageCount(int pagesBefore, Font font);
 
-    public abstract void render(BookAccess access, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY);
+    public abstract void render(BookAccess access, GuiGraphicsExtractor graphics, Font font, int x, int y, int mouseX, int mouseY);
 
     public abstract void tick(BookAccess access, Font font, int x, int y, int mouseX, int mouseY);
 

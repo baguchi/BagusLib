@@ -4,7 +4,7 @@ import baguchi.bagus_lib.client.render.book.BookAccess;
 import it.unimi.dsi.fastutil.ints.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
@@ -66,7 +66,7 @@ public class IndexBookComponent extends BookComponent {
     }
 
     @Override
-    public void render(BookAccess access, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
+    public void render(BookAccess access, GuiGraphicsExtractor graphics, Font font, int x, int y, int mouseX, int mouseY) {
         int linesPerPage = height / font.lineHeight;
         for (int i = access.getRelativePage() * linesPerPage; i < Math.min((access.getRelativePage() + 1) * linesPerPage, cachedComponents.size()); i++) {
             int textY = (i - access.getRelativePage() * linesPerPage) * font.lineHeight;
@@ -76,7 +76,7 @@ public class IndexBookComponent extends BookComponent {
                     toDraw = hoveredIndexItemComponents.get(i - indexStartLine);
                 }
             }
-            graphics.drawString(font, toDraw, x, y + textY, -13408581, false);
+            graphics.text(font, toDraw, x, y + textY, -13408581, false);
         }
     }
 

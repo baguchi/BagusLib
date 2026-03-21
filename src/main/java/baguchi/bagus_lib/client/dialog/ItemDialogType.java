@@ -3,7 +3,7 @@ package baguchi.bagus_lib.client.dialog;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix3x2fStack;
 
@@ -26,12 +26,12 @@ public class ItemDialogType extends DialogType {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
+    public void render(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
         if (this.itemStack != null) {
             poseStack.pushMatrix();
             poseStack.translate(0, y);
             poseStack.scale(this.dialogueOption.scaleX(), this.dialogueOption.scaleY());
-            guiGraphics.renderItem(itemStack, 0, 0);
+            guiGraphics.item(itemStack, 0, 0);
             poseStack.popMatrix();
         }
     }

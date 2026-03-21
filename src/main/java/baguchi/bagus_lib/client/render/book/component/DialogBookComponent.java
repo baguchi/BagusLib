@@ -4,7 +4,7 @@ import baguchi.bagus_lib.client.render.book.BookAccess;
 import baguchi.bagus_lib.util.DialogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
@@ -42,7 +42,7 @@ public class DialogBookComponent extends BookComponent {
     }
 
     @Override
-    public void render(BookAccess access, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
+    public void render(BookAccess access, GuiGraphicsExtractor graphics, Font font, int x, int y, int mouseX, int mouseY) {
         int linesPerPage = height / font.lineHeight;
         float g = Minecraft.getInstance().gui.getGuiTicks() + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
         if (dialogues == null) {
@@ -64,14 +64,14 @@ public class DialogBookComponent extends BookComponent {
 
     }
 
-    public DialogHandler.DrawString beginString(GuiGraphics guiGraphics, double lastTick, double perTick, Font font, FormattedText string2, int i, int j2) {
+    public DialogHandler.DrawString beginString(GuiGraphicsExtractor guiGraphics, double lastTick, double perTick, Font font, FormattedText string2, int i, int j2) {
         List<FormattedText> list = font.getSplitter().splitLines(string2, j2, Style.EMPTY);
         String string22 = list.stream().map(FormattedText::getString).collect(Collectors.joining("\n"));
         return new DialogHandler.DrawString(lastTick, perTick, string22, (string, j, k) -> {
             String[] strings = string.split("\\r?\\n");
             int l = k;
             for (String string3 : strings) {
-                guiGraphics.drawString(font, string3, j, l, i, false);
+                guiGraphics.text(font, string3, j, l, i, false);
                 l += font.lineHeight + 4;
             }
         });

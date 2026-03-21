@@ -8,7 +8,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
@@ -54,11 +54,11 @@ public class DialogType {
     }
 
 
-    public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
+    public void render(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
     }
 
 
-    public void renderText(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
+    public void renderText(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
 
         Font font = Minecraft.getInstance().font;
         float g = tickCount + f;
@@ -79,14 +79,14 @@ public class DialogType {
         }
     }
 
-    public DialogHandler.DrawString beginString(GuiGraphics guiGraphics, double lastTick, double perTick, Font font, String string2, int i, int j2) {
+    public DialogHandler.DrawString beginString(GuiGraphicsExtractor guiGraphics, double lastTick, double perTick, Font font, String string2, int i, int j2) {
         List<FormattedText> list = font.getSplitter().splitLines(string2, j2, Style.EMPTY);
         String string22 = list.stream().map(FormattedText::getString).collect(Collectors.joining("\n"));
         return new DialogHandler.DrawString(lastTick, perTick, string22, (string, j, k) -> {
             String[] strings = string.split("\\r?\\n");
             int l = k;
             for (String string3 : strings) {
-                guiGraphics.drawString(font, string3, j, l, i);
+                guiGraphics.text(font, string3, j, l, i);
                 l += font.lineHeight + 4;
             }
         });

@@ -3,7 +3,7 @@ package baguchi.bagus_lib.client.dialog;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
@@ -40,7 +40,7 @@ public class ImageDialogType extends DialogType {
 
 
     @Override
-    public void render(GuiGraphics guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
+    public void render(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
         if (this.image.isPresent()) {
             poseStack.pushMatrix();
             poseStack.translate(0, y);

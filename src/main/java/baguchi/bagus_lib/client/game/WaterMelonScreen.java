@@ -1,6 +1,6 @@
 package baguchi.bagus_lib.client.game;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -26,13 +26,13 @@ public class WaterMelonScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int p_281550_, int p_282878_, float partialTick) {
-        super.render(guiGraphics, p_281550_, p_282878_, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         this.scroll = Math.max(0.0F, this.scroll + partialTick * this.scrollSpeed);
         if (aprilFoolsWaterMelonCraft == null) {
             aprilFoolsWaterMelonCraft = new WaterMelonCraft();
         } else {
-            aprilFoolsWaterMelonCraft.render(this, guiGraphics, partialTick);
+            aprilFoolsWaterMelonCraft.render(this, graphics, partialTick);
         }
     }
 

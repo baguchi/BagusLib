@@ -6,7 +6,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -169,7 +169,7 @@ public class WaterMelonCraft {
         tossFruit = nextFruit;
     }
 
-    private void renderFruit(GuiGraphics gui, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
+    private void renderFruit(GuiGraphicsExtractor gui, FruitObject fruit, float x, float y, float scale, float offsetX, float offsetY) {
         renderBlockState(gui, fruit, offsetX + (x) * scale, offsetY + (y) * scale, scale);
     }
 
@@ -182,9 +182,9 @@ public class WaterMelonCraft {
 
     }
 
-    private void renderBlockState(GuiGraphics gui, FruitObject fruit, float offsetX, float offsetY, float size) {
+    private void renderBlockState(GuiGraphicsExtractor gui, FruitObject fruit, float offsetX, float offsetY, float size) {
         gui.pose().pushMatrix();
-        TextureAtlasSprite sprite = Minecraft.getInstance().getBlockRenderer().getBlockModel(fruit.getFruit().getFruitBlock().defaultBlockState()).particleMaterial().sprite();
+        TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(fruit.getFruit().getFruitBlock().defaultBlockState()).particleMaterial().sprite();
         float f = size * fruit.getFruit().getSize();
         PoseStack stack = new PoseStack();
         stack.pushPose();
@@ -196,7 +196,7 @@ public class WaterMelonCraft {
         gui.pose().popMatrix();
     }
 
-    public void render(Screen screen, GuiGraphics gui, float partialTick) {
+    public void render(Screen screen, GuiGraphicsExtractor gui, float partialTick) {
         float scale = Math.min(screen.width / 15F, screen.height / (float) HEIGHT);
         float offsetX = screen.width / 2F - scale * 5F;
         float offsetY = scale * 0.5F;
@@ -216,25 +216,25 @@ public class WaterMelonCraft {
         int color = i;
         gui.pose().pushMatrix();
         gui.pose().scale(2, 2);
-        gui.drawCenteredString(Minecraft.getInstance().font, "Score", (int) (screen.width * 0.065F), (int) (screen.height * 0.175F), color);
-        gui.drawCenteredString(Minecraft.getInstance().font, "" + score, (int) (screen.width * 0.065F), (int) (screen.height * 0.175F) + 10, color);
+        gui.centeredText(Minecraft.getInstance().font, "Score", (int) (screen.width * 0.065F), (int) (screen.height * 0.175F), color);
+        gui.centeredText(Minecraft.getInstance().font, "" + score, (int) (screen.width * 0.065F), (int) (screen.height * 0.175F) + 10, color);
         gui.pose().popMatrix();
-        gui.drawString(Minecraft.getInstance().font, "[LEFT ARROW] move left", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F), color);
-        gui.drawString(Minecraft.getInstance().font, "[RIGHT ARROW] move right", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 10, color);
-        gui.drawString(Minecraft.getInstance().font, "[DOWN ARROW] drop fruit", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 30, color);
-        gui.drawString(Minecraft.getInstance().font, "[W] start over", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 50, color);
+        gui.text(Minecraft.getInstance().font, "[LEFT ARROW] move left", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F), color);
+        gui.text(Minecraft.getInstance().font, "[RIGHT ARROW] move right", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 10, color);
+        gui.text(Minecraft.getInstance().font, "[DOWN ARROW] drop fruit", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 30, color);
+        gui.text(Minecraft.getInstance().font, "[W] start over", (int) (screen.width * 0.71F), (int) (screen.height * 0.55F) + 50, color);
         if (gameOver) {
             gui.pose().pushMatrix();
             gui.pose().translate((int) (screen.width * 0.5F), (int) (screen.height * 0.5F));
             gui.pose().scale(3, 3);
-            gui.drawCenteredString(Minecraft.getInstance().font, "GAME OVER", 0, 0, color);
+            gui.centeredText(Minecraft.getInstance().font, "GAME OVER", 0, 0, color);
             gui.pose().popMatrix();
         }
         if (finishTime > 0) {
             gui.pose().pushMatrix();
             gui.pose().translate((int) (screen.width * 0.5F), (int) (screen.height * 0.5F));
             gui.pose().scale(2, 2);
-            gui.drawCenteredString(Minecraft.getInstance().font, "" + this.finishTime / 20, 0, 0, color);
+            gui.centeredText(Minecraft.getInstance().font, "" + this.finishTime / 20, 0, 0, color);
             gui.pose().popMatrix();
         }
 

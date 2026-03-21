@@ -5,7 +5,7 @@ import baguchi.bagus_lib.message.DialogMessage;
 import baguchi.bagus_lib.register.DialogRegister;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -21,8 +21,8 @@ public class DialogHandler {
 
     public final Map<String, DialogType> dialogTypes = Maps.newHashMap();
 
-    
-    public void renderDialogue(GuiGraphics guiGraphics, float f, float tickCount) {
+
+    public void renderDialogue(GuiGraphicsExtractor guiGraphics, float f, float tickCount) {
         Minecraft minecraft = Minecraft.getInstance();
         float g = tickCount + f;
         Matrix3x2fStack poseStack = guiGraphics.pose();

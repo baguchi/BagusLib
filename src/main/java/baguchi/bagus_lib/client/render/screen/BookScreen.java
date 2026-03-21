@@ -5,7 +5,7 @@ import baguchi.bagus_lib.client.render.book.Book;
 import baguchi.bagus_lib.client.render.book.BookAccess;
 import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
 import net.minecraft.client.gui.ActiveTextCollector;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.player.LocalPlayer;
@@ -153,28 +153,28 @@ public class BookScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-        super.renderBackground(guiGraphics, i, j, f);
+    public void extractBackground(GuiGraphicsExtractor graphics, int i, int j, float f) {
+        super.extractBackground(graphics, i, j, f);
         if (bookOpened()) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, book.background(), getBaseX(), getBaseY(), 0, 0, book.width(), book.height(), book.width(), book.height());
+            graphics.blit(RenderPipelines.GUI_TEXTURED, book.background(), getBaseX(), getBaseY(), 0, 0, book.width(), book.height(), book.width(), book.height());
             BookComponentDefinition left = getCurrentComponent(true);
             BookComponentDefinition right = getCurrentComponent(false);
             if (left != null) {
-                left.component().render(createBookAccess(true), guiGraphics, font,
+                left.component().render(createBookAccess(true), graphics, font,
                         getBaseX() + left.xOffsetL(),
                         getBaseY() + left.yOffsetL(),
                         mouseX, mouseY);
             }
             if (right != null) {
-                right.component().render(createBookAccess(false), guiGraphics, font,
+                right.component().render(createBookAccess(false), graphics, font,
                         getBaseX() + book.width() / 2 + right.xOffsetR(),
                         getBaseY() + right.yOffsetR(),
                         mouseX, mouseY);
             }
         } else if (currentPage < 0) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, book.cover(), getBaseX() + book.width() / 2, getBaseY(), 0, 0, book.width() / 2, book.height(), book.width() / 2, book.height());
+            graphics.blit(RenderPipelines.GUI_TEXTURED, book.cover(), getBaseX() + book.width() / 2, getBaseY(), 0, 0, book.width() / 2, book.height(), book.width() / 2, book.height());
         } else {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, book.backCover(), getBaseX(), getBaseY(), 0, 0, book.width() / 2, book.height(), book.width() / 2, book.height());
+            graphics.blit(RenderPipelines.GUI_TEXTURED, book.backCover(), getBaseX(), getBaseY(), 0, 0, book.width() / 2, book.height(), book.width() / 2, book.height());
         }
     }
 
