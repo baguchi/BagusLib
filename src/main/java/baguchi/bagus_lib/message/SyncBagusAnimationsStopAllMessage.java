@@ -39,7 +39,7 @@ public class SyncBagusAnimationsStopAllMessage implements CustomPacketPayload, I
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            BagusAnimationUtil.handleStopAllAnimationPacket(entity);
+            BagusAnimationUtil.handleStopAllAnimationClient(entity);
         });
     }
 

@@ -44,7 +44,7 @@ public class SyncBagusAnimationsStopMessage implements CustomPacketPayload, IPay
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            BagusAnimationUtil.handleStopAnimationPacket(entity, message.resourceLocation);
+            BagusAnimationUtil.handleStopAnimationClient(entity, message.resourceLocation);
         });
     }
 

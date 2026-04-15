@@ -44,7 +44,7 @@ public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayload
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            BagusAnimationUtil.handleAnimationPacket(entity, message.resourceLocation);
+            BagusAnimationUtil.handleAnimationClient(entity, message.resourceLocation);
         });
     }
 

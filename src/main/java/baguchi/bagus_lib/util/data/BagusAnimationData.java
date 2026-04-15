@@ -11,10 +11,17 @@ public class BagusAnimationData {
     public boolean started;
     public final Identifier animation;
     public final int maxAnimationTick;
+    public final boolean loop;
+
 
     public BagusAnimationData(Identifier animation, int maxAnimationTick) {
+        this(animation, maxAnimationTick, false);
+    }
+
+    public BagusAnimationData(Identifier animation, int maxAnimationTick, boolean loop) {
         this.animation = animation;
         this.maxAnimationTick = maxAnimationTick;
+        this.loop = loop;
     }
 
     public void tick(Entity entity) {
@@ -23,7 +30,7 @@ public class BagusAnimationData {
             if (this.started && this.animationTick < this.maxAnimationTick) {
                 this.animationTick++;
             }
-            if (this.started && this.animationTick >= this.maxAnimationTick) {
+            if (this.started && this.animationTick >= this.maxAnimationTick && !this.loop) {
                 this.stop(entity);
             }
         }

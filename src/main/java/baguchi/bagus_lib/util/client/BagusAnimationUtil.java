@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BagusAnimationUtil {
 
-    public static void handleAnimationPacket(Entity entity, Identifier resourceLocation) {
+    public static void handleAnimationClient(Entity entity, Identifier resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
                 baguAnimate.getBaguController().startAnimation(resourceLocation);
@@ -27,7 +27,7 @@ public class BagusAnimationUtil {
     }
 
 
-    public static void handleStopAnimationPacket(Entity entity, Identifier resourceLocation) {
+    public static void handleStopAnimationClient(Entity entity, Identifier resourceLocation) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
                 baguAnimate.getBaguController().stopAnimation(resourceLocation);
@@ -36,7 +36,7 @@ public class BagusAnimationUtil {
     }
 
 
-    public static void handleStopAllAnimationPacket(Entity entity) {
+    public static void handleStopAllAnimationClient(Entity entity) {
         if (entity instanceof IBaguAnimate baguAnimate) {
             if (entity != null) {
                 baguAnimate.getBaguController().stopAllAnimation();
