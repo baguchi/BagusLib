@@ -181,10 +181,13 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
     public <S> void renderLayers(EquipmentClientInfo.LayerType p_387484_, ResourceKey<EquipmentAsset> p_387603_, Model<? super S> p_371731_, S p_435806_, ItemStack p_371670_, PoseStack p_371767_, SubmitNodeCollector p_435795_, int light, @Nullable Identifier p_371639_, int outlineColor, int p_436591_, String renderPart) {
-        ModelPart part = p_371731_.root().createPartLookup().apply(renderPart);
 
         IClientItemExtensions extensions = IClientItemExtensions.of(p_371670_);
-        p_371731_ = extensions.getGenericArmorModel(p_371670_, p_387484_, p_371731_);
+
+        Model<S> remadeModel = extensions.getGenericArmorModel(p_371670_, p_387484_, p_371731_);
+
+        ModelPart part = remadeModel.root().createPartLookup().apply(renderPart);
+
         List<EquipmentClientInfo.Layer> list = this.equipmentAssets.get(p_387603_).getLayers(p_387484_);
         if (!list.isEmpty()) {
             int i = extensions.getDefaultDyeColor(p_371670_);
