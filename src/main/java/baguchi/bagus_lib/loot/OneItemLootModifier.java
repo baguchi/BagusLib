@@ -1,7 +1,6 @@
 package baguchi.bagus_lib.loot;
 
 import baguchi.bagus_lib.register.ModLootModifiers;
-import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,19 +16,18 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class OneItemLootModifier extends LootModifier {
 
-    public static final Supplier<MapCodec<OneItemLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
+    public static final MapCodec<OneItemLootModifier> CODEC =
+            RecordCodecBuilder.mapCodec(instance -> codecStart(instance)
                     .and(Identifier.CODEC.fieldOf("loot_table").forGetter((m) -> m.lootTable))
-                    .apply(inst, OneItemLootModifier::new)));
+                    .apply(instance, OneItemLootModifier::new));
 
     public final Identifier lootTable;
 
-    public OneItemLootModifier(LootItemCondition[] conditionsIn, Identifier lootTable) {
-        super(conditionsIn);
+    public OneItemLootModifier(LootItemCondition[] conditionsIn, int priority, Identifier lootTable) {
+        super(conditionsIn, priority);
         this.lootTable = lootTable;
     }
 

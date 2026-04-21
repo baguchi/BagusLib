@@ -11,5 +11,5 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 public class ModLootModifiers {
     public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, BagusLib.MODID);
 
-    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<OneItemLootModifier>> ONE_IN_LOOT = LOOT_MODIFIERS.register("one_in_loot", OneItemLootModifier.CODEC);
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<OneItemLootModifier>> ONE_IN_LOOT = LOOT_MODIFIERS.register("one_in_loot", () -> OneItemLootModifier.CODEC);
 }
