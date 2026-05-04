@@ -100,8 +100,8 @@ public class SmartDamageTargetGoal extends MostDamageTargetGoal {
 
 
     protected void alertOther(Mob other, LivingEntity hurtByMob) {
-        if (hurtByMob instanceof SmartHurtMob smartHurtMob) {
-            smartHurtMob.noticedByHurtAllies();
+        if (other instanceof SmartHurtMob smartHurtMob) {
+            smartHurtMob.noticedByHurtAllies(hurtByMob);
         } else {
             other.setTarget(hurtByMob);
         }

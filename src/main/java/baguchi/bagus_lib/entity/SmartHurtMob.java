@@ -1,6 +1,8 @@
 package baguchi.bagus_lib.entity;
 
+import net.minecraft.world.entity.LivingEntity;
+
 public interface SmartHurtMob {
 
-    void noticedByHurtAllies();
+    void noticedByHurtAllies(LivingEntity target);
 }
