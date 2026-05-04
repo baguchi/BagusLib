@@ -31,7 +31,7 @@ public class MostDamageTargetGoal extends TargetGoal {
     /**
      * Store the previous revengeTimer value.
      */
-    private int lastHurtTimestamp;
+    protected int lastHurtTimestamp;
     /**
      * The current target.
      */
