@@ -10,7 +10,6 @@
     "WardenMixin"
   ],
   "client": [
-    "client.ClientPacketListenerMixin",
     "client.LivingEntityRendererMixin",
     "client.LivingEntityRenderStateMixin",
     "client.ModelFeatureRendererMixin",

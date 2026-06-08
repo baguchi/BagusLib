@@ -44,7 +44,7 @@ public class DialogBookComponent extends BookComponent {
     @Override
     public void render(BookAccess access, GuiGraphicsExtractor graphics, Font font, int x, int y, int mouseX, int mouseY) {
         int linesPerPage = height / font.lineHeight;
-        float g = Minecraft.getInstance().gui.getGuiTicks() + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
+        float g = Minecraft.getInstance().gui.hud.getGuiTicks() + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
         if (dialogues == null) {
             dialogues = beginString(graphics, g, 2, Minecraft.getInstance().font, text, -16777216, width);
         } else {

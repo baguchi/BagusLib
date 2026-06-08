@@ -13,14 +13,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.jspecify.annotations.Nullable;
 
 /*
  * Based from Yung's Ocean Monuments!
  * https://github.com/YUNG-GANG/YUNGs-Better-Ocean-Monuments/blob/1.20/Common/src/main/java/com/yungnickyoung/minecraft/betteroceanmonuments/world/processor/LegProcessor.java
  */
-public class BaseProcessor extends StructureProcessor {
+public class BaseProcessor implements StructureProcessor {
     public static final MapCodec<BaseProcessor> CODEC = RecordCodecBuilder.mapCodec((p_74116_) -> {
         return p_74116_.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter((p_163729_) -> {
             return p_163729_.baseBlock;
@@ -39,33 +39,29 @@ public class BaseProcessor extends StructureProcessor {
     }
 
     @Override
-    public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
-                                                             BlockPos jigsawPiecePos,
-                                                             BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
-                                                             StructureTemplate.StructureBlockInfo blockInfoGlobal,
-                                                             StructurePlaceSettings structurePlacementData) {
-        if (blockInfoGlobal.state().getBlock() == this.baseBlock) {
-            if (levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(ChunkPos.containing(blockInfoGlobal.pos()))) {
-                return blockInfoGlobal;
+    public StructureTemplate.@Nullable StructureBlockInfo processBlock(LevelReader level, BlockPos targetPosition, BlockPos referencePos, BlockPos templateRelativePos, StructureTemplate.StructureBlockInfo processedBlockInfo, StructurePlaceSettings settings) {
+        if (processedBlockInfo.state().getBlock() == this.baseBlock) {
+            if (level instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(ChunkPos.containing(processedBlockInfo.pos()))) {
+                return processedBlockInfo;
             }
 
-            blockInfoGlobal = new StructureTemplate.StructureBlockInfo(blockInfoGlobal.pos(), this.replaceBlock.defaultBlockState(), blockInfoGlobal.nbt());
-            BlockPos.MutableBlockPos mutable = blockInfoGlobal.pos().mutable().move(Direction.DOWN);
-            BlockState currBlockState = levelReader.getBlockState(mutable);
+            processedBlockInfo = new StructureTemplate.StructureBlockInfo(processedBlockInfo.pos(), this.replaceBlock.defaultBlockState(), processedBlockInfo.nbt());
+            BlockPos.MutableBlockPos mutable = processedBlockInfo.pos().mutable().move(Direction.DOWN);
+            BlockState currBlockState = level.getBlockState(mutable);
 
-            while (mutable.getY() > levelReader.getMinY()
-                    && mutable.getY() < levelReader.getMaxY()
-                    && (currBlockState.isAir() || !levelReader.getFluidState(mutable).isEmpty())) {
-                levelReader.getChunk(mutable).setBlockState(mutable, this.replaceBlock.defaultBlockState(), 3);
+            while (mutable.getY() > level.getMinY()
+                    && mutable.getY() < level.getMaxY()
+                    && (currBlockState.isAir() || !level.getFluidState(mutable).isEmpty())) {
+                level.getChunk(mutable).setBlockState(mutable, this.replaceBlock.defaultBlockState(), 3);
                 mutable.move(Direction.DOWN);
-                currBlockState = levelReader.getBlockState(mutable);
+                currBlockState = level.getBlockState(mutable);
             }
         }
-        return blockInfoGlobal;
+        return StructureProcessor.super.processBlock(level, targetPosition, referencePos, templateRelativePos, processedBlockInfo, settings);
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return ModStructureProcessorTypes.BASE.get();
     }
 }

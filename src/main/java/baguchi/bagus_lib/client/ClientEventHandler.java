@@ -59,7 +59,7 @@ public class ClientEventHandler {
     public static void screenRender(ScreenEvent.Init.Post event) {
         if (event.getScreen() instanceof TitleScreen titleScreen && isAprilFools()) {
             int l = titleScreen.height / 4 + 28;
-            event.addListener(Button.builder(Component.translatable("bagus_lib.watermelon"), p_280785_ -> Minecraft.getInstance().setScreen(new WaterMelonScreen(Component.empty())))
+            event.addListener(Button.builder(Component.translatable("bagus_lib.watermelon"), p_280785_ -> Minecraft.getInstance().setScreenAndShow(new WaterMelonScreen(Component.empty())))
                     .bounds(titleScreen.width / 2 + 100, l + 4, 100, 20)
                     .build());
         }
@@ -83,7 +83,7 @@ public class ClientEventHandler {
                     BagusLib.prefix("textures/gui/screen/book/book_back.png"),
                     Identifier.withDefaultNamespace("textures/gui/sprites/widget/page_backward.png"),
                     Identifier.withDefaultNamespace("textures/gui/sprites/widget/page_forward.png"));
-            Minecraft.getInstance().setScreen(new BookScreen(book));
+            Minecraft.getInstance().setScreenAndShow(new BookScreen(book));
         }
     }
 
