@@ -2,9 +2,9 @@ package baguchi.bagus_lib.util.client;
 
 import baguchi.bagus_lib.animation.BaguAnimationController;
 import baguchi.bagus_lib.api.IBaguAnimate;
-import baguchi.bagus_lib.message.SyncBagusAnimationsMessage;
-import baguchi.bagus_lib.message.SyncBagusAnimationsStopAllMessage;
-import baguchi.bagus_lib.message.SyncBagusAnimationsStopMessage;
+import baguchi.bagus_lib.packet.SyncBagusAnimationsMessage;
+import baguchi.bagus_lib.packet.SyncBagusAnimationsStopAllMessage;
+import baguchi.bagus_lib.packet.SyncBagusAnimationsStopMessage;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.PacketDistributor;

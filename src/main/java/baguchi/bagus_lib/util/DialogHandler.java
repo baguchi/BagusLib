@@ -1,7 +1,7 @@
 package baguchi.bagus_lib.util;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
-import baguchi.bagus_lib.message.DialogMessage;
+import baguchi.bagus_lib.packet.DialogMessage;
 import baguchi.bagus_lib.register.DialogRegister;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;

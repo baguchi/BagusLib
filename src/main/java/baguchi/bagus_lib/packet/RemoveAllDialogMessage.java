@@ -1,4 +1,4 @@
-package baguchi.bagus_lib.message;
+package baguchi.bagus_lib.packet;
 
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.util.DialogHandler;

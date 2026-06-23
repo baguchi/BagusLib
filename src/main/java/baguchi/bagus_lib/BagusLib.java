@@ -3,7 +3,7 @@ package baguchi.bagus_lib;
 import baguchi.bagus_lib.client.dialog.DialogType;
 import baguchi.bagus_lib.command.DialogCommand;
 import baguchi.bagus_lib.item.ModItems;
-import baguchi.bagus_lib.message.*;
+import baguchi.bagus_lib.packet.*;
 import baguchi.bagus_lib.register.*;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;

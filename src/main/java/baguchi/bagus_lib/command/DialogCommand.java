@@ -1,8 +1,8 @@
 package baguchi.bagus_lib.command;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
-import baguchi.bagus_lib.message.DialogMessage;
-import baguchi.bagus_lib.message.RemoveAllDialogMessage;
+import baguchi.bagus_lib.packet.DialogMessage;
+import baguchi.bagus_lib.packet.RemoveAllDialogMessage;
 import baguchi.bagus_lib.register.DialogRegister;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
