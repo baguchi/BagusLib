@@ -3,8 +3,8 @@ package baguchi.bagus_lib.client.camera;
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.client.camera.holder.CameraHolder;
 import baguchi.bagus_lib.client.camera.holder.EntityCameraHolder;
-import baguchi.bagus_lib.packet.CameraMessage;
-import baguchi.bagus_lib.packet.EntityCameraMessage;
+import baguchi.bagus_lib.packet.CameraPacket;
+import baguchi.bagus_lib.packet.EntityCameraPacket;
 import com.google.common.collect.Lists;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -47,9 +47,9 @@ public class CameraCore {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
-                        PacketDistributor.sendToPlayer(serverPlayer, new EntityCameraMessage(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        PacketDistributor.sendToPlayer(serverPlayer, new EntityCameraPacket(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     } else {
-                        PacketDistributor.sendToPlayer(serverPlayer, new CameraMessage(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
+                        PacketDistributor.sendToPlayer(serverPlayer, new CameraPacket(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
                     }
                 }
             }

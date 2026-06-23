@@ -6,45 +6,40 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class SyncBagusAnimationsStopMessage implements CustomPacketPayload, IPayloadHandler<SyncBagusAnimationsStopMessage> {
+public class SyncBagusAnimationsStopAllPacket implements CustomPacketPayload, IPayloadHandler<SyncBagusAnimationsStopAllPacket> {
 
-    public static final StreamCodec<FriendlyByteBuf, SyncBagusAnimationsStopMessage> STREAM_CODEC = CustomPacketPayload.codec(
-            SyncBagusAnimationsStopMessage::write, SyncBagusAnimationsStopMessage::new
+    public static final StreamCodec<FriendlyByteBuf, SyncBagusAnimationsStopAllPacket> STREAM_CODEC = CustomPacketPayload.codec(
+            SyncBagusAnimationsStopAllPacket::write, SyncBagusAnimationsStopAllPacket::new
     );
-    public static final Type<SyncBagusAnimationsStopMessage> TYPE = new Type<>(BagusLib.prefix("syc_anim_stop"));
+    public static final Type<SyncBagusAnimationsStopAllPacket> TYPE = new Type<>(BagusLib.prefix("syc_anim_stop_all"));
 
     private final int entityId;
 
-    private final Identifier resourceLocation;
-
-    public SyncBagusAnimationsStopMessage(int entityId, Identifier resourceLocation) {
+    public SyncBagusAnimationsStopAllPacket(int entityId) {
         this.entityId = entityId;
-        this.resourceLocation = resourceLocation;
     }
 
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.entityId);
-        buf.writeIdentifier(this.resourceLocation);
     }
 
-    public SyncBagusAnimationsStopMessage(FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readIdentifier());
+    public SyncBagusAnimationsStopAllPacket(FriendlyByteBuf buf) {
+        this(buf.readInt());
     }
 
-    public void handle(SyncBagusAnimationsStopMessage message, IPayloadContext context) {
+    public void handle(SyncBagusAnimationsStopAllPacket message, IPayloadContext context) {
         context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {
                 return;
             }
             Entity entity = level.getEntity(message.entityId);
-            BagusAnimationUtil.handleStopAnimationClient(entity, message.resourceLocation);
+            BagusAnimationUtil.handleStopAllAnimationClient(entity);
         });
     }
 

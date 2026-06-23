@@ -12,18 +12,18 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayloadHandler<SyncBagusAnimationsMessage> {
+public class SyncBagusAnimationsPacket implements CustomPacketPayload, IPayloadHandler<SyncBagusAnimationsPacket> {
 
-    public static final StreamCodec<FriendlyByteBuf, SyncBagusAnimationsMessage> STREAM_CODEC = CustomPacketPayload.codec(
-            SyncBagusAnimationsMessage::write, SyncBagusAnimationsMessage::new
+    public static final StreamCodec<FriendlyByteBuf, SyncBagusAnimationsPacket> STREAM_CODEC = CustomPacketPayload.codec(
+            SyncBagusAnimationsPacket::write, SyncBagusAnimationsPacket::new
     );
-    public static final CustomPacketPayload.Type<SyncBagusAnimationsMessage> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("syc_anim"));
+    public static final CustomPacketPayload.Type<SyncBagusAnimationsPacket> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("syc_anim"));
 
     private final int entityId;
 
     private final Identifier resourceLocation;
 
-    public SyncBagusAnimationsMessage(int entityId, Identifier resourceLocation) {
+    public SyncBagusAnimationsPacket(int entityId, Identifier resourceLocation) {
         this.entityId = entityId;
         this.resourceLocation = resourceLocation;
     }
@@ -33,11 +33,11 @@ public class SyncBagusAnimationsMessage implements CustomPacketPayload, IPayload
         buf.writeIdentifier(this.resourceLocation);
     }
 
-    public SyncBagusAnimationsMessage(FriendlyByteBuf buf) {
+    public SyncBagusAnimationsPacket(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readIdentifier());
     }
 
-    public void handle(SyncBagusAnimationsMessage message, IPayloadContext context) {
+    public void handle(SyncBagusAnimationsPacket message, IPayloadContext context) {
         context.enqueueWork(() -> {
             Level level = Minecraft.getInstance().player.level();
             if (level == null) {

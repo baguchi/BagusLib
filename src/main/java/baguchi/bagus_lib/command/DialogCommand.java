@@ -1,8 +1,8 @@
 package baguchi.bagus_lib.command;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
-import baguchi.bagus_lib.packet.DialogMessage;
-import baguchi.bagus_lib.packet.RemoveAllDialogMessage;
+import baguchi.bagus_lib.packet.DialogPacket;
+import baguchi.bagus_lib.packet.RemoveAllDialogPacket;
 import baguchi.bagus_lib.register.DialogRegister;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -87,7 +87,7 @@ public class DialogCommand {
 
     private static void sendRemoveAllDialogMessage(CommandSourceStack p_250209_, Collection<ServerPlayer> p_252344_) {
         for (ServerPlayer serverplayer : p_252344_) {
-            PacketDistributor.sendToPlayer(serverplayer, new RemoveAllDialogMessage());
+            PacketDistributor.sendToPlayer(serverplayer, new RemoveAllDialogPacket());
 
         }
 
@@ -96,7 +96,7 @@ public class DialogCommand {
 
     private static void sendDialogMessage(CommandSourceStack p_250209_, Collection<ServerPlayer> p_252344_, Holder.Reference<DialogType> p_249416_) {
         for (ServerPlayer serverplayer : p_252344_) {
-            PacketDistributor.sendToPlayer(serverplayer, new DialogMessage("Command", p_249416_.value()));
+            PacketDistributor.sendToPlayer(serverplayer, new DialogPacket("Command", p_249416_.value()));
 
         }
         p_250209_.sendSystemMessage(Component.translatable("command.bagus_lib.dialog"));

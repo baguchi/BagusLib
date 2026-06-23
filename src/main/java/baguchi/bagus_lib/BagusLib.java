@@ -66,13 +66,13 @@ public class BagusLib {
 
     public void setupPackets(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
-        registrar.playToClient(CameraMessage.TYPE, CameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(EntityCameraMessage.TYPE, EntityCameraMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(DialogMessage.TYPE, DialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(RemoveAllDialogMessage.TYPE, RemoveAllDialogMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(SyncBagusAnimationsMessage.TYPE, SyncBagusAnimationsMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(SyncBagusAnimationsStopMessage.TYPE, SyncBagusAnimationsStopMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(SyncBagusAnimationsStopAllMessage.TYPE, SyncBagusAnimationsStopAllMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(CameraPacket.TYPE, CameraPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(EntityCameraPacket.TYPE, EntityCameraPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(DialogPacket.TYPE, DialogPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(RemoveAllDialogPacket.TYPE, RemoveAllDialogPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(SyncBagusAnimationsPacket.TYPE, SyncBagusAnimationsPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(SyncBagusAnimationsStopPacket.TYPE, SyncBagusAnimationsStopPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToClient(SyncBagusAnimationsStopAllPacket.TYPE, SyncBagusAnimationsStopAllPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
     }
 
     private void registerCommands(RegisterCommandsEvent evt) {

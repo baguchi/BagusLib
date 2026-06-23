@@ -2,9 +2,9 @@ package baguchi.bagus_lib.util.client;
 
 import baguchi.bagus_lib.animation.BaguAnimationController;
 import baguchi.bagus_lib.api.IBaguAnimate;
-import baguchi.bagus_lib.packet.SyncBagusAnimationsMessage;
-import baguchi.bagus_lib.packet.SyncBagusAnimationsStopAllMessage;
-import baguchi.bagus_lib.packet.SyncBagusAnimationsStopMessage;
+import baguchi.bagus_lib.packet.SyncBagusAnimationsPacket;
+import baguchi.bagus_lib.packet.SyncBagusAnimationsStopAllPacket;
+import baguchi.bagus_lib.packet.SyncBagusAnimationsStopPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -54,19 +54,19 @@ public class BagusAnimationUtil {
 
     public static void sendAnimation(Entity entity, Identifier resourceLocation) {
         if (!entity.level().isClientSide()) {
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsMessage(entity.getId(), resourceLocation));
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsPacket(entity.getId(), resourceLocation));
         }
     }
 
     public static void sendStopAnimation(Entity entity, Identifier resourceLocation) {
         if (!entity.level().isClientSide()) {
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopMessage(entity.getId(), resourceLocation));
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopPacket(entity.getId(), resourceLocation));
         }
     }
 
     public static void sendStopAllAnimation(Entity entity) {
         if (!entity.level().isClientSide()) {
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopAllMessage(entity.getId()));
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new SyncBagusAnimationsStopAllPacket(entity.getId()));
         }
     }
 }

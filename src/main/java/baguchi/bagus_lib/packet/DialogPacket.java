@@ -13,30 +13,30 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class DialogMessage<T extends DialogType> implements CustomPacketPayload, IPayloadHandler<DialogMessage> {
+public class DialogPacket<T extends DialogType> implements CustomPacketPayload, IPayloadHandler<DialogPacket> {
 
-    public static final StreamCodec<FriendlyByteBuf, DialogMessage<?>> STREAM_CODEC = CustomPacketPayload.codec(
-            DialogMessage::write, DialogMessage::new
+    public static final StreamCodec<FriendlyByteBuf, DialogPacket<?>> STREAM_CODEC = CustomPacketPayload.codec(
+            DialogPacket::write, DialogPacket::new
     );
-    public static final Type<DialogMessage<?>> TYPE = new Type<>(BagusLib.prefix("dialog"));
+    public static final Type<DialogPacket<?>> TYPE = new Type<>(BagusLib.prefix("dialog"));
 
     private final String name;
     private final DialogType type;
     private final Identifier dataLocation;
 
-    public DialogMessage(String name, DialogType type) {
+    public DialogPacket(String name, DialogType type) {
         this.name = name;
         this.type = type;
         dataLocation = ModDialogs.getRegistry().getKey(type.codec());
     }
 
-    public DialogMessage(String name, Identifier resourceLocation, FriendlyByteBuf type) {
+    public DialogPacket(String name, Identifier resourceLocation, FriendlyByteBuf type) {
         this.name = name;
         dataLocation = resourceLocation;
         this.type = type.readLenientJsonWithCodec(ModDialogs.getRegistry().get(dataLocation).get().value().codec());
     }
 
-    public DialogMessage(FriendlyByteBuf buf) {
+    public DialogPacket(FriendlyByteBuf buf) {
         this(buf.readUtf(), buf.readIdentifier(), buf);
     }
 
@@ -51,7 +51,7 @@ public class DialogMessage<T extends DialogType> implements CustomPacketPayload,
         return TYPE;
     }
 
-    public void handle(DialogMessage message, IPayloadContext context) {
+    public void handle(DialogPacket message, IPayloadContext context) {
         context.enqueueWork(() -> {
             DialogType dialogType = message.type;
             if (Minecraft.getInstance().level != null) {

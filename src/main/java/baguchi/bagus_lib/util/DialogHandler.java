@@ -1,7 +1,7 @@
 package baguchi.bagus_lib.util;
 
 import baguchi.bagus_lib.client.dialog.DialogType;
-import baguchi.bagus_lib.packet.DialogMessage;
+import baguchi.bagus_lib.packet.DialogPacket;
 import baguchi.bagus_lib.register.DialogRegister;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
@@ -77,7 +77,7 @@ public class DialogHandler {
     }
 
     public static void addOrReplaceDialogTypeOnServer(ServerPlayer player, String name, DialogType dialogType) {
-        PacketDistributor.sendToPlayer(player, new DialogMessage(name, dialogType));
+        PacketDistributor.sendToPlayer(player, new DialogPacket(name, dialogType));
     }
 
 
