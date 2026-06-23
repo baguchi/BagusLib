@@ -68,6 +68,7 @@ public class BagusLib {
         PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
         registrar.playToClient(CameraPacket.TYPE, CameraPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToClient(EntityCameraPacket.TYPE, EntityCameraPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playToServer(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToClient(DialogPacket.TYPE, DialogPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToClient(RemoveAllDialogPacket.TYPE, RemoveAllDialogPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToClient(SyncBagusAnimationsPacket.TYPE, SyncBagusAnimationsPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
