@@ -1,6 +1,5 @@
 package baguchi.bagus_lib.client.dialog;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,6 +8,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import org.joml.Matrix3x2fStack;
 
 import java.util.Optional;
 
@@ -26,9 +26,9 @@ public class WinDialogType extends DialogType {
         super(dialogueBase, dialogueOption, nextDialogOption, dialogPerTick);
     }
 
-
-    public void renderText(GuiGraphicsExtractor guiGraphics, PoseStack poseStack, float f, float tickCount, int y) {
-
+    @Override
+    public void renderText(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
+        super.renderText(guiGraphics, poseStack, f, tickCount, y);
         Font font = Minecraft.getInstance().font;
         float g = tickCount + f;
         if (this.drawingString == null && this.dialogueBase != null) {

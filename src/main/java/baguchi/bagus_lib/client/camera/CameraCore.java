@@ -1,10 +1,8 @@
 package baguchi.bagus_lib.client.camera;
 
 import baguchi.bagus_lib.BagusLib;
-import baguchi.bagus_lib.client.camera.holder.CameraHolder;
-import baguchi.bagus_lib.client.camera.holder.EntityCameraHolder;
+import baguchi.bagus_lib.client.camera.shake.CameraShake;
 import baguchi.bagus_lib.packet.CameraPacket;
-import baguchi.bagus_lib.packet.EntityCameraPacket;
 import com.google.common.collect.Lists;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -19,38 +17,34 @@ import java.util.List;
 
 @EventBusSubscriber(modid = BagusLib.MODID, value = Dist.CLIENT)
 public class CameraCore {
-    public static List<CameraHolder> cameraHolderList = Lists.newArrayList();
+    public static List<CameraHolder> cameraHolders = Lists.newArrayList();
 
     @SubscribeEvent
     public static void cameraEvent(ViewportEvent.ComputeCameraAngles event) {
-        for (int i = 0; i < cameraHolderList.size(); i++) {
-            CameraHolder cameraHolder = cameraHolderList.get(i);
-            if (cameraHolder.getDuration() <= cameraHolder.time) {
-                cameraHolderList.remove(cameraHolder);
+        for (int i = 0; i < cameraHolders.size(); i++) {
+            CameraHolder cameraShake = cameraHolders.get(i);
+            if (cameraShake.cameraShake().duration <= cameraShake.time()) {
+                cameraHolders.remove(cameraShake);
             } else {
-                cameraHolder.tick(event);
+                cameraHolders.get(i).setTick(cameraShake.time() + 1);
             }
 
         }
     }
 
     public static List<CameraHolder> getCameraHolderList() {
-        return cameraHolderList;
+        return cameraHolders;
     }
 
-    public static void addCameraHolderList(Level level, CameraHolder cameraHolder) {
+    public static void addCameraHolderList(Level level, CameraShake cameraShake) {
         if (level.isClientSide()) {
-            if (level.dimension() == cameraHolder.getPos().dimension()) {
-                cameraHolderList.add(cameraHolder);
+            if (level.dimension() == cameraShake.getPos().dimension()) {
+                cameraHolders.add(new CameraHolder(0, cameraShake));
             }
         } else if (!level.isClientSide()) {
             for (Player player : level.players()) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    if (cameraHolder instanceof EntityCameraHolder<?> entityCameraHolder) {
-                        PacketDistributor.sendToPlayer(serverPlayer, new EntityCameraPacket(entityCameraHolder.getEntity().getId(), cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
-                    } else {
-                        PacketDistributor.sendToPlayer(serverPlayer, new CameraPacket(cameraHolder.distance, cameraHolder.duration, cameraHolder.amount, cameraHolder.getPos()));
-                    }
+                    PacketDistributor.sendToPlayer(serverPlayer, new CameraPacket(cameraShake));
                 }
             }
         }

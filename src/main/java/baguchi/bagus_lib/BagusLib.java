@@ -44,6 +44,7 @@ public class BagusLib {
         ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
         ModSensors.SENSOR_TYPES.register(modEventBus);
         ModDialogs.DIALOG_TYPE.register(modEventBus);
+        ModCameraShakes.CAMERA_SHAKES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupPackets);
         modEventBus.addListener(this::dataSetup);
@@ -67,7 +68,6 @@ public class BagusLib {
     public void setupPackets(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
         registrar.playToClient(CameraPacket.TYPE, CameraPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
-        registrar.playToClient(EntityCameraPacket.TYPE, EntityCameraPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToServer(SyncEntityPacketToServer.TYPE, SyncEntityPacketToServer.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToClient(DialogPacket.TYPE, DialogPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
         registrar.playToClient(RemoveAllDialogPacket.TYPE, RemoveAllDialogPacket.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
