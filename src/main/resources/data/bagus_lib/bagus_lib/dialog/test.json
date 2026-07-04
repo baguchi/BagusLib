@@ -1,0 +1,15 @@
+{
+  "type": "bagus_lib:image_dialog",
+  "dialog": "Human. I remember your §c§kTest",
+  "dialog_option": {
+    "scaleX": 0.1,
+    "scaleY": 0.1
+  },
+  "next_dialog": {
+    "render_time": 80
+  },
+  "draw_per_tick": 2,
+  "texture_size_x": 531,
+  "texture_size_y": 531,
+  "image": "bagus_lib:test"
+}
