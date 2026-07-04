@@ -2,7 +2,9 @@ package baguchi.bagus_lib.packet;
 
 import baguchi.bagus_lib.BagusLib;
 import baguchi.bagus_lib.client.camera.CameraCore;
-import baguchi.bagus_lib.client.camera.shake.CameraShake;
+import baguchi.bagus_lib.client.camera.holder.CameraHolder;
+import baguchi.bagus_lib.util.GlobalVec3;
+import baguchi.bagus_lib.util.GlobalVec3ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -17,18 +19,29 @@ public class CameraPacket implements CustomPacketPayload, IPayloadHandler<Camera
     );
     public static final CustomPacketPayload.Type<CameraPacket> TYPE = new CustomPacketPayload.Type<>(BagusLib.prefix("camera"));
 
-    private final CameraShake cameraShake;
+    private final int duration;
+    private final int distance;
+    private final float amount;
+    private final GlobalVec3 globalPos;
 
-    public CameraPacket(CameraShake cameraShake) {
-        this.cameraShake = cameraShake;
+    public CameraPacket(int distance, int duration, float amount, GlobalVec3 globalPos) {
+        this.distance = distance;
+        this.duration = duration;
+
+        this.amount = amount;
+        this.globalPos = globalPos;
     }
 
     public CameraPacket(FriendlyByteBuf buf) {
-        this(buf.readLenientJsonWithCodec(CameraShake.CODEC.codec()));
+        this(buf.readInt(), buf.readInt(), buf.readFloat(), GlobalVec3ByteBuf.readGlobalPos(buf));
     }
 
     public void write(FriendlyByteBuf buf) {
-        buf.writeJsonWithCodec(CameraShake.CODEC.codec(), this.cameraShake);
+        buf.writeInt(this.distance);
+        buf.writeInt(this.duration);
+
+        buf.writeFloat(this.amount);
+        GlobalVec3ByteBuf.writeGlobalPos(buf, this.globalPos);
     }
 
     @Override
@@ -43,7 +56,7 @@ public class CameraPacket implements CustomPacketPayload, IPayloadHandler<Camera
             if (level == null) {
                 return;
             }
-            CameraCore.addCameraHolderList(level, message.cameraShake);
+            CameraCore.addCameraHolderList(level, new CameraHolder(message.distance, message.duration, message.amount, message.globalPos));
         });
     }
 }

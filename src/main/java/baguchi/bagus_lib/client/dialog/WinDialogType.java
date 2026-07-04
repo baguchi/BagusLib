@@ -29,6 +29,7 @@ public class WinDialogType extends DialogType {
     @Override
     public void renderText(GuiGraphicsExtractor guiGraphics, Matrix3x2fStack poseStack, float f, float tickCount, int y) {
         super.renderText(guiGraphics, poseStack, f, tickCount, y);
+
         Font font = Minecraft.getInstance().font;
         float g = tickCount + f;
         if (this.drawingString == null && this.dialogueBase != null) {

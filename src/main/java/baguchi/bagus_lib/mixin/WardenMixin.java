@@ -2,10 +2,9 @@ package baguchi.bagus_lib.mixin;
 
 import baguchi.bagus_lib.BagusConfigs;
 import baguchi.bagus_lib.client.camera.CameraCore;
-import baguchi.bagus_lib.client.camera.shake.EntityCameraShake;
+import baguchi.bagus_lib.client.camera.holder.EntityCameraHolder;
 import baguchi.bagus_lib.util.GlobalVec3;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
@@ -28,10 +27,10 @@ public abstract class WardenMixin extends Monster {
             if (!this.level().isClientSide() && BagusConfigs.COMMON.enableCameraShakeForVanillaMobs.get()) {
                 switch (this.getPose()) {
                     case EMERGING:
-                        CameraCore.addCameraHolderList(this.level(), new EntityCameraShake(20, 200, 0.2F, GlobalVec3.of(this.level().dimension(), this.position()), EntityReference.of(this)));
+                        CameraCore.addCameraHolderList(this.level(), new EntityCameraHolder<>(20, 200, 0.2F, GlobalVec3.of(this.level().dimension(), this.position()), this));
                         break;
                     case DIGGING:
-                        CameraCore.addCameraHolderList(this.level(), new EntityCameraShake(20, 200, 0.15F, GlobalVec3.of(this.level().dimension(), this.position()), EntityReference.of(this)));
+                        CameraCore.addCameraHolderList(this.level(), new EntityCameraHolder<>(20, 200, 0.15F, GlobalVec3.of(this.level().dimension(), this.position()), this));
                         break;
                 }
             }
