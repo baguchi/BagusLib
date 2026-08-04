@@ -1,14 +1,10 @@
 package baguchi.bagus_lib.client;
 
 import baguchi.bagus_lib.BagusLib;
-import baguchi.bagus_lib.CommonEvent;
-import baguchi.bagus_lib.client.animation.TestPlayerAnimations;
-import baguchi.bagus_lib.client.event.RegisterBagusKeyframeEvents;
 import baguchi.bagus_lib.client.overlay.DialogOverlay;
 import baguchi.bagus_lib.client.render.MiniBaguModel;
 import baguchi.bagus_lib.client.render.MiniBaguRenderer;
 import baguchi.bagus_lib.register.ModEntities;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -44,10 +40,10 @@ public class ClientRegistrar {
         event.registerAboveAll(Identifier.fromNamespaceAndPath(BagusLib.MODID, "dialog"), new DialogOverlay());
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void registerAnimation(RegisterBagusKeyframeEvents event) {
         if (event.getModel() instanceof HumanoidModel<?>) {
             event.addAnimationKeyframe(CommonEvent.PAT, TestPlayerAnimations.pat_right.bake(event.getModelPart()));
         }
-    }
+    }*/
 }

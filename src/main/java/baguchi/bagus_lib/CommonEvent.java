@@ -1,13 +1,10 @@
 package baguchi.bagus_lib;
 
 import baguchi.bagus_lib.event.RegisterBagusAnimationStateEvents;
-import baguchi.bagus_lib.util.client.BagusAnimationUtil;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Avatar;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 
 @EventBusSubscriber(modid = BagusLib.MODID)
 public class CommonEvent {
@@ -20,12 +17,4 @@ public class CommonEvent {
             events.addFirstPersonPlayableAnimationState(PAT);
         }
     }
-
-    @SubscribeEvent
-    public static void entityAnimationJoin(AttackEntityEvent events) {
-        if (events.getEntity() instanceof Player player) {
-            BagusAnimationUtil.sendAnimation(player, PAT);
-        }
-    }
-
 }
