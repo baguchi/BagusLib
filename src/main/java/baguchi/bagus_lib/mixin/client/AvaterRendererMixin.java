@@ -42,7 +42,7 @@ public abstract class AvaterRendererMixin<AvatarlikeEntity extends Avatar & Clie
             EntityModel entityModel = playerrenderer.getModel();
             AvatarRenderState avatarRenderState = playerrenderer.createRenderState();
             playerrenderer.extractRenderState(abstractClientPlayer, avatarRenderState, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(abstractClientPlayer)));
-
+            // do the player animation bring from post animate event
             if (abstractClientPlayer instanceof IBaguAnimate baguAnimate) {
                 BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(avatarRenderState, entityModel);
                 NeoForge.EVENT_BUS.post(event2);

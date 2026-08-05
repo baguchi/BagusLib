@@ -12,6 +12,7 @@
   "client": [
     "client.AvaterRendererMixin",
     "client.ClientPacketListenerMixin",
+    "client.ItemInHandRendererMixin",
     "client.LivingEntityRendererMixin",
     "client.LivingEntityRenderStateMixin",
     "client.ModelFeatureRendererMixin",
