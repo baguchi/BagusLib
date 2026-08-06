@@ -2,10 +2,6 @@ package baguchi.bagus_lib.client;
 
 import baguchi.bagus_lib.BagusConfigs;
 import baguchi.bagus_lib.BagusLib;
-import baguchi.bagus_lib.CommonEvent;
-import baguchi.bagus_lib.animation.BaguAnimationController;
-import baguchi.bagus_lib.animation.client.BaguKeyFrameController;
-import baguchi.bagus_lib.client.event.BagusModelEvent;
 import baguchi.bagus_lib.client.game.WaterMelonScreen;
 import baguchi.bagus_lib.client.render.book.Book;
 import baguchi.bagus_lib.client.render.book.component.BookComponentDefinition;
@@ -15,7 +11,6 @@ import baguchi.bagus_lib.client.render.screen.BookScreen;
 import baguchi.bagus_lib.util.DialogHandler;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
@@ -27,7 +22,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import javax.annotation.Nullable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -90,7 +84,7 @@ public class ClientEventHandler {
     }
 
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onAnimateModelEvent(BagusModelEvent.PostAnimate event) {
         BaguAnimationController animations = event.getBaguAnimationController();
         @Nullable BaguKeyFrameController keyFrames = event.getBaguKeyframeController();
@@ -108,5 +102,5 @@ public class ClientEventHandler {
                 }
             }
         }
-    }
+    }*/
 }
