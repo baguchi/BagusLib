@@ -41,7 +41,7 @@ public class ItemInHandRendererMixin {
             if (entityModel instanceof HumanoidModel<?> humanoidModel) {
                 humanoidModel.rightArm.resetPose();
                 humanoidModel.leftArm.resetPose();
-                if (player instanceof IBaguAnimate baguAnimate) {
+                if (player instanceof IBaguAnimate baguAnimate && baguAnimate.getBaguController().hasPlayingAnimation()) {
                     BagusModelEvent.PostAnimate event2 = new BagusModelEvent.PostAnimate(avatarRenderState, entityModel);
                     NeoForge.EVENT_BUS.post(event2);
 
