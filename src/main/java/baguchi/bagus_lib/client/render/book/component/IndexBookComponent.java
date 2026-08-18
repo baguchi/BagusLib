@@ -41,7 +41,7 @@ public class IndexBookComponent extends BookComponent {
             indexStartLine = cachedComponents.size();
             for (IndexItem indexItem : indexItems) {
                 cachedComponents.addAll(font.split(indexItem.text().copy().withColor(0x473d4b), width));
-                List<FormattedCharSequence> list = font.split(indexItem.text().copy().withColor(0x261c09).withStyle(ChatFormatting.ITALIC), width);
+                List<FormattedCharSequence> list = font.split(indexItem.text().copy().withColor(0x261c09).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BOLD), width);
                 hoveredIndexItemComponents.addAll(list);
                 linesPerIndexItem.add(list.size());
             }
