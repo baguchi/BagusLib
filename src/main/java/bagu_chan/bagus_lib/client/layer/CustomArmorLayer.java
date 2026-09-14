@@ -231,8 +231,7 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         }
     }
 
-    private void renderLeg(ItemStack legItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+    private void renderLeg(ItemStack legItem, LivingEntity entity, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
         renderer.getModel().copyPropertiesTo(modelIn);
         modelIn.body.xRot = 0F;
         modelIn.body.yRot = 0;
@@ -253,37 +252,41 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.leftLeg.z = 0F;
         modelIn.rightLeg.z = 0F;
         renderer.getModel().rightLegPartArmors().forEach(part -> {
-                    matrixStackIn.pushPose();
-                    renderer.getModel().translateToLeg(part, matrixStackIn);
+                    VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
 
-            modelIn.rightLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-                    renderTrim(modelIn.rightLeg, legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+                    stack.pushPose();
+                    renderer.getModel().translateToLeg(part, stack);
+                    modelIn.rightLeg.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
+                    renderTrim(modelIn.rightLeg, legItem, entity, stack, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
 
-                    matrixStackIn.popPose();
+                    stack.popPose();
                 }
         );
         renderer.getModel().leftLegPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            renderer.getModel().translateToLeg(part, matrixStackIn);
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
 
-            modelIn.leftLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.leftLeg, legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+            stack.pushPose();
+            renderer.getModel().translateToLeg(part, stack);
 
-            matrixStackIn.popPose();
+            modelIn.leftLeg.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
+            renderTrim(modelIn.leftLeg, legItem, entity, stack, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+
+            stack.popPose();
         });
         renderer.getModel().bodyPartArmors().forEach(part -> {
-            matrixStackIn.pushPose();
-            this.renderer.getModel().translateToChest(part, matrixStackIn);
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
 
-            modelIn.body.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
-            renderTrim(modelIn.body, legItem, entity, matrixStackIn, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+            stack.pushPose();
+            this.renderer.getModel().translateToChest(part, stack);
 
-            matrixStackIn.popPose();
+            modelIn.body.render(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
+            renderTrim(modelIn.body, legItem, entity, stack, bufferIn, packedLightIn, glintIn, EquipmentSlot.LEGS, modelIn);
+
+            stack.popPose();
         });
     }
 
     private void renderBoot(ItemStack feetItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
         renderer.getModel().copyPropertiesTo(modelIn);
         modelIn.rightLeg.x = 0F;
         modelIn.rightLeg.xRot = 0F;
@@ -298,6 +301,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.leftLeg.z = 0F;
         modelIn.rightLeg.z = 0F;
         renderer.getModel().rightLegPartArmors().forEach(part -> {
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+
             matrixStackIn.pushPose();
             renderer.getModel().translateToLeg(part, matrixStackIn);
             modelIn.rightLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
@@ -306,6 +311,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
             matrixStackIn.popPose();
         });
         renderer.getModel().leftLegPartArmors().forEach(part -> {
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+
             matrixStackIn.pushPose();
             renderer.getModel().translateToLeg(part, matrixStackIn);
             modelIn.leftLeg.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
@@ -318,7 +325,6 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
 
 
     private void renderChestplate(ItemStack chestItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
         renderer.getModel().copyPropertiesTo(modelIn);
         modelIn.body.xRot = 0F;
         modelIn.body.yRot = 0;
@@ -343,6 +349,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.leftArm.z = 0F;
         modelIn.rightArm.z = 0F;
         renderer.getModel().rightHandArmors().forEach(part -> {
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+
             matrixStackIn.pushPose();
             renderer.getModel().translateToChestPat(part, matrixStackIn);
             modelIn.rightArm.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
@@ -351,6 +359,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
             matrixStackIn.popPose();
         });
         renderer.getModel().leftHandArmors().forEach(part -> {
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+
             matrixStackIn.pushPose();
             renderer.getModel().translateToChestPat(part, matrixStackIn);
             modelIn.leftArm.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
@@ -359,6 +369,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
             matrixStackIn.popPose();
         });
         renderer.getModel().bodyPartArmors().forEach(part -> {
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+
             matrixStackIn.pushPose();
             this.renderer.getModel().translateToChest(part, matrixStackIn);
 
@@ -370,7 +382,6 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
     }
 
     private void renderHelmet(ItemStack headItem, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean glintIn, HumanoidModel modelIn, int color, ResourceLocation armorResource, boolean notAVanillaModel) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
         renderer.getModel().copyPropertiesTo(modelIn);
         modelIn.head.xRot = 0F;
         modelIn.head.yRot = 0F;
@@ -385,6 +396,8 @@ public class CustomArmorLayer<T extends LivingEntity, M extends EntityModel<T> &
         modelIn.hat.y = 0F;
         modelIn.hat.z = 0F;
         renderer.getModel().headPartArmors().forEach(part -> {
+            VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.entityCutoutNoCull(armorResource), false, glintIn);
+
             matrixStackIn.pushPose();
             this.renderer.getModel().translateToHead(part, matrixStackIn);
             modelIn.head.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, color);
