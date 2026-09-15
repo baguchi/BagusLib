@@ -4,6 +4,7 @@ import baguchi.bagus_lib.register.ModLootModifiers;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Optional;
 
 public class OneItemLootModifier extends LootModifier {
 
@@ -26,7 +28,7 @@ public class OneItemLootModifier extends LootModifier {
 
     public final Identifier lootTable;
 
-    public OneItemLootModifier(LootItemCondition[] conditionsIn, int priority, Identifier lootTable) {
+    public OneItemLootModifier(Optional<Holder<LootItemCondition>> conditionsIn, int priority, Identifier lootTable) {
         super(conditionsIn, priority);
         this.lootTable = lootTable;
     }

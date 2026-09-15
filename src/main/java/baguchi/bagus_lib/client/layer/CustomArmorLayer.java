@@ -8,7 +8,6 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.player.PlayerModel;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -18,11 +17,10 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.client.resources.palette.PalettedTextureManager;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ARGB;
@@ -50,8 +48,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     private final RenderLayerParent<S, M> renderer;
     private final EquipmentAssetManager equipmentAssets;
     private final Function<LayerTextureKey, Identifier> layerTextureLookup;
-    private final Function<TrimSpriteKey, TextureAtlasSprite> trimSpriteLookup;
-
+    private final Function<TrimTextureKey, PalettedTextureManager.Handle> trimTextureLookup;
 
     public CustomArmorLayer(RenderLayerParent<S, M> render, EntityRendererProvider.Context context) {
         super(render);
@@ -63,8 +60,7 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         this.renderer = render;
         this.equipmentAssets = context.getEquipmentAssets();
         this.layerTextureLookup = Util.memoize((p_386235_) -> p_386235_.layer.getTextureLocation(p_386235_.layerType));
-        this.trimSpriteLookup = Util.memoize((p_399319_) -> Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ARMOR_TRIMS).getSprite(p_399319_.spriteId()));
-
+        this.trimTextureLookup = Util.memoize(key -> key.getOrPrepareTexture(Minecraft.getInstance().getPalettedTextureManager()));
     }
 
     @Override
@@ -180,15 +176,15 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         this.renderLayers(p_388694_, p_386937_, p_371498_, p_435837_, p_371902_, p_371937_, p_434165_, light, null, outlineColor, 1, renderPart);
     }
 
-    public <S> void renderLayers(EquipmentClientInfo.LayerType p_387484_, ResourceKey<EquipmentAsset> p_387603_, Model<? super S> p_371731_, S p_435806_, ItemStack p_371670_, PoseStack p_371767_, SubmitNodeCollector p_435795_, int light, @Nullable Identifier p_371639_, int outlineColor, int p_436591_, String renderPart) {
+    public <S> void renderLayers(EquipmentClientInfo.LayerType layerType, ResourceKey<EquipmentAsset> equipmentAssetId, Model<? super S> p_371731_, S p_435806_, ItemStack p_371670_, PoseStack p_371767_, SubmitNodeCollector p_435795_, int light, @Nullable Identifier p_371639_, int outlineColor, int p_436591_, String renderPart) {
 
         IClientItemExtensions extensions = IClientItemExtensions.of(p_371670_);
 
-        Model<S> remadeModel = extensions.getGenericArmorModel(p_371670_, p_387484_, p_371731_);
+        Model<S> remadeModel = extensions.getGenericArmorModel(p_371670_, layerType, p_371731_);
 
         ModelPart part = remadeModel.root().createPartLookup().apply(renderPart);
 
-        List<EquipmentClientInfo.Layer> list = this.equipmentAssets.get(p_387603_).getLayers(p_387484_);
+        List<EquipmentClientInfo.Layer> list = this.equipmentAssets.get(equipmentAssetId).getLayers(layerType);
         if (!list.isEmpty()) {
             int i = extensions.getDefaultDyeColor(p_371670_);
             boolean flag = p_371670_.hasFoil();
@@ -198,11 +194,11 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
             for (EquipmentClientInfo.Layer equipmentclientinfo$layer : list) {
                 int k = extensions.getArmorLayerTintColor(p_371670_, equipmentclientinfo$layer, idx, i);
                 if (k != 0) {
-                    Identifier resourcelocation = equipmentclientinfo$layer.usePlayerTexture() && p_371639_ != null ? p_371639_ : this.layerTextureLookup.apply(new LayerTextureKey(p_387484_, equipmentclientinfo$layer));
-                    resourcelocation = ClientHooks.getArmorTexture(p_371670_, p_387484_, equipmentclientinfo$layer, resourcelocation);
-                    p_435795_.order(j++).submitModelPart(part, p_371767_, RenderTypes.armorCutoutNoCull(resourcelocation), light, outlineColor, null, k, null);
+                    Identifier resourcelocation = equipmentclientinfo$layer.usePlayerTexture() && p_371639_ != null ? p_371639_ : this.layerTextureLookup.apply(new LayerTextureKey(layerType, equipmentclientinfo$layer));
+                    resourcelocation = ClientHooks.getArmorTexture(p_371670_, layerType, equipmentclientinfo$layer, resourcelocation);
+                    p_435795_.order(j++).submitModelPart(part, p_371767_, RenderTypes.armorCutoutNoCull(resourcelocation), light, outlineColor, null, k);
                     if (flag) {
-                        p_435795_.order(j++).submitModelPart(part, p_371767_, RenderTypes.armorEntityGlint(), light, outlineColor, null, k, null);
+                        p_435795_.order(j++).submitModelPart(part, p_371767_, RenderTypes.trimmedArmorGlint(), light, outlineColor, null, k);
                     }
 
                     flag = false;
@@ -211,11 +207,19 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
                 ++idx;
             }
 
-            ArmorTrim armortrim = p_371670_.get(DataComponents.TRIM);
-            if (armortrim != null) {
-                TextureAtlasSprite textureatlassprite = this.trimSpriteLookup.apply(new TrimSpriteKey(armortrim, p_387484_, p_387603_));
-                RenderType rendertype = Sheets.armorTrimsSheet(armortrim.pattern().value().decal());
-                p_435795_.order(j++).submitModelPart(part, p_371767_, rendertype, light, outlineColor, textureatlassprite, -1, null);
+            ArmorTrim trim = p_371670_.get(DataComponents.TRIM);
+            boolean hasTrim = trim != null && layerType != EquipmentClientInfo.LayerType.HUMANOID_BABY;
+
+            if (hasTrim) {
+                EquipmentClientInfo equipmentInfo = this.equipmentAssets.get(equipmentAssetId);
+
+                PalettedTextureManager.Handle textureHandle = this.trimTextureLookup
+                        .apply(new TrimTextureKey(trim, layerType, equipmentInfo));
+
+
+                RenderType renderType = RenderTypes.armorTrim(textureHandle.textureLocation(), trim.pattern().value().decal());
+
+                p_435795_.order(j++).submitModelPart(part, p_371767_, renderType, light, outlineColor, textureHandle, -1);
             }
         }
 
@@ -232,13 +236,6 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
     }
 
     public record LayerTextureKey(EquipmentClientInfo.LayerType layerType, EquipmentClientInfo.Layer layer) {
-    }
-
-    record TrimSpriteKey(ArmorTrim trim, EquipmentClientInfo.LayerType layerType,
-                         ResourceKey<EquipmentAsset> equipmentAssetId) {
-        public Identifier spriteId() {
-            return this.trim.layerAssetId(this.layerType.trimAssetPrefix(), this.equipmentAssetId);
-        }
     }
 
     private static boolean shouldRender(Equippable p_371295_, EquipmentSlot p_371795_) {
@@ -271,5 +268,44 @@ public class CustomArmorLayer<S extends LivingEntityRenderState, M extends Entit
         part.xRot = 0;
         part.yRot = 0;
         part.zRot = 0;
+    }
+
+    private record TrimTextureKey(ArmorTrim trim, EquipmentClientInfo.LayerType layerType,
+                                  EquipmentClientInfo equipmentInfo) {
+        private PalettedTextureManager.Handle getOrPrepareTexture(PalettedTextureManager palettedTextures) {
+            Identifier textureId = this.trim.pattern().value().assetId();
+            Identifier paletteId = this.trim.material().value().paletteId();
+
+            for (EquipmentClientInfo.TrimOverride override : this.equipmentInfo.trimOverrides()) {
+                if (override.predicate().matches(this.trim)) {
+                    textureId = override.textureId().orElse(textureId);
+                    paletteId = override.paletteId().orElse(null);
+                    break;
+                }
+            }
+
+            Identifier baseTexture = textureId.withPath(path -> this.layerType.trimAssetPrefix() + "/" + path);
+            return paletteId == null ? createTextureWithNoPalette(baseTexture) : palettedTextures.getOrPrepare(baseTexture, paletteId);
+        }
+
+        private static PalettedTextureManager.Handle createTextureWithNoPalette(Identifier texture) {
+            final Identifier textureLocation = texture.withPath(path -> "textures/" + path + ".png");
+            return new PalettedTextureManager.Handle() {
+                @Override
+                public Identifier textureLocation() {
+                    return textureLocation;
+                }
+
+                @Override
+                public float getU(float offset) {
+                    return offset;
+                }
+
+                @Override
+                public float getV(float offset) {
+                    return offset;
+                }
+            };
+        }
     }
 }

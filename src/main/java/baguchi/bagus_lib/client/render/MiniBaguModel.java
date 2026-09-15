@@ -93,6 +93,17 @@ public class MiniBaguModel<T extends MiniBaguRenderState> extends EntityModel<T>
         return ImmutableList.of(this.head);
     }
 
+
+    @Override
+    public Iterable<ModelPart> rightLegPartArmors() {
+        return ImmutableList.of(this.head);
+    }
+
+    @Override
+    public Iterable<ModelPart> leftLegPartArmors() {
+        return ImmutableList.of(this.head);
+    }
+
     @Override
     public ModelPart getHead() {
         return this.head;
