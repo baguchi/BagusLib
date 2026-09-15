@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -23,12 +22,12 @@ public class OneItemLootModifier extends LootModifier {
 
     public static final MapCodec<OneItemLootModifier> CODEC =
             RecordCodecBuilder.mapCodec(instance -> codecStart(instance)
-                    .and(Identifier.CODEC.fieldOf("loot_table").forGetter((m) -> m.lootTable))
+                    .and(ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter((m) -> m.lootTable))
                     .apply(instance, OneItemLootModifier::new));
 
-    public final Identifier lootTable;
+    public final ResourceKey<LootTable> lootTable;
 
-    public OneItemLootModifier(Optional<Holder<LootItemCondition>> conditionsIn, int priority, Identifier lootTable) {
+    public OneItemLootModifier(Optional<Holder<LootItemCondition>> conditionsIn, int priority, ResourceKey<LootTable> lootTable) {
         super(conditionsIn, priority);
         this.lootTable = lootTable;
     }
@@ -37,11 +36,10 @@ public class OneItemLootModifier extends LootModifier {
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ObjectArrayList<ItemStack> stacks = new ObjectArrayList<>();
-        context.getResolver().lookupOrThrow(Registries.LOOT_TABLE).get(ResourceKey.create(Registries.LOOT_TABLE, this.lootTable)).ifPresent(extraTable -> {
+        context.getResolver().lookupOrThrow(Registries.LOOT_TABLE).get(this.lootTable).ifPresent(extraTable -> {
             // Don't run loot modifiers for subtables;
             // the added loot will be modifiable by downstream loot modifiers modifying the target table,
             // so if we modify it here then it could get modified twice.
-
             extraTable.value().getRandomItemsRaw(context, LootTable.createStackSplitter(context.getLevel(), stacks::add));
         });
         List<ItemStack> itemStacks = stacks.stream().filter(itemStack -> {
