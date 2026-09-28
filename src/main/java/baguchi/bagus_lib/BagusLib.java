@@ -18,7 +18,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.NewDatapackRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,8 +52,8 @@ public class BagusLib {
         modContainer.registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
     }
 
-    private void dataSetup(final DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(DialogRegister.REGISTRY_KEY, DialogType.DIRECT_CODEC, DialogType.DIRECT_CODEC);
+    private void dataSetup(final NewDatapackRegistryEvent event) {
+        event.worldRegistry(DialogRegister.REGISTRY_KEY, DialogType.DIRECT_CODEC, DialogType.DIRECT_CODEC);
     }
 
 
