@@ -49,7 +49,7 @@ public class BagusLib {
         modEventBus.addListener(this::dataSetup);
 
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
-        modContainer.registerConfig(ModConfig.Type.COMMON, BagusConfigs.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.LOCAL, BagusConfigs.COMMON_SPEC);
     }
 
     private void dataSetup(final NewDatapackRegistryEvent event) {
